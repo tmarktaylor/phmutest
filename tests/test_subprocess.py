@@ -11,7 +11,7 @@ def test_subprocess():
         "phmutest",
         "docs/fix/code/globdemo.md",
         "--progress",
-        "-q",
+        "--quiet",
         "--log",
         "--summary",
         "--fixture",
@@ -32,7 +32,7 @@ def test_callfrompython():
         "phmutest",
         "docs/callfrompython.md",
         "--progress",
-        "-q",
+        "--quiet",
         "--log",
         "--summary",
     ]

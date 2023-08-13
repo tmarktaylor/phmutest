@@ -115,8 +115,9 @@ def test_deselected_blocks_report(capsys, endswith_checker):
 def test_print_captured_output(startswith_checker):
     """Show captured stdout and stderr when printed by --progress."""
     # Note- While unittest is running Printer prints to stderr.
+    # --quiet is passed through to unittest to prevent the progress dot printing.
     # Printing after unittest completes is to stdout.
-    command = "tests/md/printer.md --log --progress"
+    command = "tests/md/printer.md --log --progress --quiet"
     with contextlib.redirect_stderr(io.StringIO()) as ferr:
         phmresult = phmutest.main.main(command.split())
     want = phmutest.summary.Metrics(

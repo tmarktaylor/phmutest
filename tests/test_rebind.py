@@ -54,6 +54,7 @@ def test_share_across_rebind():
         "--fixture tests.test_rebind.globsfixture "
         "--sharing . --quiet"
     )
+    # --quiet is passed through to unittest to prevent the progress dot printing.
     args = command.split()
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
