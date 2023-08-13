@@ -74,7 +74,7 @@ jobs:
           phmutest docs/advanced/skipif.md --log
           phmutest docs/advanced/label.md --log
           phmutest docs/advanced/labelanyfcb.md --log
-          phmutest tests/project.md --report
+          phmutest tests/md/project.md --report
 
   coverage:
     runs-on: ubuntu-latest
