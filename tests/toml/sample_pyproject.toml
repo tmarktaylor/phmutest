@@ -1,0 +1,45 @@
+[build-system]
+# These are the assumed default build requirements from pip:
+# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
+requires = ["setuptools>=40.8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "6.2.4"
+testpaths = [
+    "tests",
+]
+addopts = "--ignore tests/check_classifiers.py"
+
+[tool.phmutest]
+# Use fnmatch like patterns on the -globs keys
+include-globs = [
+    # Globs select Markdown files to be tested.
+    # Refer to Python standard library Path.glob(pattern)
+    "docs/share/file1.md",
+    "docs/share/file2.md",
+]
+bogus = "3"
+exclude-globs = [
+    # Don't test files matching globs below:
+    "docs/share/share*.md",  # this matches share_demo.md
+    # ok to comment out here "docs/share/file1.md",
+    ]
+bogus2 = []
+
+fixture = ""    # Empty string means no fixture.
+share-across-files = ["docs/share/file1.md", "docs/share/file2.md"]
+setup-across-files = []
+# Only one of select, deselect may be non-empty.
+select = []
+deselect = [
+    "notmygroup3",  # comment
+    "notmygroup4"
+]
+skip = ["hello-world", "abcd"]   # ] in string ignored, no breakage
+skipbogus = ["333"]   # ] in string ignored, no breakage
+globs = "a,b"
+
+[tool.someothertool]
+skip = ["bogushello-world", "bogusabcd"]   # same keys as phmutest
+

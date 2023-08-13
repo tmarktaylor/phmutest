@@ -1,0 +1,8 @@
+# Requires setuptools 43.0.0+
+# https://packaging.python.org/en/latest/guides/using-manifest-in/
+graft src
+graft docs
+graft tests
+graft .github
+include .gitignore *.ini *.md *.txt *.yml
+global-exclude *.py[cod]
