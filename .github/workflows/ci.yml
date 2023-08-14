@@ -15,7 +15,7 @@ on:
     paths-ignore:
       '.github/workflows/publish.yml'
       '.github/workflows/wheel.yml'
-      
+
 
 jobs:
   os:
