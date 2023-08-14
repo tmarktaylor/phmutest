@@ -1,0 +1,53 @@
+site_name: phmutest 0.0.1
+site_description: Detect broken Python examples in Markdown
+copyright: Copyright (c) 2023 Mark Taylor
+docs_dir: _mkdocsin
+theme: readthedocs
+nav:
+    - Home: README.md
+
+    - Sections:
+        - 'Advanced feature details' : docs/advanced.md
+        - 'How it works' : docs/howitworks.md
+        - 'Code mode' : docs/codemode.md
+        - 'Session mode' : docs/sessionmode.md
+        - 'Call from Python example' : docs/callfrompython.md
+        - 'Api': docs/api.md
+        - 'Contributing': CONTRIBUTING.md
+        - 'Recent Changes': docs/recent_changes.md
+
+    - Demos:
+        - 'replmode': docs/replmode.md
+        - 'fixture change workdir': docs/fix/code/chdir.md
+        - 'fixture set globals': docs/fix/code/globdemo.md
+        - 'replmode fixture cleanup': docs/fix/repl/drink.md
+        - 'share across files': docs/share/share_demo.md
+        - 'replmode share across files': docs/repl/replshare_demo.md
+        - 'select groups': docs/group/select.md
+        - 'deselect groups': docs/group/deselect.md
+        - 'setup/teardown': docs/setup/setup.md
+        - 'setup across files': docs/setup/across1.md
+
+    - 'un-navd':
+        - 'project testfile': docs/generated_project_py.md
+        - 'sharedemo testfile': docs/generated_share_demo_py.md
+        - tests/md/project.md
+        - docs/fixture_py.md
+        - docs/fix/code/chdir_py.md
+        - docs/fix/code/globdemo_py.md
+        - docs/fix/repl/drink_py.md
+        - docs/setup/across2.md
+        - docs/share/file1.md
+        - docs/share/file2.md
+        - docs/share/file3.md
+        - docs/repl/repl1.md
+        - docs/repl/repl2.md
+        - docs/repl/repl3.md
+        - 'demos' : docs/demos.md
+        - 'skip' : docs/advanced/skip.md
+        - 'skipif' : docs/advanced/skipif.md
+        - 'label' : docs/advanced/label.md
+        - 'label any FCB' : docs/advanced/labelanyfcb.md
+        - 'Junit help' : docs/junit.md
+
+

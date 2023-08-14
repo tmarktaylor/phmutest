@@ -1,0 +1,12 @@
+[tool.phmutest]
+# Use fnmatch like patterns on the -globs keys
+include-globs = ["docs/fix/code/chdir.md"]
+exclude-globs = []
+fixture = "docs.fix.code.chdir.change_dir"    # Empty string means no fixture.
+share-across-files = []
+setup-across-files = []
+# Only one of select, deselect may be non-empty.
+select = []
+deselect = []
+skip = []
+

@@ -1,0 +1,141 @@
+# built from tests/md/example1.md
+
+
+
+
+>>> print("Hello World!")
+Hello World!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# built from tests/md/example2.md
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>> a = "Greetings Planet!"
+>>> a
+'Greetings Planet!'
+>>> b = 12
+>>> b
+12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>> from fractions import Fraction
+>>> Fraction(16, -10)
+Fraction(-8, 5)
+>>> Fraction(123)
+Fraction(123, 1)
+>>> Fraction()
+Fraction(0, 1)
+>>> Fraction('3/7')
+Fraction(3, 7)
+

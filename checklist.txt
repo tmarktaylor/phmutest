@@ -1,0 +1,52 @@
+Checklist
+- Update __init__.py.__version__ per Semantic Versioning.  Tests will fail
+  until all version strings are the same.
+
+- Check for outstanding todo's.
+- update recent changes in recent_changes.md
+- update copyright year
+- Run code inspections.
+- Run pytest cases on lowest Py version
+- Run pytest cases with python warnings enabled.
+  - python -W once -m pytest -vv tests
+  - python -W default -m pytest -vv tests
+- git ls-files shows the files under version control
+- Run mypy against package sources
+- Run black code reformatter
+- Run isort
+- Run flake8
+- Run flake8 on doc and tests (fixture import and use errors are expected)
+- Build docs python docs/premkdocs.py --start-server --clean
+
+- On GitHub manually dispatch build.yml on the branch to be released below.
+  Manually check the contents of source distribution *.tar.gz.
+  Look for its listing at the bottom of build.yml action output.
+
+- Release on GitHub (where 0.0.0 -> published version)
+  - tag= v0.0.0
+  - release= phmutest 0.0.0
+  - description= Version 0.0.0 uploaded to Python Package Index.
+
+- Publish to PYPI
+  Configure trusted publishing on both test PYPI and PYPI if this is
+  the first release.
+  - On GitHub manually dispatch publish.yml
+  - On GitHub manually dispatch wheel.yml to try installing from PYPI
+
+  Alternate manual steps
+  - On GitHub manually dispatch build.yml on the release ref
+  - Download dist artifact uploaded by build.yml to an empty directory.
+  - upload to PYPI
+    python -m pip install --upgrade pip
+	python -m pip install --upgrade setuptools wheel twine
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
+
+  - On GitHub manually dispatch wheel.yml to try installing from PYPI
+  Alternate manual steps
+    Look up on PYPI and check version
+    install from PYPI and verify phmutest.__version__
+    install in venv on Ubuntu
+
+  - The hash on PYPI should be the same as the hash shown by the
+    builddist action step.

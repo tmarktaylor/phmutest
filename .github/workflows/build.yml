@@ -1,0 +1,38 @@
+name: Build PYPI dist
+# Check that the ref can build a PYPI distribution.
+# Show the contents of the source distribution archive.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  builddist:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Build dist
+      run: |
+        python -m pip install build --user
+        python -m build
+        python -m pip hash dist/*
+
+    - name: Upload dist
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist-${{ github.ref_name }}
+        path: dist/*
+        retention-days: 3
+
+    - name: Source distribution contents
+      run: |
+        echo "Source distribution contents:"
+        tar --list -f dist/*.tar.gz
+        echo
+        echo "Number of files plus directories."
+        tar --list -f dist/*.tar.gz | wc --lines
+

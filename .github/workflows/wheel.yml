@@ -1,0 +1,24 @@
+name: Install from PYPI
+
+on:
+  workflow_dispatch:
+
+env:
+  version: 0.0.1
+  command: phmutest
+
+jobs:
+  pypi-install:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: PIP Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install "${{ env.project }}==${{ env.version }}"
+        ${{ env.command }} --help
+        ${{ env.command }} --version
+        python -c "import phmutest; print(phmutest.__version__)"

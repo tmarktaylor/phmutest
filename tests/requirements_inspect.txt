@@ -1,0 +1,8 @@
+flake8
+pep8-naming
+mkdocs
+mypy
+typing
+twine
+black
+isort
