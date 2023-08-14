@@ -1,0 +1,50 @@
+name: Coverage
+
+# Notes:
+# - The os job installs phmutest in a virtual environment.
+# - The coverage job installs phmutest dependencies, but does
+#   not install phmutest.  It imports phmutest from the checked
+#   out src folder set by the environment variable PYTHONPATH.
+# - The inspect job installs phmutest.
+on:
+  workflow_dispatch:
+
+jobs:
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.x
+      id: setuppython
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+    - name: Install phmutest
+      run: |
+        python -m pip install --upgrade pip
+        pip install coverage
+        pip install -r tests/requirements.txt
+        pip freeze
+    - name: Tests, coverage report
+      run: |
+        coverage erase
+        coverage run --branch --source=src -m phmutest --version
+        coverage run --branch --source=src --append -m phmutest README.md --report
+        coverage run --branch --source=src --append -m phmutest README.md
+        coverage run --branch --source=src --append -m pytest -vv tests
+        coverage report --show-missing
+        coverage xml
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
+      continue-on-error: true
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml # optional
+        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: false # optional (default = false)
+        verbose: true # optional (default = false)

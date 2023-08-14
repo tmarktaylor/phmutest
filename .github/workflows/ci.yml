@@ -110,14 +110,14 @@ jobs:
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      if: success() && ((github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/develop'))
-      continue-on-error: true
       with:
-        file: coverage.xml
-        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest
-        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml # optional
+        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: false # optional (default = false)
+        verbose: true # optional (default = false)
+
 
   inspect:
     runs-on: ubuntu-latest

@@ -11,7 +11,7 @@ build:
     python: "3.11"
   jobs:
     post_checkout:
-      - python docs/premkdocs.py
+      - python3 docs/premkdocs.py
 
 mkdocs:
   configuration: mkdocs.yml
