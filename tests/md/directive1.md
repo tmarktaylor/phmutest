@@ -51,14 +51,14 @@ incorrect expected output
 ## skipif directive.
 
 Use skipif on Python code blocks.
-This test case will only run when Python is version 3.10 or higher.
+This test case will only run when Python is version 3.8 or higher.
 
-<!--phmutest-skipif<3.10-->
+<!--phmutest-skipif<3.8-->
 ```python
 import sys
 b = 10
 print(b)
-assert sys.version_info >= (3, 10)
+assert sys.version_info >= (3, 8)
 ```
 ```
 10
