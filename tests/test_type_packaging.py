@@ -7,15 +7,12 @@ import phmutest.reader
 import phmutest.tool
 
 
-def test_mypy_likes_fenced_code_blocks() -> None:
-    """Compile time use of fenced_code_blocks() to be type checked by mypy."""
-    blocks: List[phmutest.fenced.FencedBlock] = []
-    blocks = phmutest.tool.fenced_code_blocks("tests/md/example1.md")
-    assert len(blocks) > 0
-
-
-def test_mypy_likes_fenced_block_nodes() -> None:
-    """Compile time use of fenced_block_nodes() to be type checked by mypy."""
-    nodes: List[phmutest.reader.DocType] = []
+def test_mypy_likes_imported_types() -> None:
+    """Compile time use of imported types to be type checked by mypy."""
+    nodes: List[phmutest.reader.DocNode] = []
     nodes = phmutest.reader.fcb_nodes("tests/md/example1.md")
     assert len(nodes) > 0
+
+    blocks: List[phmutest.fenced.FencedBlock] = []
+    blocks = phmutest.fenced.convert(nodes)
+    assert len(blocks) > 0
