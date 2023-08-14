@@ -11,10 +11,10 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - 'main'
     paths-ignore:
-      '.github/workflows/publish.yml'
-      '.github/workflows/wheel.yml'
+      - '.github/workflows/publish.yml'
+      - '.github/workflows/wheel.yml'
 
 
 jobs:
