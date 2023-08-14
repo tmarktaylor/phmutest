@@ -12,6 +12,10 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      '.github/workflows/publish.yml'
+      '.github/workflows/wheel.yml'
+      
 
 jobs:
   os:
@@ -103,15 +107,17 @@ jobs:
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       continue-on-error: true
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       if: success() && ((github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/develop'))
       continue-on-error: true
       with:
         file: coverage.xml
         flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest
         fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
 
   inspect:
     runs-on: ubuntu-latest
