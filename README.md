@@ -56,7 +56,7 @@ by pressing the `Code` button in the banner at the top of the file.
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [![CI Test](https://github.com/tmarktaylor/phmutest/actions/workflows/ci.yml/badge.svg)](https://github.com/tmarktaylor/phmutest/actions/workflows/ci.yml)
-[![Build status](https://ci.appveyor.com/api/projects/status/5pp3swc1q1fgbcd6/branch/main?svg=true)](https://ci.appveyor.com/project/tmarktaylor/phmutest/branch/default)
+[![Build status](https://ci.appveyor.com/api/projects/status/nbu1xlraoii8x377?svg=true)](https://ci.appveyor.com/project/tmarktaylor/phmutest)
 [![readthedocs](https://readthedocs.org/projects/phmutest/badge/?version=latest)](https://phmutest.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/tmarktaylor/phmutest/coverage.svg?branch=main)](https://codecov.io/gh/tmarktaylor/phmutest?branch=main)
 
