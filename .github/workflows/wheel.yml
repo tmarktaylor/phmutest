@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  project: phmutest
   version: 0.0.1
   command: phmutest
 
