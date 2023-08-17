@@ -144,8 +144,8 @@ jobs:
       # Subsequent steps run with the modified files.
       # Don't run black on the generated test files.
       run: |
-        black **/*.py --check --force-exclude "tests.py.generated.*py"
-        black **/*.py --force-exclude "tests.py.generated.*py"
+        black **/*.py --check --force-exclude="tests/py"
+        black **/*.py --force-exclude="tests/py"
       continue-on-error: true
     - name: Code Style
       run: |
