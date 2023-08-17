@@ -391,14 +391,18 @@ def test_unittest_stderr_printing():
                 number_of_deselected_blocks=1,
             )
     assert want == phmresult.metrics
-    expected_std_err = """\
+    expected_std_err = [
+        """\
 .
 ----------------------------------------------------------------------
-Ran 1 test in 0.000s
+Ran 1 test in""",
+        """
 
 OK
-"""
-    assert expected_std_err == ferr.getvalue()
+""",
+    ]
+    assert expected_std_err[0] in ferr.getvalue()
+    assert expected_std_err[1] in ferr.getvalue()
     assert output == fout.getvalue().lstrip()
 
 
