@@ -5,6 +5,7 @@ import io
 import pytest
 
 import phmutest.main
+import phmutest.summary
 
 
 def test_code_raises():

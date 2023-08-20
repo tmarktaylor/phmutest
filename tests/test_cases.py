@@ -7,6 +7,7 @@ import unittest
 import phmutest.cases
 import phmutest.main
 import phmutest.subtest
+import phmutest.summary
 
 
 def test_chop_final_newline():

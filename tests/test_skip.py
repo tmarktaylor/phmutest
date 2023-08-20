@@ -1,6 +1,7 @@
 """Check handling of --skip command line option."""
 
 import phmutest.main
+import phmutest.summary
 
 
 def test_skip_text1():

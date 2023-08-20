@@ -7,6 +7,7 @@ from unittest.mock import patch
 import pytest
 
 import phmutest.main
+import phmutest.summary
 from phmutest.globs import AssignmentExtractor, Globals
 
 MYGLOBAL = 1

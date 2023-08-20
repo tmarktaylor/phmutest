@@ -10,6 +10,7 @@ import phmutest.fixture
 import phmutest.main
 import phmutest.reader
 import phmutest.session
+import phmutest.summary
 from phmutest.direct import MarkerPattern
 
 # Note that the last block is included because it has the

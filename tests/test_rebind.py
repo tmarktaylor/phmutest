@@ -31,6 +31,7 @@ To see the effect of rebind in REPL mode see test_globs.py::test_extractor().
 import unittest
 
 import phmutest.main
+import phmutest.summary
 from phmutest.fixture import Fixture
 
 

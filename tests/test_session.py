@@ -1,5 +1,6 @@
 """Test cases for session.py."""
 import phmutest.main
+import phmutest.summary
 from phmutest.fixture import Fixture
 
 

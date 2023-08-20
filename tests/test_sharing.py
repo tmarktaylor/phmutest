@@ -4,6 +4,7 @@ import io
 import unittest
 
 import phmutest.main
+import phmutest.summary
 
 
 def namelist(text, unwanted_prefix):

@@ -1,5 +1,6 @@
 """Test Python info string matching, command line skip, and --report."""
 import phmutest.main
+import phmutest.summary
 
 
 def test_python_code_matcher():

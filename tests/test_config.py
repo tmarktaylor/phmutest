@@ -7,6 +7,7 @@ import pytest
 
 import phmutest.config
 import phmutest.main
+import phmutest.summary
 
 
 def process_args(commandline_args):
