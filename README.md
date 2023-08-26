@@ -1,4 +1,4 @@
-# phmutest 0.0.1
+# phmutest 0.0.2
 
 ## Detect broken Python examples in Markdown
 
