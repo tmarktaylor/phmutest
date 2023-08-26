@@ -31,8 +31,8 @@ def test_code_raises():
 
 def test_unittest_fail_fast():
     """Pass through callers -f option to unittest. (fail fast)."""
-    command = "tests/fail/raiser.md --log -f"
-    phmresult = phmutest.main.main(command.split())
+    line = "tests/fail/raiser.md --log -f"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=5,
         passed=4,

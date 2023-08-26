@@ -3,3 +3,7 @@
 
 - Initial upload to Python Package Index.
 
+0.0.2 - 2023-xx-xx
+
+- add main.command().
+

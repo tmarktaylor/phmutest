@@ -234,6 +234,11 @@ def main(argv: Optional[List[str]] = None) -> Optional[phmutest.summary.PhmResul
     return generate_and_run(known_args)
 
 
+def command(line: str) -> Optional[phmutest.summary.PhmResult]:
+    """For call from Python with command line as a string and no sys.exit()."""
+    return main(line.split())
+
+
 def entry_point(argv: Optional[List[str]] = None) -> None:
     """Entry point for command line invocation."""
     phmresult = main(argv)

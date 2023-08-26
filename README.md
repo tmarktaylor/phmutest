@@ -246,6 +246,17 @@ The fixture file should be in the project directory tree. Fixture demos:
 - [fixture set globals](docs/fix/code/globdemo.md)
 - [fixture cleanup REPL Mode](docs/fix/repl/drink.md)
 
+When calling phmutest from Python, mock.patch() patching
+would typically be implemented as enclosing with statements.
+
+When invoking phmutest from a shell,
+the --fixture function can be used to install patches.
+See example near the end of tests/test_patching.py and
+in tests/test_subprocess.py. The example shows how to patch to
+apply doctest optionflags in --replmode.
+Do patching cleanup when not in --replmode by calling
+`unittest.addModuleCleanup(stack.pop_all().close)`.
+
 
 ## Extend an example across files
 
@@ -306,9 +317,9 @@ python -m phmutest README.md --log
 
 ## Call from Python
 
-Call **phmutest.main.main()** with a list of strings for the usage arguments,
-options, and option values like this:
-`["/md/project.md", "--replmode"]`
+Call **phmutest.main.command()** with a string that looks like a
+command line less the phmutest, like this:
+`"md/project.md --replmode"`
 
 - A `phmutest.summary.PhmResult` instance is returned.
 - When calling from Python there is no shell wildcard expansion.

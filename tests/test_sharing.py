@@ -21,11 +21,11 @@ def test_share_across_with_setup_sharing():
     """Show that setup blocks are not shared by share-across-files."""
     # --quiet is passed through to unittest to prevent the progress dot printing.
     with contextlib.redirect_stderr(io.StringIO()) as err:
-        command = (
+        line = (
             "--log --config tests/toml/acrossfiles2.toml "
             "--sharing tests/md/setupnoteardown.md --quiet"
         )
-        phmresult = phmutest.main.main(command.split())
+        phmresult = phmutest.main.command(line)
         want = phmutest.summary.Metrics(
             number_blocks_run=6,
             passed=6,
@@ -88,12 +88,12 @@ def test_share_across_with_setup_sharing():
 def test_setup_across_sharing():
     """Run the setup across files example with --sharing."""
     with contextlib.redirect_stderr(io.StringIO()) as err:
-        command = (
+        line = (
             "docs/setup/across1.md docs/setup/across2.md "
             "--setup-across-files docs/setup/across1.md --log "
             "--sharing docs/setup/across1.md"
         )
-        phmresult = phmutest.main.main(command.split())
+        phmresult = phmutest.main.command(line)
         want = phmutest.summary.Metrics(
             number_blocks_run=6,
             passed=6,

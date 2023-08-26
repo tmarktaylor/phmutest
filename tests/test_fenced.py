@@ -5,8 +5,8 @@ import phmutest.summary
 
 def test_python_code_matcher():
     """Test Python block identification."""
-    args = "tests/md/pythonmatch.md".split()
-    phmresult = phmutest.main.main(args)
+    line = "tests/md/pythonmatch.md"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=7,
         passed=7,
@@ -22,8 +22,8 @@ def test_python_code_matcher():
 
 def test_python_repl_matcher():
     """Test Python block identification."""
-    args = "tests/md/pythonmatch.md --replmode".split()
-    phmresult = phmutest.main.main(args)
+    line = "tests/md/pythonmatch.md --replmode"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=8,
         passed=8,
@@ -99,9 +99,9 @@ def test_report(capsys, checker):
 
         Deselected blocks:
         """
-    command = "tests/md/report.md --skip CHERRIES CHERRIES --report"
+    line = "tests/md/report.md --skip CHERRIES CHERRIES --report"
     # Note- duplicate skip pattern CHERRIES is not shown in list of
     #       block skip patterns.
-    phmresult = phmutest.main.main(command.split())
+    phmresult = phmutest.main.command(line)
     assert phmresult is None
     checker(expected, capsys.readouterr().out.rstrip())

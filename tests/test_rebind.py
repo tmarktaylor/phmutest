@@ -49,15 +49,14 @@ def globsfixture(**kwargs):
 
 def test_share_across_rebind():
     """Share across files re-assign of fixture glob name done in file1.md."""
-    command = (
+    line = (
         "docs/share/file1.md docs/share/file2.md docs/share/file3.md "
         "--share-across-files docs/share/file1.md docs/share/file2.md --log "
         "--fixture tests.test_rebind.globsfixture "
         "--sharing . --quiet"
     )
     # --quiet is passed through to unittest to prevent the progress dot printing.
-    args = command.split()
-    phmresult = phmutest.main.main(args)
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=8,
         passed=8,

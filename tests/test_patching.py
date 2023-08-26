@@ -35,8 +35,8 @@ def test_infostring_patch(capsys):
     matcher.python_patterns.append("ladenpython")  # Also match info string ladenpython.
     matcher.compile()
     with mock.patch("phmutest.fenced.python_matcher", matcher):
-        args = ["tests/md/patching1.md", "--log"]
-        phmresult = phmutest.main.main(args)
+        line = "tests/md/patching1.md --log"
+        phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,  # counts the ladenpython FCB
@@ -89,8 +89,8 @@ def test_directive_patch(capsys):
     updated_finders = copy.copy(phmutest.direct.directive_finders)
     updated_finders.append(finder_alias)
     with mock.patch("phmutest.direct.directive_finders", updated_finders):
-        args = ["tests/md/patching1.md", "--log"]
-        phmresult = phmutest.main.main(args)
+        line = "tests/md/patching1.md --log"
+        phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=2,
         passed=2,  # does not count the ladenpython FCB
@@ -134,11 +134,8 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     """Show modify_docstring patch changes the docstring that gets run."""
     # Run twice, first time without the patch. The second time with the
     # patch that makes the 3 blocks fail.
-    command = (
-        "tests/md/optionflags.md --replmode --fixture tests.test_patching.setflags"
-    )
-    args = command.split()
-    phmresult1 = phmutest.main.main(args)
+    line = "tests/md/optionflags.md --replmode --fixture tests.test_patching.setflags"
+    phmresult1 = phmutest.main.command(line)
     want1 = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,
@@ -153,7 +150,7 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     assert phmresult1.is_success is True
 
     with mock.patch("phmutest.session.modify_docstring", rewrite_docstring):
-        phmresult2 = phmutest.main.main(args)
+        phmresult2 = phmutest.main.command(line)
     want2 = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=0,
@@ -193,12 +190,11 @@ def setflags(**kwargs):
 
 def test_doctest_optionflags_patch():
     """Test a --fixture that runs doctests with optionflags."""
-    command = (
+    line = (
         "tests/md/optionflags.md --log --replmode "
         " --fixture tests.test_patching.setflags"
     )
-    args = command.split()
-    phmresult = phmutest.main.main(args)
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,
