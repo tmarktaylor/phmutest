@@ -12,7 +12,7 @@ note that dots separate the folders and the function.
 
 The function **change_dir()** changes the
 working directory to `docs/fix/code`.  This allows the example to use a
-pathname relative to `docs/init/fix/code` for the file.
+pathname relative to `docs/fix/code` for the file.
 
 **change_dir()** also calls **unittest.addModuleCleanup()** to have unittest
 restore the working directory when unittest terminates.

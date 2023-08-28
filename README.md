@@ -37,9 +37,9 @@ Designated and stable **patch points** for Python standard library
 
 These features require adding tool specific HTML comment **directives**
 to the Markdown. Because directives are HTML comments they are not visible in
-rendered Markdown. View directives on [Latest README on GitHub][1]
+rendered Markdown. View directives on GitHub
 by pressing the `Code` button in the banner at the top of the file.
-| [Here](docs/advanced.md).
+| [Advanced feature details](docs/advanced.md).
 
 - Assign test group names to blocks. Command line options select or
   deselect test groups by name.
@@ -81,6 +81,8 @@ by pressing the `Code` button in the banner at the top of the file.
 [Patch points](#patch-points) |
 [Related projects](#related-projects)
 
+[Sections](docs/demos.md#sections) |
+[Demos](docs/demos.md#demos) |
 [Changes](docs/recent_changes.md) |
 [Contributions](CONTRIBUTING.md)
 
@@ -137,9 +139,9 @@ args.log: 'True'
 
 location|label  result
 --------------  ------
-README.md:92..  pass
-README.md:98..  pass
-README.md:111.  pass
+README.md:94..  pass
+README.md:100.  pass
+README.md:113.  pass
 --------------  ------
 ```
 
@@ -334,15 +336,15 @@ command line less the phmutest, like this:
 Feel free to **unittest.mock.patch()** at these places in the code and not worry about
 breakage in future versions. Look for examples in tests/test_patching.py.
 
+### List of patch points
 
-|       patched function       | purpose
+|       patched function              | purpose
 | :--------------------------------:  | :----------:
 | phmutest.direct.directive_finders() | Add directive aliases
 | phmutest.fenced.python_matcher()    | Add detect Python from FCB info string
 | phmutest.session.modify_docstring() | Inspect/modify REPL text before testing
 | phmutest.reader.post()              | Inspect/modify DocNode detected in Markdown
 
-List of patch points
 
 ## Related projects
 - phmdoctest
@@ -355,6 +357,28 @@ List of patch points
 - pytest-phmdoctest
 - pytest-codeblocks
 
+
+Major differences between phmutest and phmdoctest:
+
+- phmutest treats each Markdown file as a single long example. phmdoctest
+  tests each FCB separately. Adding a share-names directive is necessary to
+  extend an example across FCBs within a file.
+- Only phmutest can extend an example across files.
+- phmutest uses Python standard library unittest and doctest as test runners.
+  phmdoctest writes a pytest testfile for each Markdown file
+  which requires a separate step to run. The testfiles then need to be discarded.
+- phmdoctest offers two pytest fixtures that can be used in a pytest test case
+  to generate and run a testfile in one step.
+- phmutest generates tests for multiple Markdown files in one step
+  and runs them internally so there are no leftover test files.
+- The --fixture test suite initialization and cleanup is only available on phmutest.
+  phmdoctest offers some initialization behaviour using an FCB with a setup
+  directive and its --setup-doctest option and it only works with sessions.
+  See phmdoctest documentation "Execution Context"
+  section for an explanation.
+- phmutest does not support inline annotations.
+
+
 [1]: https://github.com/tmarktaylor/phmutest/blob/master/README.md?plain=1
 [3]: https://github.github.com/gfm/#fenced-code-blocks
 [11]: https://github.github.com/gfm/#info-string
@@ -364,6 +388,6 @@ List of patch points
 [13]: https://ci.appveyor.com/project/tmarktaylor/phmutest
 [15]: https://docs.pytest.org/en/stable
 [16]: https://tmarktaylor.github.io/pytest-phmdoctest
-[17]: https://pypi.python.org/pypi/phmutest
+[17]: https://pypi.python.org/pypi/phmdoctest
 
 

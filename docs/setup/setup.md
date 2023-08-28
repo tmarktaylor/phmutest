@@ -10,8 +10,11 @@ in the Markdown file.
 The main reason to use setup blocks is so that the teardown blocks
 will run in the event a post setup block fails.
 Note that teardown will only run if all the setup blocks succeed.
-We use ExitStack to create a single function call to cleanup the
-temporary directory and change back to the original working directory.
+We use ExitStack to create a single function call to do cleanup:
+
+- change back to the original working directory
+- cleanup the temporary directory
+
 We use with ExitStack to assure cleanup when a statement in the with
 suite raises an exception.
 
@@ -91,11 +94,10 @@ args.log: 'True'
 
 location|label                   result
 -------------------------------  ------
-docs/setup/setup.md:19 setup...  pass
-docs/setup/setup.md:32 setup...  pass
-docs/setup/setup.md:44.........  pass
-docs/setup/setup.md:56 teardown  pass
-docs/setup/setup.md:71 teardown  pass
+docs/setup/setup.md:22 setup...  pass
+docs/setup/setup.md:35 setup...  pass
+docs/setup/setup.md:47.........  pass
+docs/setup/setup.md:59 teardown  pass
+docs/setup/setup.md:74 teardown  pass
 -------------------------------  ------
 ```
-[1]: https://github.com/tmarktaylor/phmutest/docs/setup

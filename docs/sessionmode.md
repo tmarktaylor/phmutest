@@ -14,7 +14,7 @@ file.
 The fixture function can return global variables that are used
 when running doctest.
 The fixture function returns a dict.
-The items become globs as described by [doctest][1].
+The items become [globs][2] as described by doctest.
 Examples should avoid assignments to the fixture glob names. To see what
 happens see tests/test_rebind.py.
 
@@ -54,4 +54,5 @@ to the standard output stream shared with doctest's verbose printing.
 
 
 [1]: https://docs.python.org/3/library/doctest.html
+[2]: https://docs.python.org/3/library/doctest.html#doctest.DocTest.globs
 

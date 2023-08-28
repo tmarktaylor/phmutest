@@ -1,4 +1,13 @@
-# Index of Demos
+# Sections
+
+- [Advanced feature details](advanced.md)
+- [How it works](howitworks.md)
+- [Code mode](codemode.md)
+- [Session mode](sessionmode.md)
+- [Call from Python example](callfrompython.md)
+- [Api](api.md)
+
+# Demos
 
 - [REPL Mode](replmode.md)
 - [fixture change workdir](fix/code/chdir.md)

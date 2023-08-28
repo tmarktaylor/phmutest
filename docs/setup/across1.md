@@ -100,4 +100,3 @@ docs/setup/across1.md:53 teardown  pass
 docs/setup/across1.md:68 teardown  pass
 ---------------------------------  ------
 ```
-[1]: https://github.com/tmarktaylor/phmutest/docs/setup

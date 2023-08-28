@@ -4,7 +4,7 @@
 
 The Markdown [GFM fenced code blocks][1] are identified as Python by
 looking at the [info string][2].
-To be treated as Python the FCB [info string][2] should start
+To be treated as Python the FCB info string should start
 with one of these:
 
 - python
@@ -36,14 +36,14 @@ The --report option shows these fenced block details:
 - output block
 - directives
 
+### role field values
+
 | role          | meaning               | referred to in the docs as
 | :-------------| :-----------------:   | :-----------------:
 | Role.CODE     | Python code block     | code blocks or Python code blocks
 | Role.OUTPUT   | expected output block | output blocks
 | Role.SESSION  | Python REPL block     | session or REPL blocks
 | Role.NOROLE   | all other blocks
-
-interpret the --report role field values
 
 The report also shows a list called Deselected blocks: at the end that lists each
 block that was excluded by the --select or --deselect option.
