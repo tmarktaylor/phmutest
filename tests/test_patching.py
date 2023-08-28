@@ -165,7 +165,7 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     assert phmresult2.is_success is False
 
 
-class FailFastRunner(phmutest.session.ExampleOutcomeRunner):
+class OptionflagRunner(phmutest.session.ExampleOutcomeRunner):
     """Doctest Runner to set optionflags."""
 
     myflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
@@ -177,10 +177,10 @@ class FailFastRunner(phmutest.session.ExampleOutcomeRunner):
 
 
 def setflags(**kwargs):
-    """phmutest fixture function replaces the doctest.DocTestRunner."""
+    """phmutest fixture function to patch the doctest runner."""
     with ExitStack() as stack:
         stack.enter_context(
-            mock.patch("phmutest.session.ExampleOutcomeRunner", FailFastRunner)
+            mock.patch("phmutest.session.ExampleOutcomeRunner", OptionflagRunner)
         )
         fixture = phmutest.fixture.Fixture(
             globs=None, repl_cleanup=stack.pop_all().close

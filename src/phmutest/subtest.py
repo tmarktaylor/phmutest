@@ -1,3 +1,4 @@
+"""Generate code to test Python FCBs."""
 import argparse
 import re
 import textwrap

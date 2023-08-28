@@ -6,14 +6,6 @@ top = "# <put filename here>\n```python\n"
 bottom = """```
 """
 
-raw_top = "# <put filename here>\n~~~\n"
-
-raw_bottom = """~~~
-"""
-
-text_bottom = """~~~
-"""
-
 
 def nag():
     print("If a new file...")

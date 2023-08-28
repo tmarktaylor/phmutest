@@ -42,7 +42,7 @@ def setUpModule():
     _phm_log.append(["setUpModule", "", ""])
     $showprogressenter
     _phm_globals = _phmGlobals(__name__, shareid=$shareid)
-    $usersetupupdate
+    $userfixtureglobs
 $setupblocks
     $showprogressexit
 """
@@ -82,9 +82,9 @@ def render_setup_module(
         ] = 'print("leaving setUpModule.", file=sys.stderr)'
 
     if args.fixture:
-        replacements["usersetupupdate"] = phmutest.subtest.justify(
+        replacements["userfixtureglobs"] = phmutest.subtest.justify(
             setup_module_form,
-            "$usersetupupdate",
+            "$userfixtureglobs",
             fixture_globs_update_code,
         )
     return phmutest.subtest.fill_in(
@@ -316,7 +316,7 @@ import unittest
 from phmutest.globs import Globals as _phmGlobals
 from phmutest.printer import Printer as _phmPrinter
 from phmutest.skip import sys_tool as _phm_sys
-$usersetupfunction
+$importuserfixture
 
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
@@ -342,7 +342,7 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
     if args.fixture:
         modulepackage, function_name = get_fixture_parts(args.fixture)
         replacements[
-            "usersetupfunction"
+            "importuserfixture"
         ] = f"from {modulepackage} import {function_name} as _phm_user_setup_function"
 
     if args.setup_across_files or args.share_across_files or args.fixture:
@@ -351,7 +351,6 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
         teardown_code = render_teardown_module(args, block_store)
         replacements["teardownmodule"] = "\n\n" + teardown_code
 
-    sequence_number = 1
     for sequence_number, path in enumerate(args.files, start=1):
         test_classes += "\n\n" + markdown_file(args, block_store, path, sequence_number)
     if not test_classes.endswith("\n"):
