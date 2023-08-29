@@ -115,7 +115,7 @@ class FencedBlock:
         self.output = fenced_block
 
     def get_output_contents(self) -> str:
-        """Return contents of linked output block or empty str if no link."""
+        """Return contents of linked output block."""
         assert self.output, "Must be called on a block with Role.OUTPUT"
         return self.output.contents
 

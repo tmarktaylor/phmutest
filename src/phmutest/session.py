@@ -23,22 +23,22 @@ class ExampleOutcomeRunner(doctest.DocTestRunner):
 
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
-        self.outcomes = {}
-        self.number_of_failures = 0
-        self.number_of_errors = 0
+        self.phm_outcomes = {}
+        self.phm_number_of_failures = 0
+        self.phm_number_of_errors = 0
 
     def report_success(self, out, test, example, got):  # type: ignore
-        self.outcomes[example.lineno + 1] = "pass"
+        self.phm_outcomes[example.lineno + 1] = "pass"
         super().report_success(out, test, example, got)
 
     def report_failure(self, out, test, example, got):  # type: ignore
-        self.outcomes[example.lineno + 1] = "failed"
-        self.number_of_failures += 1
+        self.phm_outcomes[example.lineno + 1] = "failed"
+        self.phm_number_of_failures += 1
         super().report_failure(out, test, example, got)
 
     def report_unexpected_exception(self, out, test, example, exc_info):  # type: ignore
-        self.outcomes[example.lineno + 1] = "error"
-        self.number_of_errors += 1
+        self.phm_outcomes[example.lineno + 1] = "error"
+        self.phm_number_of_errors += 1
         super().report_unexpected_exception(out, test, example, exc_info)
 
 
@@ -156,10 +156,10 @@ def run_one_file(
     runner.run(tests[0])
 
     # Determine each overall block result for the log from the file's Example outcomes.
-    runner_lineno = set(runner.outcomes)
+    runner_lineno = set(runner.phm_outcomes)
     for block, line_range in zip(tested_blocks, line_ranges):
         block_lineno = set(line_range) & runner_lineno
-        if block_outcomes := [runner.outcomes[line] for line in block_lineno]:
+        if block_outcomes := [runner.phm_outcomes[line] for line in block_lineno]:
             # Note- If there is a fail-fast there will be no outcomes for a
             #       later block.
             result = get_result(block_outcomes)
@@ -172,7 +172,7 @@ def run_one_file(
     lineno_log.sort()
     log = [entry for lineno, entry in lineno_log]
     return SessionResult(
-        log, runner.number_of_failures, runner.number_of_errors, docstring
+        log, runner.phm_number_of_failures, runner.phm_number_of_errors, docstring
     )
 
 
@@ -220,7 +220,7 @@ def process_user_fixture(
         globs = {}
     else:
         # If --sharing ".", show the fixture globs.
-        if phmutest.cases.is_verbose_sharing(args, Path("not_a_md_file")):
+        if phmutest.cases.is_verbose_sharing(args, Path("placeholder")):
             glob_names = ", ".join(globs.keys())
             print(f"{args.fixture} is sharing: {glob_names}")
 
