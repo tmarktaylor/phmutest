@@ -5,5 +5,7 @@
 
 0.0.2 - 2023-xx-xx
 
-- add main.command().
+- Add main.command().
+- Remove import io, sys, contextlib from generated testfile.
+- Setup classifiers, cleanups, Docs, renames.
 

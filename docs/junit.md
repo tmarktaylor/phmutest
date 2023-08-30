@@ -17,7 +17,6 @@ FCB with an "error" status.
 ```python
 import contextlib
 import io
-import sys
 
 import phmutest.main
 

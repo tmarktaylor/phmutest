@@ -72,9 +72,6 @@ in its docstring.
 These imports will not be shown by --sharing because they are already
 imported at the top of the testfile.
 
-- import contextlib
-- import io
-- import sys
 - import unittest
 
 ## Share across files

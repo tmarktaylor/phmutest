@@ -93,18 +93,15 @@ class TestGlobals:
         """Try an update with names that get conditionally popped before the update."""
         # Exercises the if XXX in additions.pop('XXX', None) lines
         items = {
-            "contextlib": None,
-            "io": None,
-            "sys": None,
+            "unittest": None,
             "example_variable": 1111,  # does not get popped
         }
         self.globs.update(additions=items)
         # Note get_names() does not include sys since sys is a global of this file.
-        assert self.globs.get_names() == {"example_variable", "contextlib", "io"}
+        assert self.globs.get_names() == {"example_variable", "unittest"}
         assert self.globs.copy() == {
             "example_variable": 1111,
-            "contextlib": None,
-            "io": None,
+            "unittest": None,
         }
 
     def test_more_additions(self):
