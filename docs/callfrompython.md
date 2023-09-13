@@ -18,15 +18,17 @@ assert phmresult.metrics.number_of_files == 1
 ```
 
 ## PhmResult
+
 phmutest.main.command() returns a value of type PhmResult
 defined in src/phmutest/summary.py.
 
 <!--phmutest-skip-->
 <!--phmutest-label phmresult-->
+
 ```python
 @dataclass
 class PhmResult:
-    """phmutest.main.main() return type.  Markdown Python example test results."""
+    """phmutest.main.command() return type.  Markdown Python example test results."""
 
     test_program: Optional[unittest.TestProgram]
     is_success: bool
@@ -48,7 +50,6 @@ assert phmresult.metrics.number_blocks_run == 3
 assert phmresult.metrics.passed == 3
 assert phmresult.metrics.number_of_files == 1
 ```
-
 
 ## limitation
 
@@ -85,5 +86,3 @@ Tests checking this example:
 - tests/test_subprocess.py:test_callfrompython()
 - tests/test_docs.py:test_call_from_python()
 - tests/test_docs.py:test_phmresult()
-
-

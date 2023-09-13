@@ -82,7 +82,7 @@ class Metrics:
 
 @dataclass
 class PhmResult:
-    """phmutest.main.main() return type.  Markdown Python example test results."""
+    """phmutest.main.command() return type.  Markdown Python example test results."""
 
     test_program: Optional[unittest.TestProgram]
     is_success: bool
