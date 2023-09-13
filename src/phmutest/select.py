@@ -9,6 +9,16 @@ import phmutest.reader
 from phmutest.direct import Marker
 from phmutest.fenced import FencedBlock, Role
 
+# This is a designated patch point. Developers: Please treat this as if it were an API.
+# Use this add FCB info strings that indicate an expected output FCB.
+# To patch:
+# - Create a copy of OUTPUT_INFO_STRINGS.
+# - Add or remove info string values that indicate the FCB is expected output.
+# - with mock.patch("phmutest.select.OUTPUT_INFO_STRINGS", <the new instance>):
+# - See example in tests/test_patching.py.
+OUTPUT_INFO_STRINGS = ["", "expected-output"]
+"""To be expected output the FCB will have one of these info strings."""
+
 
 def identify_output_blocks(blocks: List[FencedBlock]) -> None:
     """Guess which are blocks are output.
@@ -22,7 +32,9 @@ def identify_output_blocks(blocks: List[FencedBlock]) -> None:
     previous_block = None
     for block in blocks:
         if previous_block is not None:
-            if not block.info_string and previous_block.role == Role.CODE:
+            if (block.info_string in OUTPUT_INFO_STRINGS) and (
+                previous_block.role == Role.CODE
+            ):
                 block.set(Role.OUTPUT)
                 previous_block.set_link_to_output(block)
         previous_block = block
