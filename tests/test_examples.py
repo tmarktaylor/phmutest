@@ -114,7 +114,7 @@ def test_directive1():
 
 
 def test_directive1_replmode():
-    """Test label, skip, and skipif directives on code blocks."""
+    """Test label, skip, and skipif directives on session blocks."""
     line = "tests/md/directive1.md --replmode"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
@@ -130,7 +130,7 @@ def test_directive1_replmode():
     assert want == phmresult.metrics
     assert phmresult.is_success is True
     assert "phmutest-skip" in phmresult.log[0][2]
-    assert "tests/md/directive1.md:69" in phmresult.log[1][0]
+    assert "tests/md/directive1.md:78" in phmresult.log[1][0]
     assert "doctest_print_coffee" in phmresult.log[1][0]
 
 
@@ -267,6 +267,24 @@ def test_does_not_print():
 def test_excess_printing():
     """Excess expected output printed."""
     line = "tests/md/missing_some_output.md"
+    phmresult = phmutest.main.command(line)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=1,
+        passed=0,
+        failed=1,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+    assert phmresult.is_success is False
+
+
+def test_extra_expected_output():
+    """Expected output has an additional line."""
+    line = "tests/md/extra_line_in_output.md"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=1,
