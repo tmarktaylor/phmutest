@@ -61,7 +61,6 @@ def test_no_files():
 
 def test_skipif_no_output():
     """Source Code block with no ouput and skipif directive. Empty Python block."""
-    # This covers the cases.py line near the end: test_classes += "\n"
     line = "tests/md/cases.md --log"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
@@ -136,19 +135,19 @@ def test_print_captured_output(startswith_checker):
     assert isinstance(phmresult.test_program, unittest.TestProgram)
 
     output = ferr.getvalue()
-    expected = """tests/md/printer.md:6 ... failed
+    expected = """tests/md/printer.md:7 ... failed
         === phmutest: captured stdout ===
         asserting False...
         === end ===
         === phmutest: captured stderr ===
         asserting False...
         === end ===
-        tests/md/printer.md:17 ... pass
-        tests/md/printer.md:30 ... failed
+        tests/md/printer.md:18 ... pass
+        tests/md/printer.md:31 ... failed
         === phmutest: captured stdout ===
         (10, 1)
         === end ===
-        tests/md/printer.md:42 ... skip   phmutest-skip
+        tests/md/printer.md:46 ... skip   phmutest-skip
         """
     startswith_checker(expected, output)
     ferr.close()
@@ -213,15 +212,15 @@ def test_setup_no_teardown(capsys):
     assert want == phmresult.metrics
     assert phmresult.is_success is True
     assert isinstance(phmresult.test_program, unittest.TestProgram)
-    assert "tests/md/setupnoteardown.md:10 setup" in phmresult.log[0][0]
-    assert "tests/md/setupnoteardown.md:14 setup" in phmresult.log[1][0]
-    assert "tests/md/setupnoteardown.md:26" in phmresult.log[2][0]
-    assert "tests/md/setupnoteardown.md:42" in phmresult.log[3][0]
-    assert "tests/md/setupnoteardown.md:46" in phmresult.log[4][0]
+    assert "tests/md/setupnoteardown.md:11 setup" in phmresult.log[0][0]
+    assert "tests/md/setupnoteardown.md:17 setup" in phmresult.log[1][0]
+    assert "tests/md/setupnoteardown.md:29" in phmresult.log[2][0]
+    assert "tests/md/setupnoteardown.md:48" in phmresult.log[3][0]
+    assert "tests/md/setupnoteardown.md:52" in phmresult.log[4][0]
 
 
 def test_setup_across_no_teardown(capsys):
-    """Run the setup across files example and check the log."""
+    """Run the setup across files."""
     line = (
         "tests/md/setupnoteardown.md tests/md/setupto.md --log "
         "--setup-across-files tests/md/setupnoteardown.md"
@@ -241,17 +240,17 @@ def test_setup_across_no_teardown(capsys):
     assert phmresult.is_success is True
     assert isinstance(phmresult.test_program, unittest.TestProgram)
     assert "setUpModule" in phmresult.log[0][0]
-    assert "tests/md/setupnoteardown.md:10" in phmresult.log[1][0]
-    assert "tests/md/setupnoteardown.md:14" in phmresult.log[2][0]
-    assert "tests/md/setupnoteardown.md:26" in phmresult.log[3][0]
-    assert "tests/md/setupnoteardown.md:42" in phmresult.log[4][0]
-    assert "tests/md/setupnoteardown.md:46" in phmresult.log[5][0]
+    assert "tests/md/setupnoteardown.md:11" in phmresult.log[1][0]
+    assert "tests/md/setupnoteardown.md:17" in phmresult.log[2][0]
+    assert "tests/md/setupnoteardown.md:29" in phmresult.log[3][0]
+    assert "tests/md/setupnoteardown.md:48" in phmresult.log[4][0]
+    assert "tests/md/setupnoteardown.md:52" in phmresult.log[5][0]
     assert "tests/md/setupto.md:7" in phmresult.log[6][0]
     assert "tearDownModule" in phmresult.log[7][0]
 
 
 def test_setup_across_share_across(capsys):
-    """Run the setup across files example and check the log."""
+    """Run the setup+share across files."""
     line = "--log --config tests/toml/acrossfiles.toml"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
@@ -268,13 +267,13 @@ def test_setup_across_share_across(capsys):
     assert phmresult.is_success is True
     assert isinstance(phmresult.test_program, unittest.TestProgram)
     assert "setUpModule" in phmresult.log[0][0]
-    assert "tests/md/setupnoteardown.md:10 setup" in phmresult.log[1][0]
-    assert "tests/md/setupnoteardown.md:14 setup" in phmresult.log[2][0]
-    assert "tests/md/setupnoteardown.md:26" in phmresult.log[3][0]
-    assert "tests/md/setupnoteardown.md:42" in phmresult.log[4][0]
-    assert "tests/md/setupnoteardown.md:46" in phmresult.log[5][0]
+    assert "tests/md/setupnoteardown.md:11 setup" in phmresult.log[1][0]
+    assert "tests/md/setupnoteardown.md:17 setup" in phmresult.log[2][0]
+    assert "tests/md/setupnoteardown.md:29" in phmresult.log[3][0]
+    assert "tests/md/setupnoteardown.md:48" in phmresult.log[4][0]
+    assert "tests/md/setupnoteardown.md:52" in phmresult.log[5][0]
     assert "tests/md/sharedto.md:7" in phmresult.log[6][0]
-    assert "tests/md/sharedto.md:24" in phmresult.log[7][0]
+    assert "tests/md/sharedto.md:26" in phmresult.log[7][0]
     assert "tearDownModule" in phmresult.log[8][0]
 
 
@@ -296,11 +295,11 @@ def test_share_across_with_setup(capsys):
     assert phmresult.is_success is True
     assert isinstance(phmresult.test_program, unittest.TestProgram)
     assert "setUpModule" in phmresult.log[0][0]
-    assert "tests/md/setupnoteardown.md:10 setup" in phmresult.log[1][0]
-    assert "tests/md/setupnoteardown.md:14 setup" in phmresult.log[2][0]
-    assert "tests/md/setupnoteardown.md:26" in phmresult.log[3][0]
-    assert "tests/md/setupnoteardown.md:42" in phmresult.log[4][0]
-    assert "tests/md/setupnoteardown.md:46" in phmresult.log[5][0]
+    assert "tests/md/setupnoteardown.md:11 setup" in phmresult.log[1][0]
+    assert "tests/md/setupnoteardown.md:17 setup" in phmresult.log[2][0]
+    assert "tests/md/setupnoteardown.md:29" in phmresult.log[3][0]
+    assert "tests/md/setupnoteardown.md:48" in phmresult.log[4][0]
+    assert "tests/md/setupnoteardown.md:52" in phmresult.log[5][0]
     assert "tests/md/sharedto2.md:13" in phmresult.log[6][0]
     assert "tearDownModule" in phmresult.log[7][0]
 
@@ -333,8 +332,8 @@ def test_progress_option():
         lines = err.getvalue().splitlines()
         assert "setUpModule()..." in lines[0]
         assert "leaving setUpModule." in lines[1]
-        assert "docs/fix/code/chdir.md:25 ... pass" in lines[2]
-        assert "docs/fix/code/chdir.md:29 ... pass" in lines[3]
+        assert "docs/fix/code/chdir.md:24 ... pass" in lines[2]
+        assert "docs/fix/code/chdir.md:28 ... pass" in lines[3]
         assert "tearDownModule()..." in lines[4]
         assert "leaving tearDownModule." in lines[5]
     err.close()
