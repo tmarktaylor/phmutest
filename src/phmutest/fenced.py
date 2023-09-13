@@ -60,14 +60,14 @@ class FencedBlock:
         self.line = node.line
         self.end_line = node.end_line
         self.role = Role.NOROLE
-        self.contents = node.payload  # type: str
+        self.contents: str = node.payload
         if python_matcher.re.match(self.info_string):
             if self.contents.startswith(">>> "):
                 self.role = Role.SESSION
             else:
                 self.role = Role.CODE
-        self.output = None  # type: Optional["FencedBlock"]
-        self.skip_patterns = []  # type: List[str]
+        self.output: Optional["FencedBlock"] = None
+        self.skip_patterns: List[str] = []
         self.directives = phmutest.direct.get_directives(node)
         self._directive_markers = set(d.type for d in self.directives)
 

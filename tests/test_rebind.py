@@ -25,6 +25,8 @@ The name 'we' is assigned in file1.md. The value overwrites the 'we' initialized
 by the fixture. file2.md sees the value of 'we' assigned by file1.md.
 The fixture cleanup function sees the original value of 'we'.
 
+Just shows that the rebind in fo we in file1.md did not affect the original value.
+The rebind affects the shallow copy.
 
 To see the effect of rebind in REPL mode see test_globs.py::test_extractor().
 """
@@ -36,6 +38,7 @@ from phmutest.fixture import Fixture
 
 
 def cleanup(globs):
+    """Handles clean up of the objects created by the fixture."""
     print("cleanup-")
     assert globs == {"we": 3, "no_conflict": 9999}
 

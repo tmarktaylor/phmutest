@@ -63,10 +63,9 @@ def fill_in(template: str, replacements: Mapping[str, str]) -> str:
     """
     for k in replacements:
         assert not k.startswith("$"), "easy to make mistake, requires no leading $"
-    finder = re.finditer(
+    standalone_keys = re.findall(
         pattern=r"^\s*([$]\w+)$", string=template, flags=re.MULTILINE | re.DOTALL
     )
-    standalone_keys = [m.group(1) for m in finder]
     for key in standalone_keys:
         replacement_key = key[1:]
         if replacement_key not in replacements:

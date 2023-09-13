@@ -20,7 +20,7 @@ config.read("setup.cfg", encoding="utf-8")
 text = config.get("metadata", "classifiers")
 lines = text.splitlines()
 # remove blank lines
-lines = [line for line in lines if len(line) > 0]
+lines = [line for line in lines if line]
 unique_lines = set(lines)
 messages = []
 # Check for duplicates.
