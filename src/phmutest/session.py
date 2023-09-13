@@ -1,13 +1,13 @@
 """Generate and run docstests for Python interactive session FCBs."""
 import argparse
-import contextlib
 import doctest
 import importlib
 import itertools
 import sys
+import traceback
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import phmutest.cases
 import phmutest.globs
@@ -186,45 +186,66 @@ def generate(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
     args.generate.close()
 
 
+def null_cleanup() -> None:
+    """Do nothing cleanup function for case where no fixture cleanup specified."""
+    pass
+
+
+UserFixtureInfo = Tuple[Dict[str, Any], Callable[[], None], bool]
+"""Function return type [globs, cleanup function, success]."""
+
+
 def process_user_fixture(
     args: argparse.Namespace, log: List[List[str]]
-) -> Tuple[contextlib.ExitStack, Optional[Dict[str, Any]]]:
-    """Check for --fixture. Create a context manager and get globs from the fixture.
+) -> UserFixtureInfo:
+    globs = {}
+    cleanup_function = null_cleanup
+    modulepackage, function_name = phmutest.cases.get_fixture_parts(args.fixture)
+    m = importlib.import_module(modulepackage)
+    f = getattr(m, function_name)
+    try:
+        user_fixture = f(log=log, is_replmode=True)
+    except Exception:
+        print("-" * 60)
+        print(f"Caught an exception in --fixture {args.fixture}...")
+        # Print the traceback to stdout
+        # since the doctest failure printing is to stdout.
+        traceback.print_exc(file=sys.stdout)
+        # Expecting caller to ignore the first two items of the returned tuple.
+        return {}, null_cleanup, False
 
-    Return a null context manager if there is no fixture.
-    Return an empty dict if there are no fixture globs.
-    The globs become visible as global variables to code under test.
-    """
-    # Create nullcontext cm for with statement below for case where no fixture cleanup.
-    # Tell mypy nullcontext looks like an ExitStack.
-    globs = None
-    cm = cast(contextlib.ExitStack, contextlib.nullcontext())
-    if args.fixture:
-        modulepackage, function_name = phmutest.cases.get_fixture_parts(args.fixture)
-        m = importlib.import_module(modulepackage)
-        f = getattr(m, function_name)
-        if user_fixture := f(log=log, is_replmode=True):
+    if user_fixture:
+        if user_fixture.globs is not None:
             globs = user_fixture.globs
-            if user_fixture.repl_cleanup:
-                # Note- DocTestRunner catches exceptions raised by the Example under
-                # test. The ExitStack with callback here assures the fixture cleanup
-                # code is run in the event any of this package's code
-                # wrapped around DocTestRunner raises an exception.
-                cm = contextlib.ExitStack()
-                cm.callback(user_fixture.repl_cleanup)
 
-    # The user_fixture.globs default value is None.
-    # In the event of sharing across files, the calling code needs globs as an
-    # empty mapping to store names that are shared across files.
-    if globs is None:
-        globs = {}
-    else:
-        # If --sharing ".", show the fixture globs.
-        if phmutest.cases.is_verbose_sharing(args, Path("placeholder")):
+        if user_fixture.repl_cleanup is not None:
+            cleanup_function = user_fixture.repl_cleanup
+
+        # When --sharing is ".", and the fixture returned some globs, show them.
+        if globs and phmutest.cases.is_verbose_sharing(args, Path("placeholder")):
             glob_names = ", ".join(globs.keys())
             print(f"{args.fixture} is sharing: {glob_names}")
+    return globs, cleanup_function, True
 
-    return cm, globs
+
+def update_globs_show_sharing(
+    args: argparse.Namespace,
+    globs: Optional[Dict[str, Any]],
+    fileblocks: phmutest.select.FileBlocks,
+    extractor: Optional[phmutest.globs.AssignmentExtractor],
+) -> None:
+    """If sharing across files copy assigned names to globs, Do --sharing."""
+    # This is a refactoring to get run_repl() complexity down from 11.
+    # Modifies globs in place. Clears the extractor.
+    if extractor is not None and globs is not None:
+        for name in extractor.assignments:
+            globs[name] = extractor.assignments[name]
+        if phmutest.cases.is_verbose_sharing(args, fileblocks.path):
+            shared_names = ", ".join(extractor.assignments.keys())
+            print(f"{fileblocks.built_from} is sharing: {shared_names}")
+
+    if extractor is not None:
+        extractor.assignments.clear()
 
 
 def run_repl(
@@ -239,10 +260,20 @@ def run_repl(
         return phmutest.summary.EMPTY_PHMRESULT
 
     optionflags = doctest.FAIL_FAST if "-f" in extra_args else 0
+    globs: Optional[Dict[str, Any]] = {}
+    cleanup_function = null_cleanup
     log: List[List[str]] = []
     number_of_errors = 0
-    cm, globs = process_user_fixture(args, log)
-    with cm:
+    if args.fixture:
+        globs, cleanup_function, success = process_user_fixture(args, log)
+        if not success:
+            phm_result = phmutest.summary.EMPTY_PHMRESULT
+            phm_result.is_success = False
+            phm_result.metrics.suite_errors = 1
+            phm_result.log = [[str(args.fixture), "error", ""]]
+            return phm_result
+
+    try:
         for path in args.files:
             fileblocks = block_store.get_blocks(path)
 
@@ -257,18 +288,7 @@ def run_repl(
             if args.progress:
                 phmutest.summary.show_log(result.log)
 
-            # If sharing across files names assigned by the file, udate globs
-            # with the shared names.
-            # Implement command line --sharing for the file.
-            if extractor is not None and globs is not None:
-                for name in extractor.assignments:
-                    globs[name] = extractor.assignments[name]
-                if phmutest.cases.is_verbose_sharing(args, fileblocks.path):
-                    shared_names = ", ".join(extractor.assignments.keys())
-                    print(f"{fileblocks.built_from} is sharing: {shared_names}")
-
-            if extractor is not None:
-                extractor.assignments.clear()
+            update_globs_show_sharing(args, globs, fileblocks, extractor)
 
             log.extend(result.log)
             number_of_errors += result.number_of_errors
@@ -276,6 +296,12 @@ def run_repl(
                 result.number_of_failures or result.number_of_errors
             ):
                 break
+
+    except Exception as e:
+        cleanup_function()
+        raise e
+
+    cleanup_function()
 
     metrics = phmutest.summary.compute_metrics(
         len(args.files),
