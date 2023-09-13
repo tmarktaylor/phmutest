@@ -1,4 +1,5 @@
 # docs/fix/repl/drink.py
+
 ```python
 """--replmode fixture acquires resource, passes to tests via globs, releases it."""
 from phmutest.fixture import Fixture

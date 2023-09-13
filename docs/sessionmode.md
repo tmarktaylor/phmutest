@@ -46,13 +46,10 @@ the docstring generated for the Markdown file.
 Add the FILE or `.` to the --sharing option to turn on verbose printing.
 `.` means show sharing for all files and will show fixture globs too.
 
-
 ## --progress
 
 This option turns on per Markdown file verbose printing. The printing is directed
 to the standard output stream shared with doctest's verbose printing.
 
-
 [1]: https://docs.python.org/3/library/doctest.html
 [2]: https://docs.python.org/3/library/doctest.html#doctest.DocTest.globs
-

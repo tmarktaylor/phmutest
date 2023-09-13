@@ -58,4 +58,3 @@ print("code-group-4")
 ```python
 >>> print()  # repl-7
 >>> print()  # repl-8
-

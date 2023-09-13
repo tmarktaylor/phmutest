@@ -3,24 +3,23 @@
 Second file of --share-across-files demo.
 
 This file references the names shared from [file1.md](file1.md).
-
 Show the name `we` is visible.
+
 ```python
 print(we.combine())
 ```
 
-```
+```expected-output
 water-exercise
 ```
 
-Show the name `BeverageActivity` is visible.
-Create the name `bp`.
+Show the name `BeverageActivity` is visible. Create the name `bp`.
+
 ```python
 bp = BeverageActivity("beer", "partying")
 print(bp.combine())
 ```
 
-```
+```expected-output
 beer-partying
 ```
-

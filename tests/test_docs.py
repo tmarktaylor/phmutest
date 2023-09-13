@@ -29,7 +29,7 @@ from docs.quicklinks import make_quick_links
 
 
 def get_command_and_output(markdown_filename: str) -> List[str]:
-    """Get the first FCB that starts with 'phmutest' and same for 'summary'."""
+    """Get the last FCB that starts with 'phmutest' and same for 'summary'."""
     command = ""
     output = ""
     content_strings = phmutest.tool.fenced_code_blocks(markdown_filename)
@@ -43,7 +43,7 @@ def get_command_and_output(markdown_filename: str) -> List[str]:
 
 
 def get_command_and_log(markdown_filename: str) -> List[str]:
-    """Get the first FCB that starts with 'phmutest' and same for 'log'."""
+    """Get the last FCB that starts with 'phmutest' and same for 'log'."""
     command = ""
     output = ""
     content_strings = phmutest.tool.fenced_code_blocks(markdown_filename)
@@ -82,9 +82,13 @@ def test_setup_example(capsys):
     assert output == capsys.readouterr().out.lstrip()
 
 
-def test_readme_metrics():
-    """Test the blocks status when running on README.md."""
-    command, output = get_command_and_log("README.md")
+readme_chooser = phmutest.tool.FCBChooser("README.md")
+"""Helper to select lists of FCB contents from the Markdown file."""
+
+
+def test_readme_code_metrics():
+    """Test the metrics when running on README.md."""
+    command = readme_chooser.select(info_string="shell")[0]  # 1st of selected FCBs
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
@@ -100,9 +104,37 @@ def test_readme_metrics():
     assert want == phmresult.metrics
 
 
-def test_readme_output(capsys):
-    """Test the expected output block when running on README.md."""
-    command, output = get_command_and_log("README.md")
+def test_readme_code_output(capsys):
+    """Test the shell expected output block when running on README.md."""
+    command = readme_chooser.select(info_string="shell")[0]  # 1st of selected FCBs
+    output = readme_chooser.select(contains="args.files: 'README.md'")[0]
+    args = arg_list(command)
+    _ = phmutest.main.main(args)
+    assert output == capsys.readouterr().out.lstrip()
+
+
+def test_readme_repl_metrics():
+    """Test the metrics when running on README.md."""
+    command = readme_chooser.select(info_string="shell")[1]  # 1st of selected FCBs
+    args = arg_list(command)
+    phmresult = phmutest.main.main(args)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=4,
+        passed=4,
+        failed=0,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+
+
+def test_readme_repl_output(capsys):
+    """Test the shell expected output block when running on README.md."""
+    command = readme_chooser.select(info_string="shell")[1]  # 1st of selected FCBs
+    output = readme_chooser.select(contains="args.files: 'README.md'")[1]
     args = arg_list(command)
     _ = phmutest.main.main(args)
     assert output == capsys.readouterr().out.lstrip()
@@ -188,8 +220,8 @@ def test_replmode_example(capsys):
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=3,
-        passed=3,
+        number_blocks_run=4,
+        passed=4,
         failed=0,
         skipped=0,
         suite_errors=0,
@@ -300,7 +332,6 @@ def test_deselect_example(capsys):
 
 def test_skip_directive_example(capsys):
     """Test skip directive example."""
-    # args = ["docs/advanced/skip.md"]
     command, output = get_command_and_log("docs/advanced/skip.md")
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
@@ -408,10 +439,17 @@ OK
 
 def extract_usage_options(text):
     """From --help output get a set of the usage option names."""
-    finder = re.finditer(
-        pattern=r"[-][-][a-z][\-A-Z_a-z]*", string=text, flags=re.MULTILINE | re.DOTALL
+
+    option_name_finder = (
+        # 2 dash
+        r"[-]{2}"
+        # mix of dash | letter | number | underscore
+        r"[\-A-Za-z0-9_]*"
     )
-    option_mentions = [m.group() for m in finder]
+    """This won't find options with the other punctuation characters."""
+    option_mentions = re.findall(
+        pattern=option_name_finder, string=text, flags=re.MULTILINE | re.DOTALL
+    )
     return set(option_mentions)
 
 
@@ -440,7 +478,7 @@ def test_usage_options():
 def test_quick_links():
     """Make sure the README.md quick links are up to date."""
     filename = "README.md"
-    readme = Path("README.md").read_text(encoding="utf-8")
+    readme = Path(filename).read_text(encoding="utf-8")
     github_links = make_quick_links(filename)
     # There must be at least one blank line after the last link.
     assert github_links + "\n\n" in readme

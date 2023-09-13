@@ -6,7 +6,6 @@ First file of share across files demo.
 from dataclasses import dataclass
 ```
 
-
 ```python
 @dataclass
 class BeverageActivity:
@@ -21,17 +20,18 @@ class BeverageActivity:
 ```
 
 Use `BeverageActivity` defined above to create the name `cc`.
+
 ```python
 cc = BeverageActivity("coffee", "coding")
 print(cc.combine())
 ```
 
-```
+```expected-output
 enjoyment
 ```
 
 Create the name `we` for use in later files.
+
 ```python
 we = BeverageActivity("water", "exercise")
 ```
-

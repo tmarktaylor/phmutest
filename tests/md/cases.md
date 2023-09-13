@@ -1,9 +1,7 @@
-#
-
-
-## Source Code block with no ouput and skipif directive.
+# Source Code block with no ouput and skipif directive
 
 <!--phmutest-skipif<3.5-->
+
 ```python
 from enum import Enum
 
@@ -15,5 +13,6 @@ class Floats(Enum):
 ```
 
 Empty Python FCB.
+
 ```python
 ```

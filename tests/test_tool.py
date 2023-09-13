@@ -23,10 +23,10 @@ def test_labeled_fcbs():
     labeled = phmutest.tool.labeled_fenced_code_blocks(markdown_filename)
     assert len(labeled) == 2
     assert labeled[0].label == "my-label"
-    assert labeled[0].line == "43"
+    assert labeled[0].line == "53"
     assert labeled[0].contents == "(10, 1)\n"
     assert labeled[1].label == "  EXTRA_SPACES  "
-    assert labeled[1].line == "49"
+    assert labeled[1].line == "61"
     assert labeled[1].contents == "assert False\n"
 
 
@@ -58,7 +58,7 @@ class TestSelect:
         self.chooser = phmutest.tool.FCBChooser("tests/md/multi_label.md")
 
     def test_not_found(self):
-        """Select multiple blocks with the same label."""
+        """No blocks match."""
         selected = self.chooser.select(label="no-chance")
         assert selected == []
 

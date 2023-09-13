@@ -33,9 +33,9 @@ class Test001(unittest.TestCase):
             with _phmPrinter(_phm_log, "docs/share/file1.md:5", False):
                 from dataclasses import dataclass
 
-        # ------ docs/share/file1.md:10 ------
-        with self.subTest(msg="docs/share/file1.md:10"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:10", False):
+        # ------ docs/share/file1.md:9 ------
+        with self.subTest(msg="docs/share/file1.md:9"):
+            with _phmPrinter(_phm_log, "docs/share/file1.md:9", False):
                 @dataclass
                 class BeverageActivity:
                     beverage: str
@@ -59,9 +59,9 @@ enjoyment
                 _phm_printer.cancel_print_capture_on_error()
                 _phm_testcase.assertEqual(_phm_expected_str, _phm_printer.stdout())
 
-        # ------ docs/share/file1.md:34 ------
-        with self.subTest(msg="docs/share/file1.md:34"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:34", False):
+        # ------ docs/share/file1.md:35 ------
+        with self.subTest(msg="docs/share/file1.md:35"):
+            with _phmPrinter(_phm_log, "docs/share/file1.md:35", False):
                 we = BeverageActivity("water", "exercise")
 
         _phm_globals.update(additions=locals(), built_from="docs/share/file1.md", existing_names=None)
@@ -103,11 +103,11 @@ class Test003(unittest.TestCase):
 
     def tests(self):
 
-        # ------ docs/share/file3.md:8 ------
-        with self.subTest(msg="docs/share/file3.md:8"):
-            with _phmPrinter(_phm_log, "docs/share/file3.md:8", False) as _phm_printer:
+        # ------ docs/share/file3.md:7 ------
+        with self.subTest(msg="docs/share/file3.md:7"):
+            with _phmPrinter(_phm_log, "docs/share/file3.md:7", False) as _phm_printer:
                 print(bp.combine())
-                # line 12
+                # line 11
                 _phm_expected_str = """\
 beer-partying
 """

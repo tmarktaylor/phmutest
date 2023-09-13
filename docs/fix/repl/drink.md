@@ -16,15 +16,15 @@ tea
 tea + sugar
 ```
 
-## phmutest command line.
+## phmutest command line
 
-```
+```shell
 phmutest docs/fix/repl/drink.md --fixture docs.fix.repl.drink.init --replmode --log
 ```
 
-## phmutest output.
+## phmutest output
 
-```
+```txt
 Acquiring Drink tea. ...
 Releasing Drink tea + sugar. ...
 
@@ -44,4 +44,3 @@ docs/fix/repl/drink.md:13  pass
 Notice that 'Acquiring' and 'Releasing' lines in the output
 precede the log.  In --replmode the --log printing happens after all
 testing and cleanup completes.
-

@@ -12,14 +12,17 @@ ending at the fenced code block.
 The `<!--phmutest-skip-->` directive in the raw Markdown below
 is associated with the FCB.
 
-~~~
+~~~txt
 <!--phmutest-skip-->
 <!--Another HTML comment-->
+
 ```python
 print("Hello World!")
 ```
+
 Expected Output
-```
+
+```expected-output
 Hello World!
 ```
 ~~~
@@ -94,7 +97,5 @@ The file's setup blocks are run by **unittest.setUpModule()** and the names assi
 setup blocks are shared to **all** FILEs. Teardown blocks in FILE
 are run by **unittest.tearDownModule()**.
 
-
 [1]: https://github.com/tmarktaylor/phmutest/blob/master/tests/md/directive1.md?plain=1
 [2]: https://tmarktaylor.github.io/phmdoctest
-

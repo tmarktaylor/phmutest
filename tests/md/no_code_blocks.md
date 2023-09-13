@@ -1,4 +1,4 @@
-### No Python code blocks
+# No Python code blocks
 
 Example Markdown file with no Python fenced code blocks.
 

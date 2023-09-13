@@ -1,8 +1,11 @@
+# heading
+
 <!--phmutest-label testing-1-2-3-->
 ```python
 print("hello world")
 ```
-```
+
+```expected-output
 hello world
 ```
 
@@ -11,7 +14,8 @@ hello world
 print("coffee")
 print("coding")
 ```
-```
+
+```expected-output
 coffee
 coding
 ```
@@ -19,7 +23,7 @@ coding
 ```ladenpython
 print("ladenpython is a made up FCB info string.")
 ```
-```
+
+```expected-output
 ladenpython is a made up FCB info string.
 ```
-

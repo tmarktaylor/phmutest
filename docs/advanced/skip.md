@@ -7,18 +7,21 @@ This example does not have a skip directive.
 ```python
 print("Hello World!")
 ```
-```
+
+```expected-output
 Hello World!
 ```
 
 This example has `<!--phmutest-skip-->` before the FCB.
 
-
 <!--phmutest-skip-->
+
 ```python
 print("Hello World!")
+
 ```
-```
+
+```expected-output
 Bad expected output.
 ```
 
@@ -30,27 +33,30 @@ It prevents the test from failing the expected output check.
 ```python
 print("Hello World!")
 ```
+
 <!--phmutest-skip-->
-```
+
+```expected-output
 Bad expected output.
 ```
 
 ## phmutest command line
-```
+
+```shell
 phmutest docs/advanced/skip.md --log
 ```
 
 ## phmutest output
-```
+
+```txt
 log:
 args.files: 'docs/advanced/skip.md'
 args.log: 'True'
 
-location|label            result  skip reason
-------------------------  ------  -------------
-docs/advanced/skip.md:7.  pass
-docs/advanced/skip.md:18  skip    phmutest-skip
-docs/advanced/skip.md:30  pass
-------------------------  ------  -------------
+location|label             result  skip reason
+-------------------------  ------  -------------
+docs/advanced/skip.md:7 o  pass
+docs/advanced/skip.md:19.  skip    phmutest-skip
+docs/advanced/skip.md:33.  pass
+-------------------------  ------  -------------
 ```
-

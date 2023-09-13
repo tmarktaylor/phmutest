@@ -19,16 +19,17 @@ All the names assigned at the top level of all the Python blocks in the
 file are shared. A later file might inadventently reassign a name that was
 shared.
 
-## phmutest command line.
+## phmutest command line
 
-```
+```shell
 phmutest docs/repl/repl1.md docs/repl/repl2.md docs/repl/repl3.md --replmode --share-across-files docs/repl/repl1.md docs/repl/repl2.md --log --summary
 ```
 
-## phmutest output.
+## phmutest output
 
 Terminal output after the `OK` line.
-```
+
+```txt
 summary:
 metric
 --------------------  -
@@ -55,13 +56,12 @@ args.summary: 'True'
 location|label         result
 ---------------------  ------
 docs/repl/repl1.md:5.  pass
-docs/repl/repl1.md:10  pass
+docs/repl/repl1.md:9.  pass
 docs/repl/repl1.md:24  pass
-docs/repl/repl1.md:31  pass
-docs/repl/repl2.md:8.  pass
-docs/repl/repl2.md:15  pass
+docs/repl/repl1.md:32  pass
+docs/repl/repl2.md:9.  pass
+docs/repl/repl2.md:17  pass
 docs/repl/repl3.md:8.  pass
-docs/repl/repl3.md:14  pass
+docs/repl/repl3.md:15  pass
 ---------------------  ------
 ```
-

@@ -31,4 +31,3 @@ def test_broken_python_examples(capsys):
         phmresult = phmutest.main.main(args)
         assert phmresult.is_success, capsys.readouterr().out + "\n" + f.getvalue()
 ```
-

@@ -14,7 +14,7 @@ The function **init_globals()** assigns names and returns
 a mapping of them to the caller. The generated testfile
 copies them to the test module's module attributes.
 
-## Python fenced code block and expected output under test.
+## Python fenced code block and expected output under test
 
 This is the Python example we want to check.
 
@@ -25,35 +25,36 @@ print(my_function(2))
 ```
 
 Expected output:
-```
+
+```expected-output
 10
 [1, 2, 3, 4, 'A']
 3
 ```
+
 Note that Python prints the string value with single quotes.
 
+## phmutest command line
 
-## phmutest command line.
-
-```
+```shell
 phmutest docs/fix/code/globdemo.md --fixture docs.fix.code.globdemo.init_globals --log
 ```
 
-## phmutest output.
+## phmutest output
 
 Terminal output after the `OK` line.
-```
+
+```txt
 log:
 args.files: 'docs/fix/code/globdemo.md'
 args.fixture: 'docs.fix.code.globdemo.init_globals'
 args.log: 'True'
 
-location|label                result
-----------------------------  ------
-setUpModule.................
-init_globals................
-docs/fix/code/globdemo.md:21  pass
-tearDownModule..............
-----------------------------  ------
+location|label                  result
+------------------------------  ------
+setUpModule...................
+init_globals..................
+docs/fix/code/globdemo.md:21 o  pass
+tearDownModule................
+------------------------------  ------
 ```
-

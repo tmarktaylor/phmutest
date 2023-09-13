@@ -38,4 +38,3 @@ assert False
    <!-- indent 3 blanks html comment -->
     this is not a NodeType.HTML_COMMENT
     <!-- indent 4 blanks html comment -->
-

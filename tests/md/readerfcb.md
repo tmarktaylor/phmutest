@@ -1,4 +1,4 @@
-# Test reader.py FCB DocNodes.
+# Test reader.py FCB DocNodes
 4 tilde start fence, 4 tilde closing fence
 <!-- an html comment -->
 ~~~~python
@@ -69,4 +69,3 @@ incorrect expected output
 ```
 
 </details>
-

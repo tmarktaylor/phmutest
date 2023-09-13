@@ -1,4 +1,5 @@
 # docs/fix/code/globdemo.py
+
 ```python
 """User fixture to return mapping of values."""
 from phmutest.fixture import Fixture
