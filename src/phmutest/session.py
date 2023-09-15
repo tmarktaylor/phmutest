@@ -1,16 +1,17 @@
 """Generate and run docstests for Python interactive session FCBs."""
 import argparse
 import doctest
-import importlib
 import itertools
 import sys
 import traceback
+import typing
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import phmutest.cases
 import phmutest.globs
+import phmutest.importer
 import phmutest.select
 import phmutest.subtest
 import phmutest.summary
@@ -191,18 +192,16 @@ def null_cleanup() -> None:
     pass
 
 
-UserFixtureInfo = Tuple[Dict[str, Any], Callable[[], None], bool]
+UserFixtureInfo = Tuple[Optional[Dict[str, Any]], Callable[[], None], bool]
 """Function return type [globs, cleanup function, success]."""
 
 
 def process_user_fixture(
     args: argparse.Namespace, log: List[List[str]]
 ) -> UserFixtureInfo:
-    globs = {}
+    globs: Optional[Dict[str, Any]] = {}
     cleanup_function = null_cleanup
-    modulepackage, function_name = phmutest.cases.get_fixture_parts(args.fixture)
-    m = importlib.import_module(modulepackage)
-    f = getattr(m, function_name)
+    f = phmutest.importer.fixture_function_importer(args.fixture.name)
     try:
         user_fixture = f(log=log, is_replmode=True)
     except Exception:
@@ -216,7 +215,8 @@ def process_user_fixture(
 
     if user_fixture:
         if user_fixture.globs is not None:
-            globs = user_fixture.globs
+            # Make the fixture's MutableMapping type look like a Dict for doctest.
+            globs = typing.cast(Optional[Dict[str, Any]], user_fixture.globs)
 
         if user_fixture.repl_cleanup is not None:
             cleanup_function = user_fixture.repl_cleanup

@@ -1,7 +1,6 @@
 """Generate test cases as a unittest test file."""
 import argparse
 from pathlib import Path
-from typing import Tuple
 
 import phmutest.select
 import phmutest.subtest
@@ -317,6 +316,7 @@ from phmutest.printer import Printer as _phmPrinter
 from phmutest.skip import sys_tool as _phm_sys
 $importuserfixture
 
+$calluserfixture
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
 _phm_log = []
@@ -326,23 +326,22 @@ $testclasses
 '''
 
 
-def get_fixture_parts(fixture_arg: Path) -> Tuple[str, str]:
-    """Return X, Y for the fixture function where X and Y are 'from X import Y'."""
-    function = fixture_arg.suffix  # pathlib Rocks!
-    assert function.startswith("."), "Expecting .FUNCTION."
-    function = function[1:]
-    return fixture_arg.stem, function
-
-
 def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) -> str:
     """Generate the unittest module source as directed by command line args args."""
     test_classes = ""
     replacements = {}
     if args.fixture:
-        modulepackage, function_name = get_fixture_parts(args.fixture)
-        replacements[
-            "importuserfixture"
-        ] = f"from {modulepackage} import {function_name} as _phm_user_setup_function"
+        # modulepackage, function_name = get_fixture_parts(args.fixture)
+        import_line = (
+            "from phmutest.importer import fixture_function_importer "
+            "as _phm_fixture_function_importer"
+        )
+        replacements["importuserfixture"] = import_line
+        call_line = (
+            f"_phm_user_setup_function = "
+            f'_phm_fixture_function_importer("{args.fixture}")'
+        )
+        replacements["calluserfixture"] = call_line
 
     if args.setup_across_files or args.share_across_files or args.fixture:
         setupcode = render_setup_module(args, block_store)
