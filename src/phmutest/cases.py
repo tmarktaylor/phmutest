@@ -331,17 +331,14 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
     test_classes = ""
     replacements = {}
     if args.fixture:
-        # modulepackage, function_name = get_fixture_parts(args.fixture)
-        import_line = (
+        replacements["importuserfixture"] = (
             "from phmutest.importer import fixture_function_importer "
             "as _phm_fixture_function_importer"
         )
-        replacements["importuserfixture"] = import_line
-        call_line = (
+        replacements["calluserfixture"] = (
             f"_phm_user_setup_function = "
             f'_phm_fixture_function_importer("{args.fixture}")'
         )
-        replacements["calluserfixture"] = call_line
 
     if args.setup_across_files or args.share_across_files or args.fixture:
         setupcode = render_setup_module(args, block_store)

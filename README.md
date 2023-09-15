@@ -342,6 +342,17 @@ apply doctest optionflags in --replmode.
 Do patching cleanup when not in --replmode by calling
 `unittest.addModuleCleanup(stack.pop_all().close)`.
 
+### Dotted path details
+
+The fixture function must be at the top level of a .py file.
+
+- The dotted_path has components separated by ".".
+- The last component is the function name.
+- The next to last component is the python file name without the .py suffix.
+- The preceding components identify parent folders. Folders should be
+  relative to the current working directory which is typically the
+  project root.
+
 ## Extend an example across files
 
 Names assigned by all the blocks in a file can be shared, as global variables,
@@ -446,6 +457,8 @@ breakage in future versions. Look for examples in tests/test_patching.py.
 - In repl mode **no** skipped blocks are rendered.
 - Try redirecting `--generate -` standard output into PYPI Pygments to
   colorize the generated test file.
+- pytest will run a generated test file (--generate TESTFILE). pytest won't
+  run functions added by unittest.addModuleCleanup().
 
 ## Related projects
 
