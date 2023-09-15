@@ -1,6 +1,4 @@
-#
-
-## Example
+# Example
 
 The example starts by creating the object m.
 ```python
@@ -21,20 +19,22 @@ have an info string.
 db406
 ```
 
-The example continues here. It will continue for the entire file. This is
-the last Python FCB in the file.
+The example continues here. It will continue for the entire file.
+
 ```python
 m.update(b"more bytes")
 print(m.hexdigest()[0:5])
 ```
 
 Note the expected output is different.
-```
+
+```expected-output
 4c6ea
 ```
 
 <!--phmutest-label example1-outfile-->
 <!--phmutest-skip-->
+
 ```python
 from enum import Enum
 
@@ -56,6 +56,7 @@ Floats.ADUCK
 ```
 
 <!--phmutest-label LABEL-->
+
 ```yml
 on:
   push:

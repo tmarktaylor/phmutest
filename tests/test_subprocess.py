@@ -38,3 +38,28 @@ def test_callfrompython():
     ]
     completed = subprocess.run(commandline)
     assert completed.returncode == 0
+
+
+def test_fixture_patching():
+    """Run phmutest in a subprocess, call a fixture that does mock.patch().
+
+    This shows a --fixture function using contextlib.ExitStack to install
+    a patch using unittest.mock.patch() with a shell invocation of
+    phmutest. It runs the same example as
+    test_patching::test_doctest_optionflags_patch.
+
+    It should be possible to do the same patch when not in --replmode
+    by calling unittest.addModuleCleanup(stack.pop_all().close).
+    """
+    commandline = [
+        sys.executable,
+        "-m",
+        "phmutest",
+        "tests/md/optionflags.md",
+        "--log",
+        "--replmode",
+        "--fixture",
+        "tests.test_patching.setflags",
+    ]
+    completed = subprocess.run(commandline)
+    assert completed.returncode == 0

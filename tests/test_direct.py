@@ -12,7 +12,7 @@ def get_all_fcbs(filename):
 
 
 class TestPhmdoctest:
-    """Check directives that start with <~--phmdoctest."""
+    """Check directives that start with <!--phmdoctest."""
 
     def setup_method(self):
         self.blocks = get_all_fcbs("tests/md/legacy_directives.md")
@@ -69,12 +69,12 @@ class TestPhmdoctest:
         directive = self.blocks[0].directives[0]
         assert directive.type == Marker.SKIP
         assert directive.value == ""
-        assert directive.line == 4
+        assert directive.line == 5
         assert directive.literal == "<!--phmdoctest-skip-->"
 
 
 class TestPhutest:
-    """Check directives that start with <~--phmutest."""
+    """Check directives that start with <!--phmutest."""
 
     def setup_method(self):
         self.blocks = get_all_fcbs("tests/md/directives.md")
@@ -124,14 +124,14 @@ class TestPhutest:
         directive = self.blocks[9].directives[0]
         assert directive.type == Marker.SETUP
         assert directive.value == ""
-        assert directive.line == 71
+        assert directive.line == 80
         assert directive.literal == "<!--phmutest-setup-->"
 
     def test_comments_blanks(self):
         directive = self.blocks[12].directives[0]
         assert directive.type == Marker.SKIP
         assert directive.value == ""
-        assert directive.line == 102
+        assert directive.line == 116
         assert directive.literal == "<!--phmutest-skip-->"
 
 
@@ -146,7 +146,7 @@ class TestMisc:
         assert self.blocks[0].has_directive(Marker.SKIP)
         assert self.blocks[0].role == Role.CODE
         directive = self.blocks[0].directives[0]
-        assert directive.line == 5
+        assert directive.line == 6
 
         # over indented HTML comment
         assert self.blocks[1].directives == []

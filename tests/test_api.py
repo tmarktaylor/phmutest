@@ -13,8 +13,6 @@ def test_api(checker):
     codefile = Path("src/phmutest/tool.py")
     codetext = codefile.read_text(encoding="utf-8")
     for num, f in enumerate(fcbs, start=1):
-        # if f not in codetext:
-        #    checker(f, codetext)
         assert f in codetext, f"{apifile} FCB number {num} is not in {codefile}."
 
     # Check that tool.py was not modified since the last

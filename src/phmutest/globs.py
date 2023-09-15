@@ -125,12 +125,6 @@ class Globals:
         # cause check_attribute_name() to raise an exception.
         # Users might have one or more of them in their code block.
         # So we remove them from additions.
-        if "contextlib" in additions and "contextlib" in self.original_attributes:
-            _ = additions.pop("contextlib", None)
-        if "io" in additions and "io" in self.original_attributes:
-            _ = additions.pop("io", None)
-        if "sys" in additions and "sys" in self.original_attributes:
-            _ = additions.pop("sys", None)
         if "unittest" in additions and "unittest" in self.original_attributes:
             _ = additions.pop("unittest", None)
         added_names = ", ".join(additions.keys())

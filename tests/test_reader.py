@@ -132,3 +132,9 @@ class TestReaderFcb:
         assert self.nodes[10].info_string == "python extra stuff"
         assert self.nodes[10].line == 58
         assert self.nodes[10].end_line == 60
+
+
+def test_getline_position_0():
+    """Position 0 should be line number 1."""
+    line_getter = phmutest.reader.PositionToLineNumber("hello world")
+    assert line_getter.get_line(position=0) == 1

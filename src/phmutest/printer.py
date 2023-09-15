@@ -76,8 +76,14 @@ class Printer:
         to assertEqual. It is in the exception message.
         Thus there is no need to print captured stdout here.
         Note that any captured stderr is discarded.
+
+        Append the suffix " o" to the Markdown file location to indicate that
+        captured standard output was compared to an expected output block.
+        The call here implies that the statements in the code block
+        ran without raising an exception or assertion.
         """
         self.is_print_capture_on_error = False
+        self.location += " o"
 
     def stdout(self) -> str:
         """Return captured stdout."""

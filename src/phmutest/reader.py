@@ -39,7 +39,6 @@ class DocNode:
             self.payload = ""
         if self.ntype == NodeType.FENCED_CODE_BLOCK:
             self.info_string = match["info_string"].strip()
-            self.payload = match["contents"]
             if match["indent"]:
                 self.payload = self.dedent(match["indent"], match["contents"])
             else:
@@ -63,7 +62,7 @@ class DocNode:
 
     @staticmethod
     def dedent(indent: str, contents: str) -> str:
-        """De-indent FCB lines. All lines and fences assumed to have the indent."""
+        """De-indent any indented FCB lines."""
         dedented = []
         lines = contents.splitlines()
         for line in lines:
@@ -76,7 +75,7 @@ class PositionToLineNumber:
     """Given position in multiline string determine the line number."""
 
     def __init__(self, text: str):
-        """Initialize the position to line number mapping."""
+        """Remember the line number for some positions in the text string."""
         self.maxpos = len(text)
         self.mapping = {}
         pos = 0
@@ -87,10 +86,10 @@ class PositionToLineNumber:
             pos += 1
 
     def get_line(self, position: int) -> int:
-        """Return the line number that contains character position in the file."""
+        """Return the line number that contains character position in the string."""
         assert position <= (
             self.maxpos
-        ), f"must not be a lot beyond EOF {position}/{self.maxpos}."
+        ), f"must not be a lot beyond the end {position}/{self.maxpos}."
         while position > 0:
             if position not in self.mapping:
                 position -= 1

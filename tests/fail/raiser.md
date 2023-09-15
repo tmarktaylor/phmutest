@@ -1,4 +1,5 @@
-#
+# Raise a TypeError
+
 ```python
 from tests.fail.bumper import MyBumper
 ```
@@ -30,12 +31,14 @@ print(bumper2.bump())
 
 This is incorrect expected output, but it is not checked
 because its code block raised an exception.
+
 ```
 aa
 ```
 
 Show the test continues after catching the exception above.
 You can pass the unittest option --failfast to stop instead.
+
 ```python
 print("Still going.")
 ```

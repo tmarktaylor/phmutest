@@ -1,4 +1,4 @@
-# Test sharing of setup-across-files.
+# Test sharing of setup-across-files
 
 Names math, myglobs, and my_function shared from setup blocks by
 using setup directives and sharing their file with
@@ -11,9 +11,9 @@ print(my_function(2))
 ```
 
 Expected output:
-```
+
+```expected-output
 10
 [1, 2, 3, 4, 'A']
 3
 ```
-

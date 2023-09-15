@@ -4,7 +4,6 @@ from typing import List
 
 import phmutest.fenced
 import phmutest.reader
-import phmutest.tool
 
 
 def test_mypy_likes_imported_types() -> None:

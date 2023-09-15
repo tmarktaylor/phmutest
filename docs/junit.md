@@ -17,7 +17,6 @@ FCB with an "error" status.
 ```python
 import contextlib
 import io
-import sys
 
 import phmutest.main
 
@@ -32,4 +31,3 @@ def test_broken_python_examples(capsys):
         phmresult = phmutest.main.main(args)
         assert phmresult.is_success, capsys.readouterr().out + "\n" + f.getvalue()
 ```
-

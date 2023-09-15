@@ -7,6 +7,7 @@ from unittest.mock import patch
 import pytest
 
 import phmutest.main
+import phmutest.summary
 from phmutest.globs import AssignmentExtractor, Globals
 
 MYGLOBAL = 1
@@ -89,21 +90,18 @@ class TestGlobals:
         assert self.globs.copy() == dict()
 
     def test_update_name_ifpops(self):
-        """Try an update with names that get conditionally popped before the update."""
+        """Update with name that gets conditionally popped before the update."""
         # Exercises the if XXX in additions.pop('XXX', None) lines
         items = {
-            "contextlib": None,
-            "io": None,
-            "sys": None,
+            "unittest": None,
             "example_variable": 1111,  # does not get popped
         }
         self.globs.update(additions=items)
         # Note get_names() does not include sys since sys is a global of this file.
-        assert self.globs.get_names() == {"example_variable", "contextlib", "io"}
+        assert self.globs.get_names() == {"example_variable", "unittest"}
         assert self.globs.copy() == {
             "example_variable": 1111,
-            "contextlib": None,
-            "io": None,
+            "unittest": None,
         }
 
     def test_more_additions(self):
@@ -154,7 +152,7 @@ class TestGlobals:
 
     def test_no_originals_error(self):
         """Simulate no pre-existing globals/module attributes can be managed error."""
-        # Note that check_integrity() is believed to redundant.
+        # Note that check_integrity() is believed to be redundant.
         # It is called near the end of update().
         # This test case simulates a failure by calling check_integrity() directly.
         assert self.globs.get_names() == set()
@@ -245,17 +243,12 @@ def test_extractor(capsys):
 
 
 def test_share_testfile_imports():
-    """Use same imports in an example that are at the top level of the testfile.
+    """Use import unittest in an example.
 
+    It is imported at the top level of the testfile.
     Logic in globs.py prevents the copy to the module globals. The example works
-    because the imports already exist at the top level of the testfile.
-    Also note that --sharing will not show these imports.
-
-    Generated testfile top level imports:
-      import contextlib
-      import io
-      import sys
-      import unittest
+    because the import already exists at the top level of the testfile.
+    Also note that --sharing will not show the import.
     """
     command = (
         "tests/md/shareimports1.md tests/md/shareimports2.md "

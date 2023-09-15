@@ -1,17 +1,9 @@
 """Create Markdown wrappers around the project's example .py files."""
 from pathlib import Path
 
-top = "# <put filename here>\n```python\n"
+top = "# <put filename here>\n\n```python\n"
 
 bottom = """```
-"""
-
-raw_top = "# <put filename here>\n~~~\n"
-
-raw_bottom = """~~~
-"""
-
-text_bottom = """~~~
 """
 
 

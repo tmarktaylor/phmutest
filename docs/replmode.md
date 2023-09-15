@@ -19,6 +19,7 @@ All fenced code blocks in the file are joined into one long docstring.
 
 Example borrowed from Python Standard Library
 fractions documentation.
+
 ```py
 >>> from fractions import Fraction
 >>> Fraction(16, -10)
@@ -32,20 +33,26 @@ Fraction(3, 7)
 ```
 
 Here we show name 'b' assigned in the first FCB is still visible.
+
 ```py
 >>> b
 12
 ```
 
-# phmutest command line.
-
+```py
+>>> Fraction('3/7')
+Fraction(3, 7)
 ```
+
+## phmutest command line
+
+```shell
 phmutest docs/replmode.md --replmode --log
 ```
 
-## phmutest output.
+## phmutest output
 
-```
+```txt
 log:
 args.files: 'docs/replmode.md'
 args.replmode: 'True'
@@ -54,8 +61,8 @@ args.log: 'True'
 location|label       result
 -------------------  ------
 docs/replmode.md:11  pass
-docs/replmode.md:22  pass
-docs/replmode.md:35  pass
+docs/replmode.md:23  pass
+docs/replmode.md:37  pass
+docs/replmode.md:42  pass
 -------------------  ------
 ```
-

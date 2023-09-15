@@ -1,20 +1,22 @@
-# --deselect example.
+# --deselect example
 
 Using the phmutest-group directive and --deselect command line option.
 
-## phmutest command line.
+## phmutest command line
 
 This command line selects all blocks in [select.md](select.md)
 that don't have a "phmutest-group slow" directive.
-```
+
+```shell
 phmutest docs/group/select.md --deselect slow --summary --log
 ```
 
-## phmutest output.
+## phmutest output
 
 Terminal output after the `OK` line.
 Note in the log below that only the first block is tested.
-```
+
+```txt
 summary:
 metric
 --------------------  -
@@ -34,9 +36,8 @@ args.deselect: 'slow'
 args.log: 'True'
 args.summary: 'True'
 
-location|label           result
------------------------  ------
-docs/group/select.md:10  pass
------------------------  ------
+location|label            result
+------------------------  ------
+docs/group/select.md:7 o  pass
+------------------------  ------
 ```
-

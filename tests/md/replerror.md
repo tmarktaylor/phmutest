@@ -20,11 +20,12 @@ Create a MyBumper instance with an str value.
 ```
 
 Show that command line --skip skips the test.
+
 <!--phmutest-skip-->
+
 ```python
 >>> assert False, "--skip identified block"
 ```
-
 
 The bump() call below raises a TypeError since += 1 is not
 allowed on type str.
@@ -34,26 +35,26 @@ allowed on type str.
 aa
 ```
 
+Show that --skip MYSKIPPATTERN skips this block.
 
-Show that skip directive skips the test.
 ```python
 >>> # MYSKIPPATTERN
->>> assert False, "directive identified block"
-```
-
-
-Show that Python version conditional skip skips the test.
-<!--phmutest-skipif<3.9999-->
-```python
 >>> assert False, "--skip identified block"
 ```
 
+Show that Python version conditional skip skips the test.
 
+<!--phmutest-skipif<3.9999-->
+
+```python
+>>> assert False, "directive identified block"
+```
 
 Show that Python version conditional skip runs the test.
+
 <!--phmutest-skipif<3.3-->
+
 ```python
 >>> print("run this test if Python version >= 3.3")
 run this test if Python version >= 3.3
 ```
-

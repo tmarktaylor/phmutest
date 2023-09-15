@@ -9,32 +9,33 @@ skip reason "requires Python >= 3.N".
 This test case will only run when Python is version 3.999 or higher.
 
 <!--phmutest-skipif<3.999-->
+
 ```python
 import sys
 b = 10
 print(b)
 assert sys.version_info >= (3, 999)
 ```
-```
+
+```expected-output
 10
 ```
 
 ## phmutest command line
 
-```
+```shell
 phmutest docs/advanced/skipif.md --log
 ```
 
 ## phmutest expected output
 
-```
+```txt
 log:
 args.files: 'docs/advanced/skipif.md'
 args.log: 'True'
 
 location|label              result  skip reason
 --------------------------  ------  ------------------------
-docs/advanced/skipif.md:12  skip    requires Python >= 3.999
+docs/advanced/skipif.md:13  skip    requires Python >= 3.999
 --------------------------  ------  ------------------------
 ```
-

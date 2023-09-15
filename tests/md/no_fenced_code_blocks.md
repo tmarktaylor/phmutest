@@ -1,4 +1,4 @@
-### Markdown file that has no fenced code blocks.
+# Markdown file that has no fenced code blocks
 
 This file covers the use case where phmdoctest is given
 a Markdown file with no fenced code blocks with

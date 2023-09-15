@@ -72,9 +72,6 @@ in its docstring.
 These imports will not be shown by --sharing because they are already
 imported at the top of the testfile.
 
-- import contextlib
-- import io
-- import sys
 - import unittest
 
 ## Share across files
@@ -87,6 +84,7 @@ the unittest run.
 Refer to the implementation in src/phmutest/globs.py class Globals.
 
 ## Setup and teardown
+
 Setup and teardown applies to examples in a single Markdown file.
 
 - Blocks with the phmutest-setup directive render into **setUpClass(cls)**
@@ -100,6 +98,14 @@ The names are only present while the test class for that file is running.
 The lines printed by --sharing for setup and teardown
 directives start with `sharing-class`.
 See test_share_across_with_setup_sharing() in tests/test_sharing.py.
+
+Setup and teardown block errors do not show the Markdown FCB line number.
+If a setup block raises an exception, the Markdown line number does not
+get printed in the exception traceback.
+Run phmutest with the --summary or --progress options.
+A section in the --summary output shows setup and teardown errors.
+In the --log and --progress outputs the suffix "setup" is added
+to the Markdown location.
 
 ## Setup across files
 
@@ -117,6 +123,4 @@ to copy the names assigned by the entire function to module level globals.
 This option turns on per block verbose printing. The printing is directed
 to the standard error stream shared with unittest's verbose printing.
 
-
 [1]: https://docs.python.org/3/library/unittest.html
-

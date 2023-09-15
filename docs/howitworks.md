@@ -4,7 +4,7 @@
 
 The Markdown [GFM fenced code blocks][1] are identified as Python by
 looking at the [info string][2].
-To be treated as Python the FCB [info string][2] should start
+To be treated as Python the FCB info string should start
 with one of these:
 
 - python
@@ -36,14 +36,14 @@ The --report option shows these fenced block details:
 - output block
 - directives
 
+### role field values
+
 | role          | meaning               | referred to in the docs as
 | :-------------| :-----------------:   | :-----------------:
 | Role.CODE     | Python code block     | code blocks or Python code blocks
 | Role.OUTPUT   | expected output block | output blocks
 | Role.SESSION  | Python REPL block     | session or REPL blocks
 | Role.NOROLE   | all other blocks
-
-interpret the --report role field values
 
 The report also shows a list called Deselected blocks: at the end that lists each
 block that was excluded by the --select or --deselect option.
@@ -59,28 +59,7 @@ Test session blocks with --replmode. Test code and output blocks otherwise.
 
 [Code mode](codemode.md) | [Session mode](sessionmode.md)
 
-## Hints
-
-- Since phmutest generates code, the input files should be from a trusted
-  source.
-- The phmutest Markdown parser finds fenced code blocks enclosed by
-  html `<details>` and `</details>` tags.
-  The tags may require a preceding and trailing blank line
-  to render correctly. See example at the bottom tests/md/readerfcb.md.
-- Markdown indented code blocks ([Spec][4] section 4.4) are ignored.
-- A malformed HTML comment ending is bad. Make sure
-  it ends with both dashes like `-->`.
-- A misspelled directive will be missing from the --report output.
-- If the generated test file has a compile error phmutest will raise an
-  ImportError when importing it.
-- Blocks skipped with --skip and the phmutest-skip directive
-  are not rendered. This is useful to avoid above import error.
-- In repl mode **no** skipped blocks are rendered.
-- Try redirecting `--generate -` standard output into PYPI Pygments to
-  colorize the generated test file.
-
 [1]: https://github.github.com/gfm/#fenced-code-blocks
 [2]: https://github.github.com/gfm/#info-string
 [3]: https://docs.python.org/3/library/unittest.html
 [4]: https://spec.commonmark.org
-

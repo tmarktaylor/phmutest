@@ -1,4 +1,5 @@
 # label directive on any FCB
+
 On any fenced code block, the label directive identifies the block
 for later retrieval by the class **phmdoctest.tool.FCBChooser()**.
 The `FCBChooser` is used separately from phmutest in
@@ -9,13 +10,15 @@ phmutest. The directive value can be any string.
 [tool API](../api.md)
 
 Here is a YAML FCB with a `<!--phmutest-label my-label-->` label directive.
+
 <!--phmutest-label my-label-->
 <!-- Other one line HTML comments or directives-->
+
 ```yml
 theme: readthedocs
 ```
 
-Here is example code to retrieve the directive. Note that FCBs typically
+Here is example code to retrieve the YAML FCB. Note that FCBs typically
 end with a newline.
 
 ```python
@@ -25,7 +28,6 @@ fcb_contents = chooser.select(label="my-label")
 print(fcb_contents[0], end="")
 ```
 
-```
+```expected-output
 theme: readthedocs
 ```
-

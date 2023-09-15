@@ -12,13 +12,12 @@ note that dots separate the folders and the function.
 
 The function **change_dir()** changes the
 working directory to `docs/fix/code`.  This allows the example to use a
-pathname relative to `docs/init/fix/code` for the file.
+pathname relative to `docs/fix/code` for the file.
 
 **change_dir()** also calls **unittest.addModuleCleanup()** to have unittest
 restore the working directory when unittest terminates.
 
-
-## Python fenced code block and expected output under test.
+## Python fenced code block and expected output under test
 
 This is the Python example we want to check.
 
@@ -36,20 +35,22 @@ print(contents, end="")
 ```
 
 Expected output:
-```
+
+```expected-output
 Demonstrate changed working directory.
 ```
 
-## phmutest command line.
+## phmutest command line
 
-```
+```shell
 phmutest docs/fix/code/chdir.md --fixture docs.fix.code.chdir.change_dir --log
 ```
 
-## phmutest output.
+## phmutest output
 
 Terminal output after the `OK` line.
-```
+
+```txt
 log:
 args.files: 'docs/fix/code/chdir.md'
 args.fixture: 'docs.fix.code.chdir.change_dir'
@@ -59,10 +60,9 @@ location|label             result
 -------------------------  ------
 setUpModule..............
 change cwd...............
-docs/fix/code/chdir.md:25  pass
-docs/fix/code/chdir.md:29  pass
+docs/fix/code/chdir.md:24  pass
+docs/fix/code/chdir.md:28  pass
 tearDownModule...........
 restore cwd..............
 -------------------------  ------
 ```
-

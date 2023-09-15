@@ -1,11 +1,12 @@
 """Test Python info string matching, command line skip, and --report."""
 import phmutest.main
+import phmutest.summary
 
 
 def test_python_code_matcher():
-    """Test Python block identification."""
-    args = "tests/md/pythonmatch.md".split()
-    phmresult = phmutest.main.main(args)
+    """Test Python code block identification."""
+    line = "tests/md/pythonmatch.md"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=7,
         passed=7,
@@ -20,9 +21,9 @@ def test_python_code_matcher():
 
 
 def test_python_repl_matcher():
-    """Test Python block identification."""
-    args = "tests/md/pythonmatch.md --replmode".split()
-    phmresult = phmutest.main.main(args)
+    """Test Python session block identification."""
+    line = "tests/md/pythonmatch.md --replmode"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=8,
         passed=8,
@@ -48,30 +49,30 @@ def test_report(capsys, checker):
         Fenced blocks from tests/md/report.md:
         FencedBlock:
           info_string= python
-          lines= 6-9
+          lines= 4-7
           role= Role.CODE
           output block= no
           directives= []
         FencedBlock:
           info_string= python
-          lines= 12-15
+          lines= 10-13
           role= Role.CODE
-          output block= lines 20-22
+          output block= lines 18-20
           directives= []
         FencedBlock:
           info_string=
-          lines= 20-22
+          lines= 18-20
           role= Role.OUTPUT
           directives= []
         FencedBlock:
           info_string= python
-          lines= 26-29
+          lines= 24-27
           role= Role.CODE
-          output block= lines 32-34
+          output block= lines 31-33
           directives= []
         FencedBlock:
-          info_string=
-          lines= 32-34
+          info_string= expected-output
+          lines= 31-33
           role= Role.OUTPUT
           directives= []
         FencedBlock:
@@ -81,8 +82,8 @@ def test_report(capsys, checker):
           output block= lines 51-56
           skip patterns= 'CHERRIES'
           directives: (line, type, HTML):
-            36, LABEL, <!--phmutest-label example1-outfile-->
-            37, SKIP, <!--phmutest-skip-->
+            35, LABEL, <!--phmutest-label example1-outfile-->
+            36, SKIP, <!--phmutest-skip-->
         FencedBlock:
           info_string=
           lines= 51-56
@@ -90,7 +91,7 @@ def test_report(capsys, checker):
           directives= []
         FencedBlock:
           info_string= yml
-          lines= 59-64
+          lines= 60-65
           role= Role.NOROLE
           output block= no
           directives: (line, type, HTML):
@@ -98,9 +99,9 @@ def test_report(capsys, checker):
 
         Deselected blocks:
         """
-    command = "tests/md/report.md --skip CHERRIES CHERRIES --report"
+    line = "tests/md/report.md --skip CHERRIES CHERRIES --report"
     # Note- duplicate skip pattern CHERRIES is not shown in list of
     #       block skip patterns.
-    phmresult = phmutest.main.main(command.split())
+    phmresult = phmutest.main.command(line)
     assert phmresult is None
     checker(expected, capsys.readouterr().out.rstrip())

@@ -1,5 +1,10 @@
 """Test cases for session.py."""
+from unittest import mock
+
+import pytest
+
 import phmutest.main
+import phmutest.summary
 from phmutest.fixture import Fixture
 
 
@@ -60,7 +65,7 @@ def nonecleanupfixture(**kwargs):
 
 
 def test_none_cleanup(capsys):
-    """Use case where --replmode fixture returns Fixture with replmode=None."""
+    """Use case where --replmode fixture returns Fixture with repl_cleanup=None."""
     command = (
         "tests/md/replerror.md "
         "--fixture tests.test_session.nonecleanupfixture --replmode --log"
@@ -106,11 +111,11 @@ def test_progress(capsys, endswith_checker):
         tests/md/replerror.md:7.  pass
         tests/md/replerror.md:11  pass
         tests/md/replerror.md:18  pass
-        tests/md/replerror.md:24  skip    phmutest-skip
-        tests/md/replerror.md:32  error
-        tests/md/replerror.md:39  error
-        tests/md/replerror.md:47  skip    requires >=py3.9999
-        tests/md/replerror.md:55  pass
+        tests/md/replerror.md:26  skip    phmutest-skip
+        tests/md/replerror.md:33  error
+        tests/md/replerror.md:40  error
+        tests/md/replerror.md:49  skip    requires >=py3.9999
+        tests/md/replerror.md:57  pass
         ------------------------  ------  -------------------
         location|label          result
         ----------------------  ------
@@ -119,3 +124,36 @@ def test_progress(capsys, endswith_checker):
         """
     output = capsys.readouterr().out.rstrip()
     endswith_checker(expected, output)
+
+
+def verbose_cleanup():
+    """fixture cleanup function that prints."""
+    print("Most definitely cleaning up here!")
+
+
+def printing_cleanup_fixture(**kwargs):
+    """phmutest fixture function with a cleanup function that prints."""
+    return Fixture(globs=None, repl_cleanup=verbose_cleanup)
+
+
+def cause_exception(args, globs, fileblocks, extractor):
+    """Replacement function that raises an exception."""
+    raise ValueError("Bad phmutest REPL logic.")
+
+
+def test_repl_still_cleans_up(capsys):
+    """Show repl fixture cleanup is called for an internal error during session.py."""
+    # Get coverage for code that handles an unexpected exception in phmutest code that
+    # runs in --replmode. The code assures that a fixture cleanup function
+    # gets called before propagating the exception.
+    # Use patching to inject the exception.
+    with mock.patch("phmutest.session.update_globs_show_sharing", cause_exception):
+        with pytest.raises(ValueError) as exc_info:
+            command = (
+                "tests/md/example1.md tests/md/example2.md "
+                "--fixture tests.test_session.printing_cleanup_fixture --replmode --log"
+            )
+            args = command.split()
+            _ = phmutest.main.main(args)
+        assert "Most definitely cleaning up here!" in capsys.readouterr().out
+        assert "Bad phmutest REPL logic." in str(exc_info.value)

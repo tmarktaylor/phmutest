@@ -1,28 +1,26 @@
-# --select and group directive example.
+# --select and group directive example
 
 Using the phmutest-group directive and --select command line option.
 
-The command line below
+The first FCB has no directives and expected output block.
 
-## Fenced code block with no directives and expected output block.
-
-Example code adapted from the Python Tutorial:
 ```python
 squares = [1, 4, 9, 16, 25]
 print(squares)
 ```
+
 expected output:
-```
+
+```expected-output
 [1, 4, 9, 16, 25]
 ```
-
-## Code block with phmutest-group directive.
 
 Look for the `<!--phmutest-group GROUP-->` directive in the Markdown file.
 Note there is a space before the group name.
 The directive declares the block to be a member of test group "slow".
 
 <!--phmutest-group slow-->
+
 ```python
 from datetime import date
 
@@ -30,23 +28,25 @@ d = date.fromordinal(730920)  # 730920th day after 1. 1. 0001
 print(d)
 ```
 
-```
+```expected-output
 2002-03-11
 ```
 
-## phmutest command line.
+## phmutest command line
 
 This command line selectes all blocks in this file that have a
 `<!--phmutest-group slow-->` directive.
-```
+
+```shell
 phmutest docs/group/select.md --select slow --summary --log
 ```
 
-## phmutest output.
+## phmutest output
 
 Terminal output after the `OK` line.
 Note in the log below that only the second block is tested.
-```
+
+```txt
 summary:
 metric
 --------------------  -
@@ -66,9 +66,8 @@ args.select: 'slow'
 args.log: 'True'
 args.summary: 'True'
 
-location|label           result
------------------------  ------
-docs/group/select.md:26  pass
------------------------  ------
+location|label             result
+-------------------------  ------
+docs/group/select.md:24 o  pass
+-------------------------  ------
 ```
-[1]: https://github.com/tmarktaylor/phmutest/docs/group

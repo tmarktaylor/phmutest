@@ -1,6 +1,8 @@
-# API version 0.0.1
+# API version 0.0.2
 
-## API - phmutest.tool.
+## API - phmutest.tool
+
+Look for example uses of FCBChooser in tests/test_docs.py.
 
 ```python
 class FCBChooser:
@@ -112,4 +114,3 @@ def fenced_code_blocks(markdown_filename: str) -> List[str]:
         fenced code block.
     """
 ```
-

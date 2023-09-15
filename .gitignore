@@ -4,6 +4,9 @@
 # PyCharm
 .idea/
 
+# IDE
+.vscode/
+
 # Mkdocs
 site
 _mkdocsin

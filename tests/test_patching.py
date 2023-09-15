@@ -9,33 +9,35 @@ import phmutest.fenced
 import phmutest.fixture
 import phmutest.main
 import phmutest.reader
+import phmutest.select
 import phmutest.session
+import phmutest.summary
 from phmutest.direct import MarkerPattern
 
 # Note that the last block is included because it has the
 # info string ladenpython in the Markdown input file.
-infostring_log = """\
+python_infostring_log = """\
 log:
 args.files: 'tests/md/patching1.md'
 args.log: 'True'
 
-location|label                         result
--------------------------------------  ------
-tests/md/patching1.md:2 testing-1-2-3  pass
-tests/md/patching1.md:10.............  pass
-tests/md/patching1.md:19.............  pass
--------------------------------------  ------
+location|label                           result
+---------------------------------------  ------
+tests/md/patching1.md:4 testing-1-2-3 o  pass
+tests/md/patching1.md:13 o.............  pass
+tests/md/patching1.md:23 o.............  pass
+---------------------------------------  ------
 """
 
 
-def test_infostring_patch(capsys):
+def test_python_infostring_patch(capsys):
     """Patching fenced code block info_string python language matching."""
     matcher = phmutest.fenced.PythonMatcher()
     matcher.python_patterns.append("ladenpython")  # Also match info string ladenpython.
     matcher.compile()
     with mock.patch("phmutest.fenced.python_matcher", matcher):
-        args = ["tests/md/patching1.md", "--log"]
-        phmresult = phmutest.main.main(args)
+        line = "tests/md/patching1.md --log"
+        phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,  # counts the ladenpython FCB
@@ -47,11 +49,12 @@ def test_infostring_patch(capsys):
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
-    assert infostring_log == capsys.readouterr().out.lstrip()
+    assert python_infostring_log == capsys.readouterr().out.lstrip()
 
 
 def make_finder(old_name, new_name):
     """Make a directive MarkerPattern to match new_name that behaves like old_name."""
+    assert old_name != new_name
     finders = [f for f in phmutest.direct.directive_finders if old_name in f.pattern]
     assert finders, f"no finder pattern containing {old_name}."
     assert len(finders) == 1, f"more than 1 finder pattern containing {old_name}."
@@ -69,11 +72,11 @@ log:
 args.files: 'tests/md/patching1.md'
 args.log: 'True'
 
-location|label                         result
--------------------------------------  ------
-tests/md/patching1.md:2 testing-1-2-3  pass
-tests/md/patching1.md:10 abc.........  pass
--------------------------------------  ------
+location|label                           result
+---------------------------------------  ------
+tests/md/patching1.md:4 testing-1-2-3 o  pass
+tests/md/patching1.md:13 abc o.........  pass
+---------------------------------------  ------
 """
 
 
@@ -88,8 +91,8 @@ def test_directive_patch(capsys):
     updated_finders = copy.copy(phmutest.direct.directive_finders)
     updated_finders.append(finder_alias)
     with mock.patch("phmutest.direct.directive_finders", updated_finders):
-        args = ["tests/md/patching1.md", "--log"]
-        phmresult = phmutest.main.main(args)
+        line = "tests/md/patching1.md --log"
+        phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=2,
         passed=2,  # does not count the ladenpython FCB
@@ -133,11 +136,8 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     """Show modify_docstring patch changes the docstring that gets run."""
     # Run twice, first time without the patch. The second time with the
     # patch that makes the 3 blocks fail.
-    command = (
-        "tests/md/optionflags.md --replmode --fixture tests.test_patching.setflags"
-    )
-    args = command.split()
-    phmresult1 = phmutest.main.main(args)
+    line = "tests/md/optionflags.md --replmode --fixture tests.test_patching.setflags"
+    phmresult1 = phmutest.main.command(line)
     want1 = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,
@@ -152,7 +152,7 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     assert phmresult1.is_success is True
 
     with mock.patch("phmutest.session.modify_docstring", rewrite_docstring):
-        phmresult2 = phmutest.main.main(args)
+        phmresult2 = phmutest.main.command(line)
     want2 = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=0,
@@ -167,7 +167,7 @@ def test_modify_docstring_patch(capsys, endswith_checker):
     assert phmresult2.is_success is False
 
 
-class FailFastRunner(phmutest.session.ExampleOutcomeRunner):
+class OptionflagRunner(phmutest.session.ExampleOutcomeRunner):
     """Doctest Runner to set optionflags."""
 
     myflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
@@ -179,10 +179,10 @@ class FailFastRunner(phmutest.session.ExampleOutcomeRunner):
 
 
 def setflags(**kwargs):
-    """phmutest fixture function replaces the doctest.DocTestRunner."""
+    """phmutest fixture function to patch the doctest runner."""
     with ExitStack() as stack:
         stack.enter_context(
-            mock.patch("phmutest.session.ExampleOutcomeRunner", FailFastRunner)
+            mock.patch("phmutest.session.ExampleOutcomeRunner", OptionflagRunner)
         )
         fixture = phmutest.fixture.Fixture(
             globs=None, repl_cleanup=stack.pop_all().close
@@ -192,12 +192,11 @@ def setflags(**kwargs):
 
 def test_doctest_optionflags_patch():
     """Test a --fixture that runs doctests with optionflags."""
-    command = (
+    line = (
         "tests/md/optionflags.md --log --replmode "
         " --fixture tests.test_patching.setflags"
     )
-    args = command.split()
-    phmresult = phmutest.main.main(args)
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=3,
         passed=3,
@@ -210,3 +209,37 @@ def test_doctest_optionflags_patch():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
+
+
+output_infostring_log = """\
+log:
+args.files: 'tests/md/output_info_string.md'
+args.log: 'True'
+
+location|label                       result
+-----------------------------------  ------
+tests/md/output_info_string.md:17 o  pass
+-----------------------------------  ------
+"""
+
+
+def test_output_infostring_patch(capsys, endswith_checker):
+    """Add a new FCB info string that identifies the expected output block."""
+    info_strings = phmutest.select.OUTPUT_INFO_STRINGS
+    info_strings.append("captured-stdout")
+    line = "tests/md/output_info_string.md --log"
+    with mock.patch("phmutest.select.OUTPUT_INFO_STRINGS", info_strings):
+        phmresult = phmutest.main.command(line)
+    want2 = phmutest.summary.Metrics(
+        number_blocks_run=1,
+        passed=1,
+        failed=0,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want2 == phmresult.metrics
+    assert phmresult.is_success is True
+    assert output_infostring_log == capsys.readouterr().out.lstrip()

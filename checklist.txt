@@ -31,7 +31,6 @@ Checklist
   Configure trusted publishing on both test PYPI and PYPI if this is
   the first release.
   - On GitHub manually dispatch publish.yml
-  - On GitHub manually dispatch wheel.yml to try installing from PYPI
 
   Alternate manual steps
   - On GitHub manually dispatch build.yml on the release ref

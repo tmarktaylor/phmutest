@@ -2,6 +2,7 @@
 import pytest
 
 import phmutest.main
+import phmutest.summary
 
 
 def test_noextras():

@@ -6,27 +6,32 @@ Directives are HTML comments associated with fenced code blocks.
 They are edited into the Markdown file immediately before a fenced
 code block. It is OK if other HTML comments are present either before
 or after. A directive is recognized if it is in a continuous
-series of either HTML comments or single blanks lines
+series of either HTML comments or single blank lines
 ending at the fenced code block.
 
 The `<!--phmutest-skip-->` directive in the raw Markdown below
 is associated with the FCB.
 
-~~~
+~~~txt
 <!--phmutest-skip-->
 <!--Another HTML comment-->
+
 ```python
 print("Hello World!")
 ```
+
 Expected Output
-```
+
+```expected-output
 Hello World!
 ```
 ~~~
 
 Since directives are HTML comments they are not visible in rendered Markdown.
-View directives on [Latest README on GitHub][1]
-by pressing the `Code` button in the banner at the top of the file.
+Reveal directives by navigating to the repository on GitHub [here][1] and
+pressing the `Code` button in the banner at the top of the file.
+
+### List of directives
 
 |       Directive HTML comment       | Use on FCBs  | Ok in REPL mode
 | :--------------------------------: | :----------: | :----------:
@@ -37,10 +42,7 @@ by pressing the `Code` button in the banner at the top of the file.
 | `<!--phmutest-teardown-->`         | code         | No
 | `<!--phmutest-group NAME -->`      | code         | yes
 
-List of directives
-
-
-
+### phmdoctest directives recognized by phmutest
 
 |  phmdoctest directive                 | phmutest equivalent
 | :---------------------------------: | :---------:
@@ -52,8 +54,7 @@ List of directives
 | `<!--phmdoctest-teardown-->`        | `<!--phmutest-teardown-->`
 | `<!--phmdoctest-mark.ATTRIBUTE-->`  | `<!--phmutest-group NAME -->`
 
-phmdoctest directives recognized by phmutest.
-
+### Directive Examples
 
 [Skip directive](advanced/skip.md)
 
@@ -61,7 +62,7 @@ phmdoctest directives recognized by phmutest.
 
 [Label directive, label and skipif example](advanced/label.md)
 
-### Test groups
+## Test groups
 
 The test group directive identifies Python FCBs belonging to the group NAME.
 Test groups can be included or excluded from testing by the --select and
@@ -72,7 +73,7 @@ Test groups can be included or excluded from testing by the --select and
 - The --report option lists excluded blocks.
 - The --summary option shows the number of deselected blocks.
 
-### Setup and teardown
+## Setup and teardown
 
 Blocks can be designated setup or teardown blocks by adding the
 `<!--phmutest-setup-->` and `<!--phmutest-teardown-->` directives.
@@ -96,7 +97,5 @@ The file's setup blocks are run by **unittest.setUpModule()** and the names assi
 setup blocks are shared to **all** FILEs. Teardown blocks in FILE
 are run by **unittest.tearDownModule()**.
 
-
-[1]: https://github.com/tmarktaylor/phmutest/blob/master/README.md?plain=1
+[1]: https://github.com/tmarktaylor/phmutest/blob/master/tests/md/directive1.md?plain=1
 [2]: https://tmarktaylor.github.io/phmdoctest
-

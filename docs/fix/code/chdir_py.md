@@ -1,4 +1,5 @@
 # docs/fix/code/chdir.py
+
 ```python
 """User fixture to change the current working directory while running tests."""
 import os

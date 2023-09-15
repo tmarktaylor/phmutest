@@ -1,5 +1,7 @@
-### Additional output beyond what was expected.
+# Additional output beyond what was expected
+
 The code
+
 ```python3
 from enum import Enum
 
@@ -12,7 +14,9 @@ class Floats(Enum):
 for floater in Floats:
     print(floater)
 ```
+
 produces
+
 ```
 Floats.APPLES
 Floats.CIDER
@@ -20,4 +24,5 @@ Floats.CHERRIES
 Floats.ADUCK
 Floats.VERY_SMALL_ROCKS
 ```
-Incorrect sample output is missing the Floats.ADUCK line.
+
+Output has extra line: Floats.VERY_SMALL_ROCKS.

@@ -82,7 +82,7 @@ class Metrics:
 
 @dataclass
 class PhmResult:
-    """phmutest.main.main() return type.  Markdown Python example test results."""
+    """phmutest.main.command() return type.  Markdown Python example test results."""
 
     test_program: Optional[unittest.TestProgram]
     is_success: bool
@@ -214,15 +214,15 @@ def show_log(log: Log) -> None:
     """Print a table of the log entries."""
     if log:
         empty_3rd_col = not any([entry[2] for entry in log])
-        colulmn_title = "location|label"
+        column_title = "location|label"
         if empty_3rd_col:
-            titles = [colulmn_title, "result"]
+            titles = [column_title, "result"]
             log2 = [[entry[0], entry[1]] for entry in log]
         else:
-            titles = [colulmn_title, "result", "skip reason"]
+            titles = [column_title, "result", "skip reason"]
             log2 = log
         titled_log = [titles]
-        filled_log = dot_fill_first_column(log2, len(colulmn_title))
+        filled_log = dot_fill_first_column(log2, len(column_title))
         titled_log.extend(filled_log)
         show_table(titled_log)
 

@@ -25,16 +25,20 @@ The name 'we' is assigned in file1.md. The value overwrites the 'we' initialized
 by the fixture. file2.md sees the value of 'we' assigned by file1.md.
 The fixture cleanup function sees the original value of 'we'.
 
+Just shows that the rebind in fo we in file1.md did not affect the original value.
+The rebind affects the shallow copy.
 
 To see the effect of rebind in REPL mode see test_globs.py::test_extractor().
 """
 import unittest
 
 import phmutest.main
+import phmutest.summary
 from phmutest.fixture import Fixture
 
 
 def cleanup(globs):
+    """Handles clean up of the objects created by the fixture."""
     print("cleanup-")
     assert globs == {"we": 3, "no_conflict": 9999}
 
@@ -48,15 +52,14 @@ def globsfixture(**kwargs):
 
 def test_share_across_rebind():
     """Share across files re-assign of fixture glob name done in file1.md."""
-    command = (
+    line = (
         "docs/share/file1.md docs/share/file2.md docs/share/file3.md "
         "--share-across-files docs/share/file1.md docs/share/file2.md --log "
         "--fixture tests.test_rebind.globsfixture "
         "--sharing . --quiet"
     )
     # --quiet is passed through to unittest to prevent the progress dot printing.
-    args = command.split()
-    phmresult = phmutest.main.main(args)
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=8,
         passed=8,

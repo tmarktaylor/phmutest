@@ -3,5 +3,9 @@ class MyBumper:
         self.value = value
 
     def bump(self):
-        self.value += 1
+        self.value = helper(self.value)
         return self.value
+
+
+def helper(value):
+    return value + 1

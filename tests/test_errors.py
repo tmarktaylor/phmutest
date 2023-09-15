@@ -2,9 +2,8 @@
 import contextlib
 import io
 
-import pytest
-
 import phmutest.main
+import phmutest.summary
 
 
 def test_code_raises():
@@ -30,8 +29,8 @@ def test_code_raises():
 
 def test_unittest_fail_fast():
     """Pass through callers -f option to unittest. (fail fast)."""
-    command = "tests/fail/raiser.md --log -f"
-    phmresult = phmutest.main.main(command.split())
+    line = "tests/fail/raiser.md --log -f"
+    phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
         number_blocks_run=5,
         passed=4,
@@ -86,17 +85,30 @@ def test_replmode_errors():
 
 def badfixture(**kwargs):
     """phmutest fixture raises an exception."""
-    raise (ValueError("badfixture- having a bad day"))
+    raise ValueError("badfixture- having a bad day")
     return None
 
 
 def test_repl_fixture_raises(capsys):
-    """In --replmode a fixture raises an exception.  It just kills phmutest."""
+    """In --replmode a fixture raises an exception."""
     command = "tests/md/replerror.md --fixture tests.test_errors.badfixture --replmode"
     args = command.split()
-    with pytest.raises(ValueError) as exc_info:
-        _ = phmutest.main.main(args)
-    assert "badfixture- having a bad day" in str(exc_info.value)
+    phmresult = phmutest.main.main(args)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=0,
+        passed=0,
+        failed=0,
+        skipped=0,
+        suite_errors=1,
+        number_of_files=0,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+    assert phmresult.is_success is False
+    output = capsys.readouterr().out.strip()
+    assert "Caught an exception in --fixture tests.test_errors.badfixture..." in output
+    assert "ValueError: badfixture- having a bad day" in output
 
 
 def test_summary_option(capsys, checker):
@@ -133,14 +145,14 @@ def test_summary_option(capsys, checker):
 
         skipped blocks             reason
         -------------------------  -------------
-        tests/md/directive1.md:14  phmutest-skip
+        tests/md/directive1.md:16  phmutest-skip
         -------------------------  -------------
         """
     checker(expected, output)
 
 
 def test_setup_raises(capsys, endswith_checker):
-    """Check handling of an exception in a <~--phmutest-setup--> block.
+    """Check handling of an exception in a <!--phmutest-setup--> block.
 
     Cover 'setup and teardown errors' statements.
     The setup block generates into the unittest setUpClass() function.
@@ -167,7 +179,7 @@ def test_setup_raises(capsys, endswith_checker):
 
         setup and teardown errors
         -------------------------
-        tests/md/badsetup.md:6 setup
+        tests/md/badsetup.md:7 setup
 
         metric
         --------------------  -
@@ -189,7 +201,7 @@ def test_setup_raises(capsys, endswith_checker):
 
 
 def test_setup_across_raises(capsys, endswith_checker):
-    """Check handling of an exception in a <~--phmutest-setup--> block.
+    """Check handling of an exception in a <!--phmutest-setup--> block.
 
     The setup block is rendered in setUpModule().
     The error in setUpModule() cancels the rest of the unittest.
@@ -221,7 +233,7 @@ def test_setup_across_raises(capsys, endswith_checker):
 
         setup and teardown errors
         -------------------------
-        tests/md/badsetup.md:6 setup
+        tests/md/badsetup.md:7 setup
 
         metric
         --------------------  -
@@ -243,7 +255,7 @@ def test_setup_across_raises(capsys, endswith_checker):
 
 
 def test_teardown_raises(capsys, endswith_checker):
-    """Check handling of an exception in a <~--phmutest-teardown--> block.
+    """Check handling of an exception in a <!--phmutest-teardown--> block.
 
     Cover 'setup and teardown errors' statements.
     """
@@ -269,7 +281,7 @@ def test_teardown_raises(capsys, endswith_checker):
 
         setup and teardown errors
         -------------------------
-        tests/md/badteardown.md:55 teardown
+        tests/md/badteardown.md:68 teardown
 
         metric
         --------------------  -
@@ -291,7 +303,7 @@ def test_teardown_raises(capsys, endswith_checker):
 
 
 def test_teardown_across_raises(capsys, endswith_checker):
-    """Check handling of an exception in a <~--phmutest-teardown--> block.
+    """Check handling of an exception in a <!--phmutest-teardown--> block.
 
     Cover 'setup and teardown errors' statements.
     """
@@ -320,7 +332,7 @@ def test_teardown_across_raises(capsys, endswith_checker):
 
         setup and teardown errors
         -------------------------
-        tests/md/badteardown.md:55 teardown
+        tests/md/badteardown.md:68 teardown
 
         metric
         --------------------  -
