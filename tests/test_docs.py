@@ -115,7 +115,7 @@ def test_readme_code_output(capsys):
 
 def test_readme_repl_metrics():
     """Test the metrics when running on README.md."""
-    command = readme_chooser.select(info_string="shell")[1]  # 1st of selected FCBs
+    command = readme_chooser.select(info_string="shell")[1]  # 2nd of selected FCBs
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
@@ -133,7 +133,7 @@ def test_readme_repl_metrics():
 
 def test_readme_repl_output(capsys):
     """Test the shell expected output block when running on README.md."""
-    command = readme_chooser.select(info_string="shell")[1]  # 1st of selected FCBs
+    command = readme_chooser.select(info_string="shell")[1]  # 2nd of selected FCBs
     output = readme_chooser.select(contains="args.files: 'README.md'")[1]
     args = arg_list(command)
     _ = phmutest.main.main(args)

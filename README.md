@@ -10,7 +10,7 @@ Treats each Markdown file as a single long example, of many FCBs which continues
 across multiple Markdown [fenced code blocks][3] (FCBs or blocks).
 
 - Checks either Python code examples plus output **or** ">>>" REPL examples
-  | [doctest][4].
+  | [doctest][5].
 - Reports pass/failed/error/skip status and line number for each block.
 - An example can continue **across** files.
 - Runs files in user specified order.
@@ -295,13 +295,14 @@ will determine the order.
 
 When --replmode is specified Python interactive sessions are tested and
 Python code and expected output blocks are not tested. REPL mode tests are
-implemented using [doctest][4].
+implemented using [doctest][5].
 The option --setup-across-files and the setup and teardown directives
 have no effect in REPL mode.
 --progress has file by file granularity.
 
 ## Suite initialization and cleanup
 
+For background refer to definitions at the top of [unittest][18].
 Use --fixture to specify a Python initialization function that runs before the tests.
 It works with or without --replmode, but there are differences.
 In both modes, the fixture function may create objects (globs) that are visible
@@ -418,7 +419,9 @@ command line less the phmutest, like this:
 
 - A `phmutest.summary.PhmResult` instance is returned.
 - When calling from Python there is no shell wildcard expansion.
-- The --fixture function can be in the same Python file.
+- The --fixture function can be in the same Python file. Caveat: The Python file is
+  imported again to a new module object. The Python file's module level code will
+  be run a second time.
 - Call from pytest to get overall result as Junit XML | [Suggestion](docs/junit.md)
 
 [Example](docs/callfrompython.md) | [Limitation](docs/callfrompython.md#limitation)
@@ -497,9 +500,10 @@ breakage in future versions. Look for examples in tests/test_patching.py.
 [4]: https://spec.commonmark.org
 [11]: https://github.github.com/gfm/#info-string
 [10]: https://phmutest.readthedocs.io/en/latest/docs/api.html
-[4]: https://docs.python.org/3/library/doctest.html
+[5]: https://docs.python.org/3/library/doctest.html
 [6]: https://pypi.python.org/project/coverage
 [13]: https://ci.appveyor.com/project/tmarktaylor/phmutest
 [15]: https://docs.pytest.org/en/stable
 [16]: https://tmarktaylor.github.io/pytest-phmdoctest
 [17]: https://pypi.python.org/pypi/phmdoctest
+[18]: https://docs.python.org/3/library/unittest.html

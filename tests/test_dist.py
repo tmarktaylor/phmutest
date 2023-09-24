@@ -35,7 +35,7 @@ class TestSameVersions:
 
     def test_tool_api(self):
         """Check the version is anywhere in docs/api.md."""
-        self.verify_found_in_file("docs/api.md", "API version {}\n")
+        self.verify_found_in_file("docs/api.md", "API for phmutest version {}\n")
 
     def test_fixture_api(self):
         """Check the version is anywhere in src/phmutest/fixture.py."""

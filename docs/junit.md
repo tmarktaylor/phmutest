@@ -26,8 +26,7 @@ import phmutest.main
 def test_broken_python_examples(capsys):
     """Capture unittest's stderr and other info from any bad examples to junit XML."""
     with contextlib.redirect_stderr(io.StringIO()) as f:
-        command = "tests/md/badsetup.md --log"
-        args = command.split()
-        phmresult = phmutest.main.main(args)
+        line = "tests/md/badsetup.md --log"
+        phmresult = phmutest.main.command(line)
         assert phmresult.is_success, capsys.readouterr().out + "\n" + f.getvalue()
 ```
