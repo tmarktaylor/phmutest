@@ -25,8 +25,8 @@ def identify_output_blocks(blocks: List[FencedBlock]) -> None:
 
     The block.info_string is a copy of the Markdown fenced code block info_string.
     This string may indicate the language intended for syntax coloring.
-    A block is an output block if it has an empty info_string
-    and follows a designated python code block.
+    A block is an output block if it's info_string is one of
+    OUTPUT_INFO_STRINGS and follows a designated python code block.
     """
     # Install link to output block if one exists.
     previous_block = None

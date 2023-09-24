@@ -39,10 +39,6 @@ def make_quick_links(filename: str) -> str:
     header_level = "## "  # note trailing space
     text = Path(filename).read_text(encoding="utf-8")
     lines = text.splitlines()
-    # README.md has fenced code blocks that enclose other
-    # fenced code blocks.  The outer blocks use ~~~ as the fence.
-    # Remove the outer fenced code blocks first.
-    lines = remove_fenced_code_blocks(lines, "~~~")
     lines = remove_fenced_code_blocks(lines)
     links = []
     for line in lines:
@@ -62,7 +58,7 @@ def make_quick_links(filename: str) -> str:
 
 
 if __name__ == "__main__":
-    # To generate quick links, from repository root run: python tests/test_readme.py
+    # Call to generate quick links.
     text = make_quick_links("README.md")
     print(text)
     print()

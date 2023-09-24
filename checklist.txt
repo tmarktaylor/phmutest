@@ -18,11 +18,14 @@ Checklist
 - Run flake8 on doc and tests (fixture import and use errors are expected)
 - Build docs python docs/premkdocs.py --start-server --clean
 
-- On GitHub manually dispatch build.yml on the branch to be released below.
-  Manually check the contents of source distribution *.tar.gz.
-  Look for its listing at the bottom of build.yml action output.
+- Prepare release on the develop branch.
+  - On GitHub manually dispatch action "CI" (ci.yml) on the develop branch.
+  - On GitHub manually dispatch action "Buildable" (build.yml).
+    Inspect the log to make sure newly added files are copied to the dist.
 
-- Release on GitHub (where 0.0.0 -> published version)
+- Open pull request and merge develop branch to main branch.
+
+- On main branch create a release on GitHub (where 0.0.0 -> published version)
   - tag= v0.0.0
   - release= phmutest 0.0.0
   - description= Version 0.0.0 uploaded to Python Package Index.
@@ -30,9 +33,16 @@ Checklist
 - Publish to PYPI
   Configure trusted publishing on both test PYPI and PYPI if this is
   the first release.
-  - On GitHub manually dispatch publish.yml
+  - On GitHub manually dispatch action "Publish to PYPI" (publish.yml).
 
-  Alternate manual steps
+- Check the release on PYPI
+  - The hash on PYPI should be the same as the hash shown by the
+    publish.yml builddist action step.
+  - Manually dispatch "Install from PYPI" (wheel.yml) to show pip
+    install succeeds.
+
+  -------------------------------------------------------------------------
+  Legacy manual steps
   - On GitHub manually dispatch build.yml on the release ref
   - Download dist artifact uploaded by build.yml to an empty directory.
   - upload to PYPI

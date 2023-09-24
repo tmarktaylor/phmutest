@@ -68,10 +68,6 @@ def test_repl():
     )
     want = Path("tests/doctest/generated_replmode.txt").read_text(encoding="utf-8")
     assert want == genfile
-    testcase = unittest.TestCase()
-    testcase.maxDiff = 20000
-    testcase.assertEqual(want, genfile)
-    assert want == genfile
 
 
 def test_unittest_args(capsys):

@@ -18,3 +18,7 @@
 - Setup classifiers, cleanups, Docs, renames.
 - Move twine check to build.yml.
 - serialize ci.yml jobs
+
+0.0.3 - 2023-09-24
+
+- Add test_importer.py. Cleanups

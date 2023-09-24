@@ -4,7 +4,7 @@ from pathlib import Path
 import phmutest.tool
 
 
-def test_api(checker):
+def test_api():
     """Check the API documentaion docs/api.md reflects the actual tool.py."""
     # Check for changes in the parts of the source code file that were
     # manually copied into the Markdown file.

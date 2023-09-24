@@ -314,9 +314,9 @@ import unittest
 from phmutest.globs import Globals as _phmGlobals
 from phmutest.printer import Printer as _phmPrinter
 from phmutest.skip import sys_tool as _phm_sys
-$importuserfixture
+$importfixture
 
-$calluserfixture
+$callfixture
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
 _phm_log = []
@@ -331,11 +331,11 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
     test_classes = ""
     replacements = {}
     if args.fixture:
-        replacements["importuserfixture"] = (
+        replacements["importfixture"] = (
             "from phmutest.importer import fixture_function_importer "
             "as _phm_fixture_function_importer"
         )
-        replacements["calluserfixture"] = (
+        replacements["callfixture"] = (
             f"_phm_user_setup_function = "
             f'_phm_fixture_function_importer("{args.fixture}")'
         )
