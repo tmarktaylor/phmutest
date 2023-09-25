@@ -23,6 +23,14 @@ class DocNode:
 
     def __init__(self, match: Any):
         # Using Any annotation here since re.Match[str] does not work on Python 3.8.
+        self.payload = ""
+        self.info_string = ""
+        self.startpos = match.start()
+        self.endpos = match.end()
+        self.backlink: Optional[DocNode] = None
+        self.line = 0
+        self.end_line = 0
+
         # Detect the NodeType.
         if match["blank"] is not None:
             self.ntype = NodeType.BLANK_LINE
@@ -31,25 +39,15 @@ class DocNode:
         else:
             assert match["fcb"] is not None, "sanity check"
             self.ntype = NodeType.FENCED_CODE_BLOCK
-        self.startpos = match.start()
-        self.endpos = match.end()
+
         if self.ntype == NodeType.HTML_COMMENT:
             self.payload = match["comment"]
-        else:
-            self.payload = ""
         if self.ntype == NodeType.FENCED_CODE_BLOCK:
             self.info_string = match["info_string"].strip()
             if match["indent"]:
                 self.payload = self.dedent(match["indent"], match["contents"])
             else:
                 self.payload = match["contents"]
-
-        else:
-            self.info_string = ""
-            self.contents = ""
-        self.backlink: Optional[DocNode] = None
-        self.line = 0
-        self.end_line = 0
 
     def set_backlink(self, other: "DocNode") -> None:
         """Set a link to a preceeding DocNode."""
