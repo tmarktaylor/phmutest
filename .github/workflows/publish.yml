@@ -12,11 +12,11 @@ jobs:
   builddist:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: ${{ env.ref }}
 
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.x
 
@@ -27,7 +27,7 @@ jobs:
         python -m pip hash dist/*
 
     - name: Upload dist
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dist-${{ env.ref }}
         path: dist/*
