@@ -1,4 +1,4 @@
-site_name: phmutest 0.0.3
+site_name: phmutest 0.0.4
 site_description: Detect broken Python examples in Markdown
 copyright: Copyright (c) 2023 Mark Taylor
 docs_dir: _mkdocsin

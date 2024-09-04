@@ -22,3 +22,8 @@
 0.0.3 - 2023-09-24
 
 - Add test_importer.py. Cleanups
+
+0.0.4 - 2024-09-05
+
+- Bugfix- Issue- The generated expected output check in code mode
+  asserts if the FCB length is greater than a fairly small value.
