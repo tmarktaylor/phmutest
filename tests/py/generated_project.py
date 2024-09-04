@@ -7,6 +7,7 @@ from phmutest.skip import sys_tool as _phm_sys
 
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
+_phm_testcase.maxDiff = None
 _phm_log = []
 
 

@@ -319,6 +319,7 @@ $importfixture
 $callfixture
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
+_phm_testcase.maxDiff = None
 _phm_log = []
 $setupmodule
 $teardownmodule
