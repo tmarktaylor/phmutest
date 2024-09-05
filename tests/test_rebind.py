@@ -30,6 +30,7 @@ The rebind affects the shallow copy.
 
 To see the effect of rebind in REPL mode see test_globs.py::test_extractor().
 """
+
 import unittest
 
 import phmutest.main

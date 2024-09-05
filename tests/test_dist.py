@@ -1,4 +1,5 @@
 """Test project packaging."""
+
 import configparser
 import subprocess
 from pathlib import Path

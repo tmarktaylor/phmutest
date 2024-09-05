@@ -1,4 +1,5 @@
 """Test Globals class from globs.py."""
+
 import copy
 import doctest
 import sys

@@ -107,12 +107,9 @@ jobs:
         isort -
     - name: Formatting
       # Show reformatting changes.
-      # Make the changes.
-      # Subsequent steps run with the modified files.
       # Don't run black on the generated test files.
       run: |
-        black **/*.py --check --force-exclude="tests/py"
-        black **/*.py --force-exclude="tests/py"
+        black **/*.py --diff --force-exclude="tests/py"
       continue-on-error: true
     - name: Code Style
       run: |

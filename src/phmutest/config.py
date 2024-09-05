@@ -16,6 +16,7 @@
           --generate, --progress, --sharing,
           --log, --summary, --report
 """
+
 import argparse
 from pathlib import Path
 from typing import List

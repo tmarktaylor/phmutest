@@ -1,4 +1,5 @@
 """Check the hand copying from tool.py into api.md."""
+
 from pathlib import Path
 
 import phmutest.tool
@@ -25,4 +26,4 @@ def test_api():
     # wc src/phmutest/tool.py
     exp_code_length = len(codetext)
     msg = f"tool.py length has changed to {exp_code_length}, is api.md up to date?"
-    assert exp_code_length == 5339, msg
+    assert exp_code_length == 5340, msg

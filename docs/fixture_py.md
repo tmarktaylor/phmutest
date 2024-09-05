@@ -21,6 +21,7 @@ is_replmode
     Python bool. True when commandline argument --replmode is present.
 
 """
+
 from dataclasses import dataclass
 from typing import Callable, MutableMapping, Optional
 

@@ -1,4 +1,5 @@
 """Check handling of --generate command line option."""
+
 import os
 import unittest
 import unittest.main

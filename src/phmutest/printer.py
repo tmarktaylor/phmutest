@@ -1,4 +1,5 @@
 """Context manager to print and log entry and exit status of a code block run."""
+
 import contextlib
 import io
 import sys

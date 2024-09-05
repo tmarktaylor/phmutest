@@ -1,4 +1,5 @@
 """Find phmutest Directives in HTML comment Nodes."""
+
 import re
 from dataclasses import dataclass
 from enum import Enum, auto

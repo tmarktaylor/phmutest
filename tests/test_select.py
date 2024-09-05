@@ -1,4 +1,5 @@
 """Test test group select/deselect."""
+
 from pathlib import Path
 
 import phmutest.main

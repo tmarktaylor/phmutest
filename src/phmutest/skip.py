@@ -1,4 +1,5 @@
 """Process skip directives. Encapsulate access to Python standard library sys."""
+
 import argparse
 import sys
 from dataclasses import dataclass
@@ -69,9 +70,9 @@ def make_replacements(
     """Create mapping for Template string replacement."""
     replacements = dict(line=doc_location, log_reason=log_reason)
     if verbose:
-        replacements[
-            "print"
-        ] = f'_phm_sys.stderr_printer("{doc_location} ... skip   {log_reason}")'
+        replacements["print"] = (
+            f'_phm_sys.stderr_printer("{doc_location} ... skip   {log_reason}")'
+        )
     return replacements
 
 

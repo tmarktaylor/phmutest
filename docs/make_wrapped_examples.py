@@ -1,4 +1,5 @@
 """Create Markdown wrappers around the project's example .py files."""
+
 from pathlib import Path
 
 top = "# <put filename here>\n\n```python\n"

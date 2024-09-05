@@ -27,3 +27,4 @@
 
 - Bugfix- Issue- The generated expected output check in code mode
   asserts if the FCB length is greater than a fairly small value.
+- Python source formatting updates per Black 24.3.0.
