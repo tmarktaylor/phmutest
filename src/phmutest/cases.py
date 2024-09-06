@@ -1,4 +1,5 @@
 """Generate test cases as a unittest test file."""
+
 import argparse
 from pathlib import Path
 
@@ -75,12 +76,12 @@ def render_setup_module(
     replacements["shareid"] = shareid
     replacements["setupblocks"] = deindented_setup_blocks
     if args.progress:
-        replacements[
-            "showprogressenter"
-        ] = '_phm_sys.stderr_printer("setUpModule()...")'
-        replacements[
-            "showprogressexit"
-        ] = '_phm_sys.stderr_printer("leaving setUpModule.")'
+        replacements["showprogressenter"] = (
+            '_phm_sys.stderr_printer("setUpModule()...")'
+        )
+        replacements["showprogressexit"] = (
+            '_phm_sys.stderr_printer("leaving setUpModule.")'
+        )
 
     if args.fixture:
         replacements["userfixtureglobs"] = phmutest.subtest.justify(
@@ -128,12 +129,12 @@ def render_teardown_module(
     replacements["teardownblocks"] = deindented_teardown_blocks
 
     if args.progress:
-        replacements[
-            "showprogressenter"
-        ] = '_phm_sys.stderr_printer("tearDownModule()...")'
-        replacements[
-            "showprogressexit"
-        ] = '_phm_sys.stderr_printer("leaving tearDownModule.")'
+        replacements["showprogressenter"] = (
+            '_phm_sys.stderr_printer("tearDownModule()...")'
+        )
+        replacements["showprogressexit"] = (
+            '_phm_sys.stderr_printer("leaving tearDownModule.")'
+        )
 
     return phmutest.subtest.fill_in(
         teardown_module_form,
@@ -319,6 +320,7 @@ $importimporter
 $importfunction
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
+_phm_testcase.maxDiff = None
 _phm_log = []
 $setupmodule
 $teardownmodule

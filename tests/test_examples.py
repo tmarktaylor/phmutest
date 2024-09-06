@@ -1,4 +1,5 @@
 """Test runs calling phmutest.main.main() from Python with command line arguments."""
+
 import phmutest.main
 import phmutest.summary
 

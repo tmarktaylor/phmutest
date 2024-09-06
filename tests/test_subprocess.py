@@ -1,4 +1,5 @@
 """Test subprocess call."""
+
 import subprocess
 import sys
 

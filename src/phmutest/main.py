@@ -1,4 +1,5 @@
 """Command line parsing, main entry point, and top level operations."""
+
 import argparse
 import pathlib
 import sys

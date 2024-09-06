@@ -1,4 +1,5 @@
 """Test cases for session.py."""
+
 from unittest import mock
 
 import pytest

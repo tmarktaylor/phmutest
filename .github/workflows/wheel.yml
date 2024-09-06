@@ -5,14 +5,14 @@ on:
 
 env:
   project: phmutest
-  version: 0.0.3
+  version: 0.0.4
   command: phmutest
 
 jobs:
   pypi-install:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 

@@ -1,4 +1,4 @@
-"""v0.0.3 Keyword arguments passed to --fixture function and return type Fixture.
+"""v0.0.4 Keyword arguments passed to --fixture function and return type Fixture.
 
 These are passed to the fixture function as keyword arguments:
 
@@ -18,6 +18,7 @@ is_replmode
     Python bool. True when commandline argument --replmode is present.
 
 """
+
 from dataclasses import dataclass
 from typing import Callable, MutableMapping, Optional
 

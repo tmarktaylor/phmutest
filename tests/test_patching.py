@@ -1,4 +1,5 @@
 """Show use cases for patch points."""
+
 import copy
 import doctest
 from contextlib import ExitStack

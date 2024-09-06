@@ -1,4 +1,5 @@
 """Test project packaging."""
+
 import configparser
 import subprocess
 from pathlib import Path
@@ -65,7 +66,7 @@ class TestSameVersions:
 
 def test_consistent_copyright():
     """Assure same copyright phrasing in the various source locations."""
-    year = 2023
+    year = 2024
     assert f"Copyright (c) {year}" in Path("LICENSE").read_text(encoding="utf-8")
     assert f"Copyright (c) {year}" in Path("mkdocs.yml").read_text(encoding="utf-8")
 

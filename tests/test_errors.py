@@ -1,4 +1,5 @@
 """Check handling of user code raising an exception.  Python code, REPLs, --fixture."""
+
 import contextlib
 import io
 

@@ -1,4 +1,5 @@
 """Define main() result type. Print test results."""
+
 import argparse
 import unittest
 from collections import Counter

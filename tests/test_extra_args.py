@@ -1,4 +1,5 @@
 """Check pass through of extra args to unittest."""
+
 import pytest
 
 import phmutest.main

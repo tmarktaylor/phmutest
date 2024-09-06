@@ -1,4 +1,5 @@
 """Test HTML comment directives implemented in direct.py and fenced.py."""
+
 from pathlib import Path
 
 import phmutest.select

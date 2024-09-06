@@ -10,6 +10,7 @@ Requires installation of PYPI package trove-classifiers.
 
 https://pypi.org/classifiers/
 """
+
 import configparser
 import sys
 
