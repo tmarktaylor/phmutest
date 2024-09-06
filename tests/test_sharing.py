@@ -1,4 +1,5 @@
 """Tests --sharing printing."""
+
 import contextlib
 import io
 import unittest

@@ -1,4 +1,4 @@
-# Tool API for phmutest version 0.0.3
+# Tool API for phmutest version 0.0.4
 
 ## API - phmutest.tool
 

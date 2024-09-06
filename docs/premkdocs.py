@@ -6,6 +6,7 @@ When called with the command line arg --start-server
 - enter Ctrl-C to discontinue watching and shut down the mkdocs server
 Suggest adding the mkdocs.yml docs_dir to .gitignore.
 """
+
 import subprocess
 import sys
 from multiprocessing import Process

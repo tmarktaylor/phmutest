@@ -1,4 +1,5 @@
 """Check example Python file is the same as in Markdown fenced code block."""
+
 from pathlib import Path
 
 import phmutest.tool
