@@ -419,10 +419,8 @@ command line less the phmutest, like this:
 
 - A `phmutest.summary.PhmResult` instance is returned.
 - When calling from Python there is no shell wildcard expansion.
-- The --fixture function can be in the same Python file. Caveat: The Python file is
-  imported again to a new module object. The Python file's module level code will
-  be run a second time.
-- Call from pytest to get overall result as Junit XML | [Suggestion](docs/junit.md)
+- **phmutest.main.main()** takes a list of strings like this:
+  `["md/project.md", "--replmode"]` and returns `phmutest.summary.PhmResult`.
 
 [Example](docs/callfrompython.md) | [Limitation](docs/callfrompython.md#limitation)
 
