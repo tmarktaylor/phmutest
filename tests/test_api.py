@@ -1,29 +1,33 @@
-"""Check the hand copying from tool.py into api.md."""
+"""Check the code snippets from tool.py found in api.md."""
 
+import ast
 from pathlib import Path
 
 import phmutest.tool
 
+PYTHON_FILE = Path("src/phmutest/tool.py")
+MARKDOWN_FILE = "docs/api.md"
+
 
 def test_api():
-    """Check the API documentaion docs/api.md reflects the actual tool.py."""
+    """Check the API documentation docs/api.md reflects the actual tool.py."""
     # Check for changes in the parts of the source code file that were
     # manually copied into the Markdown file.
-    apifile = Path("docs/api.md")
-    fcbs = phmutest.tool.fenced_code_blocks(str(apifile))
-    codefile = Path("src/phmutest/tool.py")
-    codetext = codefile.read_text(encoding="utf-8")
-    for num, f in enumerate(fcbs, start=1):
-        assert f in codetext, f"{apifile} FCB number {num} is not in {codefile}."
+    # The contents of each FCB should be present verbatim in the Python file.
+    fenced_code_blocks = phmutest.tool.fenced_code_blocks(MARKDOWN_FILE)
+    source = PYTHON_FILE.read_text(encoding="utf-8")
+    for num, fcb in enumerate(fenced_code_blocks, start=1):
+        assert (
+            fcb in source
+        ), f"{MARKDOWN_FILE} FCB number {num} is not in {PYTHON_FILE}."
 
-    # Check that tool.py was not modified since the last
-    # time its text sections were manually copied to api/docs/md.
-    # If this test fails, check that api.md reflects any additions
-    # or subtractions to tool.py.
-    # Run black, isort, flake8 etc on tool.py.
-    # Then update the actual code_length literal below.
-    # Note that this test will detect any change to tool.py.
-    # wc src/phmutest/tool.py
-    exp_code_length = len(codetext)
-    msg = f"tool.py length has changed to {exp_code_length}, is api.md up to date?"
-    assert exp_code_length == 5340, msg
+    # The Python file tool.py should have one class and one function
+    # def for each FCB in api.md. If there are more classes and functions in the
+    # tool.py, the extras may be missing from the Markdown file.
+    tree = ast.parse(source)
+    count = 0
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+            count += 1
+    assert count > 0
+    assert count == len(fenced_code_blocks)
