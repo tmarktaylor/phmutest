@@ -1,4 +1,3 @@
-# todo- Need to put in the docs module reloads where suggesting put ff in pytest.
 """Try code that imports the fixture function.
 
 Show that a different module object is created by fixture_function_importer
@@ -10,6 +9,7 @@ The fixture function should be in a file which can be reloaded.
 The fixture function should not be in a file which has side effects
 when imported.
 """
+
 import sys
 
 import phmutest.importer

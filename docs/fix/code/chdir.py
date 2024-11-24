@@ -1,4 +1,5 @@
 """User fixture to change the current working directory while running tests."""
+
 import os
 import unittest
 from pathlib import Path
