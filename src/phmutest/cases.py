@@ -314,7 +314,7 @@ import unittest
 
 from phmutest.globs import Globals as _phmGlobals
 from phmutest.printer import Printer as _phmPrinter
-from phmutest.skip import sys_tool as _phm_sys
+from phmutest.systool import sys_tool as _phm_sys
 $importimporter
 
 $importfunction
