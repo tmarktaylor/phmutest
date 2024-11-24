@@ -104,7 +104,7 @@ def get_directives(node: phmutest.reader.DocNode) -> List[Directive]:
     # Back links exist only if the preceding node is adjacent to
     # the current node.
     # The scan spans runs of HTML comments and single blank lines.
-    # Two consectutive blank lines will stop the scan.
+    # Two consecutive blank lines will stop the scan.
     # If the comment is a known directive a Directive instance
     # is assembled and added to a list.
     # This list is reversed so that the Directive(s) are in file order.

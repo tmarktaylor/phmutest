@@ -50,7 +50,7 @@ class DocNode:
                 self.payload = match["contents"]
 
     def set_backlink(self, other: "DocNode") -> None:
-        """Set a link to a preceeding DocNode."""
+        """Set a link to a preceding DocNode."""
         self.backlink = other
 
     def set_line_numbers(self, start_line: int, end_line: int) -> None:

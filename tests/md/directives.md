@@ -115,11 +115,11 @@ assert not mylist, "mylist was not emptied"
 
 <!--phmutest-skip-->
 <!-- A multiline
-    comment folowed by a
+    comment followed by a
 blank line -->
 
 <!-- Another multiline
-    comment folowed by a  -->
+    comment followed by a  -->
 
 <!-- and another blank line -->
 

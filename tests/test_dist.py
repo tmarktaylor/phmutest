@@ -15,7 +15,7 @@ class TestSameVersions:
     Compare all the occurrences to phmutest.__version__.
     This test does not prove the version is correct.
     Whitespace may be significant in some cases.
-    Text surronding the x.y.z version number may be tested as well.
+    Text surrounding the x.y.z version number may be tested as well.
     """
 
     package_version = phmutest.__version__

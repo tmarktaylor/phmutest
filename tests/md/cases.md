@@ -1,4 +1,4 @@
-# Source Code block with no ouput and skipif directive
+# Source Code block with no output and skipif directive
 
 <!--phmutest-skipif<3.5-->
 
