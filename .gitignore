@@ -1,5 +1,9 @@
 # owner's
 .mine/
+todos.txt
+
+# Reserved for local CI tests
+dev/test_temptestfile.py
 
 # PyCharm
 .idea/
