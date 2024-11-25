@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 
+import phmutest.fillin
 import phmutest.select
 import phmutest.subtest
 
