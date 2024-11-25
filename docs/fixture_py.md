@@ -33,7 +33,7 @@ class Fixture:
     globs
         Python dict().
         1. For Python code blocks the keys become global variable names in the
-           the generated test file with the corresponding values.
+           generated test file with the corresponding values.
         2. In --replmode globs is passed to doctest.DocTestFinder.find()
            as keyword argument globs.
 

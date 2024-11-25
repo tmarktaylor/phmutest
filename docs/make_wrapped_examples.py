@@ -11,7 +11,7 @@ bottom = """```
 def nag():
     print("If a new file...")
     print("Consider adding a test case to test_wrapped_python_files.py.")
-    print("And add to examples.rst")
+    print("And add to mkdocs.yml")
     print()
 
 
@@ -39,6 +39,7 @@ def main():
     wrap_one_file("docs/fix/code/globdemo.py")
     wrap_one_file("docs/fix/code/chdir.py")
     wrap_one_file("docs/fix/repl/drink.py")
+    wrap_one_file("docs/answerlib.py")
     wrap_one_file(
         "tests/py/generated_project.py", outname="docs/generated_project_py.md"
     )

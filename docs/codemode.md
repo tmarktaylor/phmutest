@@ -43,6 +43,7 @@ that calls the fixture function.
 The fixture function can inject global variables into the top level
 of the testfile module by returning a dict. See [fixture.py](fixture_py.md).
 The keys become global variable names in the gernerated module.
+The keys become global variable names in the generated module.
 This is done at runtime by an instance of phmutest.globs.Globals.
 It calls Python built in function setattr(moduleobject, key, value).
 

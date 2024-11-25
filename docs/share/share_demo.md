@@ -20,7 +20,7 @@ in subsequent Markdown files.
 - [docs/share/file3.md](file3.md)
 
 All the names assigned at the top level of all the Python blocks in the
-file are shared. A later file might inadventently reassign a name that was
+file are shared. A later file might inadvertently reassign a name that was
 shared.
 
 ## phmutest command line
