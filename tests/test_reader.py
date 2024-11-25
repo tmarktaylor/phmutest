@@ -60,7 +60,7 @@ class TestReader:
         assert self.nodes[4].info_string == ""
         # HTML comment around an FCB
         assert self.nodes[7].ntype == NodeType.HTML_COMMENT
-        # indented HTNL comments
+        # indented HTML comments
         assert self.nodes[10].ntype == NodeType.HTML_COMMENT
         assert self.nodes[11].ntype == NodeType.HTML_COMMENT
         assert self.nodes[12].ntype == NodeType.HTML_COMMENT
@@ -116,7 +116,7 @@ class TestReaderFcb:
         assert self.nodes[10].end_line == 60
         assert self.nodes[11].ntype == NodeType.BLANK_LINE
         assert self.nodes[12].ntype == NodeType.BLANK_LINE
-        # The next 2 FCBs are between <deails> and </details>.
+        # The next 2 FCBs are between <details> and </details>.
         assert self.nodes[13].ntype == NodeType.FENCED_CODE_BLOCK
         assert self.nodes[14].ntype == NodeType.FENCED_CODE_BLOCK
         assert self.nodes[14].end_line == 69

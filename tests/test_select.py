@@ -17,6 +17,7 @@ def get_selected_blocks(filename, args):
 def test_select_no_group_match():
     filename = "tests/md/code_groups.md"
     args = [filename, "--select", "groupp-1"]  # mispelled group
+    args = [filename, "--select", "groupp-1"]  # misspelled group
     blocks = get_selected_blocks(filename, args)
     assert len(blocks) == 0
 
@@ -24,6 +25,7 @@ def test_select_no_group_match():
 def test_deselect_no_group_match():
     filename = "tests/md/code_groups.md"
     args = [filename, "--deselect", "groupp-1"]  # mispelled group
+    args = [filename, "--deselect", "groupp-1"]  # misspelled group
     blocks = get_selected_blocks(filename, args)
     assert len(blocks) == 4
 
