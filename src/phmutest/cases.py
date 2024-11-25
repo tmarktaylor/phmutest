@@ -85,12 +85,12 @@ def render_setup_module(
         )
 
     if args.fixture:
-        replacements["userfixtureglobs"] = phmutest.subtest.justify(
+        replacements["userfixtureglobs"] = phmutest.fillin.justify(
             setup_module_form,
             "$userfixtureglobs",
             fixture_globs_update_code,
         )
-    return phmutest.subtest.fill_in(
+    return phmutest.fillin.fill_in(
         setup_module_form,
         replacements,
     )
@@ -137,7 +137,7 @@ def render_teardown_module(
             '_phm_sys.stderr_printer("leaving tearDownModule.")'
         )
 
-    return phmutest.subtest.fill_in(
+    return phmutest.fillin.fill_in(
         teardown_module_form,
         replacements,
     )
@@ -165,7 +165,7 @@ def render_setup_class(
             setupblocks=setup_blocks,
             built_from=f'"{fileblocks.built_from}"',
         )
-        return phmutest.subtest.fill_in(
+        return phmutest.fillin.fill_in(
             setup_class_form,
             replacements,
         )
@@ -200,7 +200,7 @@ def render_teardown_class(
     teardown_blocks = phmutest.subtest.format_teardown_blocks(args, fileblocks)
     if teardown_blocks:
         replacements = {"teardownblocks": teardown_blocks}
-        return phmutest.subtest.fill_in(
+        return phmutest.fillin.fill_in(
             teardown_class_form,
             replacements,
         )
@@ -303,7 +303,7 @@ def markdown_file(
             f"_phm_globals.update(additions=locals(), {from_arg}, {existing_names})"
         )
         replacements["sharenames"] = statement
-    return phmutest.subtest.fill_in(
+    return phmutest.fillin.fill_in(
         class_form,
         replacements,
     )
@@ -355,7 +355,7 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
         test_classes += "\n"
     replacements["testclasses"] = test_classes
 
-    return phmutest.subtest.fill_in(
+    testfile = phmutest.fillin.fill_in(
         testfile_form,
         replacements,
     )

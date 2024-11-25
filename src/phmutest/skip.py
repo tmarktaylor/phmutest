@@ -4,6 +4,7 @@ import argparse
 from dataclasses import dataclass
 from typing import MutableMapping, Optional
 
+import phmutest.fillin
 import phmutest.subtest
 from phmutest.direct import Marker
 from phmutest.fenced import FencedBlock
@@ -50,7 +51,7 @@ def make_replacements(
 def always_skip(reason: str, doc_location: str, verbose: bool) -> SkipInfo:
     """Unconditionally skip the block. No code. Just log/print the block and reason."""
     replacements = make_replacements(doc_location, reason, verbose)
-    code = phmutest.subtest.fill_in(unconditional_form, replacements)
+    code = phmutest.fillin.fill_in(unconditional_form, replacements)
     return SkipInfo(
         code=code,
         reason=make_detailed_reason(doc_location, reason),
@@ -63,7 +64,7 @@ def skipif(minor_version: int, doc_location: str, verbose: bool) -> SkipInfo:
     log_reason = f"requires Python >= 3.{minor_version}"
     replacements = make_replacements(doc_location, log_reason, verbose)
     replacements["condition"] = f"_phm_sys.version_info() < (3, {minor_version})"
-    code = phmutest.subtest.fill_in(conditional_form, replacements)
+    code = phmutest.fillin.fill_in(conditional_form, replacements)
     return SkipInfo(
         code=code,
         reason=make_detailed_reason(doc_location, log_reason),
