@@ -9,8 +9,8 @@ def test_python_code_matcher():
     line = "tests/md/pythonmatch.md"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
-        number_blocks_run=7,
-        passed=7,
+        number_blocks_run=14,
+        passed=14,
         failed=0,
         skipped=0,
         suite_errors=0,
@@ -26,8 +26,42 @@ def test_python_repl_matcher():
     line = "tests/md/pythonmatch.md --replmode"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(
-        number_blocks_run=8,
-        passed=8,
+        number_blocks_run=16,
+        passed=16,
+        failed=0,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+
+
+def test_no_python_code_matches():
+    """Test illegal Python code block identification."""
+    line = "tests/md/nopythonmatch.md"
+    phmresult = phmutest.main.command(line)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=1,
+        passed=1,
+        failed=0,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+
+
+def test_no_python_repl_matches():
+    """Test illegal Python session block identification."""
+    line = "tests/md/nopythonmatch.md --replmode"
+    phmresult = phmutest.main.command(line)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=1,
+        passed=1,
         failed=0,
         skipped=0,
         suite_errors=0,
