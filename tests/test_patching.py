@@ -133,7 +133,7 @@ def rewrite_docstring(text: str) -> str:
     return text
 
 
-def test_modify_docstring_patch(capsys, endswith_checker):
+def test_modify_docstring_patch():
     """Show modify_docstring patch changes the docstring that gets run."""
     # Run twice, first time without the patch. The second time with the
     # patch that makes the 3 blocks fail.
@@ -224,7 +224,7 @@ tests/md/output_info_string.md:17 o  pass
 """
 
 
-def test_output_infostring_patch(capsys, endswith_checker):
+def test_output_infostring_patch(capsys):
     """Add a new FCB info string that identifies the expected output block."""
     info_strings = phmutest.select.OUTPUT_INFO_STRINGS
     info_strings.append("captured-stdout")
