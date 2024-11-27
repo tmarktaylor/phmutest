@@ -34,7 +34,7 @@ the generated docstring.
 An instance AssignmentExtractor from src/phmutest/globs.py discovers
 the names assigned by the docstring.
 
-- The globs mapping is empty or intialized by a fixture that returns globs.
+- The globs mapping is empty or initialized by a fixture that returns globs.
 - The globs mapping is updated after running a share-across-files FILE.
 - One globs mapping is used for the entire phmutest run.
 
