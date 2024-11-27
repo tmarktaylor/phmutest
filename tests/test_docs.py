@@ -483,3 +483,10 @@ def test_quick_links():
     github_links = make_quick_links(filename)
     # There must be at least one blank line after the last link.
     assert github_links + "\n\n" in readme
+
+
+def test_nav_links():
+    """Make sure the docs/demos.md links are up to date."""
+    want = make_nav_links()
+    got = Path("docs/demos.md").read_text(encoding="utf-8")
+    assert want == got
