@@ -14,7 +14,7 @@ nav:
         - 'Call from Python example' : docs/callfrompython.md
         - 'Api': docs/api.md
         - 'Contributing': CONTRIBUTING.md
-        - 'Recent Changes': docs/recent_changes.md
+        - 'Changelog' : CHANGELOG.md
 
     - Demos:
         - 'replmode': docs/replmode.md

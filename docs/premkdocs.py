@@ -110,6 +110,7 @@ def mainloop(updater: Updater):
 def main():
     """Create and run the documentation file updater."""
     ud = Updater(Path("_mkdocsin"))
+    ud.addglob("CHANGELOG.md")
     ud.addglob("CONTRIBUTING.md")
     ud.addglob("README.md")
     ud.addglob("tests/md/project.md")

@@ -30,9 +30,9 @@ class TestSameVersions:
         """Check the version near the top of README.md."""
         self.verify_found_in_file("README.md", "# phmutest {}\n")
 
-    def test_recent_changes(self):
-        """Check the version is anywhere in recent_changes.md."""
-        self.verify_found_in_file("docs/recent_changes.md", "{} - ")
+    def test_changelog(self):
+        """Check the version is anywhere in CHANGELOG.md."""
+        self.verify_found_in_file("CHANGELOG.md", "{} - ")
 
     def test_tool_api(self):
         """Check the version is anywhere in docs/api.md."""

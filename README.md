@@ -88,7 +88,7 @@ by pressing the `Code` button in the banner at the top of the file.
 
 [Sections](docs/demos.md#sections) |
 [Demos](docs/demos.md#demos) |
-[Changes](docs/recent_changes.md) |
+[Changelog](CHANGELOG.md) |
 [Contributions](CONTRIBUTING.md)
 
 ## Markdown code/output demo

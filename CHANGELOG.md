@@ -1,8 +1,18 @@
-# Recent changes
+# Changelog
 
-0.0.1 - 2023-08-14
+todo- conform to the guide, see photos
 
-- Initial upload to Python Package Index.
+0.1.0 - 2024-XX-XX todo-
+
+0.0.4 - 2024-09-05
+
+- Bugfix- Issue- The generated expected output check in code mode
+  asserts if the FCB length is greater than a fairly small value.
+- Python source formatting updates per Black 24.3.0.
+
+0.0.3 - 2023-09-24
+
+- Add test_importer.py. Cleanups
 
 0.0.2 - 2023-09-15
 
@@ -19,12 +29,6 @@
 - Move twine check to build.yml.
 - serialize ci.yml jobs
 
-0.0.3 - 2023-09-24
+0.0.1 - 2023-08-14
 
-- Add test_importer.py. Cleanups
-
-0.0.4 - 2024-09-05
-
-- Bugfix- Issue- The generated expected output check in code mode
-  asserts if the FCB length is greater than a fairly small value.
-- Python source formatting updates per Black 24.3.0.
+- Initial upload to Python Package Index.

@@ -3,7 +3,7 @@ Checklist
   until all version strings are the same.
 
 - Check for outstanding todo's.
-- update recent changes in recent_changes.md
+- update CHANGELOG.md
 - update copyright year
 - Run code inspections.
 - Run pytest cases on lowest Py version
