@@ -8,16 +8,11 @@ def remove_fenced_code_blocks(lines: List[str], fence="```"):
     """Return lines not starting with fence or between fences."""
     skipping = False
     for line in lines:
-        if skipping and line.startswith(fence):
-            skipping = False
-            continue
-
-        if not skipping and line.startswith(fence):
-            skipping = True
-            continue
-
-        if not skipping:
-            yield line
+        if line.startswith(fence):
+            skipping = not skipping
+        else:
+            if not skipping:
+                yield line
 
 
 def make_label(title: str) -> str:
@@ -58,7 +53,7 @@ def make_quick_links(filename: str) -> str:
 
 
 if __name__ == "__main__":
-    # Call to generate quick links.
+    # Generate quicklinks for README.md.
     text = make_quick_links("README.md")
     print(text)
     print()
