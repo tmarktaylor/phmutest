@@ -8,6 +8,12 @@ from typing import Callable, List, Optional
 Log = List[List[str]]
 
 
+# Indexes to LogEntry
+DOC_LOCATION = 0
+RESULT = 1
+REASON = 2
+
+
 class Printer:
     """Context manager to print and log test status of a code block.
 

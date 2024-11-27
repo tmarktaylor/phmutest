@@ -3,6 +3,10 @@
 import phmutest.main
 import phmutest.summary
 
+# indexes to log file entry
+DOC_LOCATION = phmutest.printer.DOC_LOCATION
+RESULT = phmutest.printer.RESULT
+REASON = phmutest.printer.REASON
 
 def test_sample():
     """Run Python code block with expected output block in project.md."""
@@ -110,8 +114,8 @@ def test_directive1():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is False
-    assert "phmutest-skip" in phmresult.log[0][2]
-    assert "expected-failed" in phmresult.log[2][0]
+    assert "phmutest-skip" in phmresult.log[0][REASON]
+    assert "expected-failed" in phmresult.log[2][DOC_LOCATION]
 
 
 def test_directive1_replmode():
@@ -130,9 +134,9 @@ def test_directive1_replmode():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "phmutest-skip" in phmresult.log[0][2]
-    assert "tests/md/directive1.md:78" in phmresult.log[1][0]
-    assert "doctest_print_coffee" in phmresult.log[1][0]
+    assert "phmutest-skip" in phmresult.log[0][REASON]
+    assert "tests/md/directive1.md:78" in phmresult.log[1][DOC_LOCATION]
+    assert "doctest_print_coffee" in phmresult.log[1][DOC_LOCATION]
 
 
 def test_directive2():
@@ -151,8 +155,8 @@ def test_directive2():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "setup" in phmresult.log[0][0]
-    assert "teardown" in phmresult.log[4][0]
+    assert "setup" in phmresult.log[0][DOC_LOCATION]
+    assert "teardown" in phmresult.log[4][DOC_LOCATION]
 
 
 def test_blank_output_lines():
@@ -189,7 +193,7 @@ def test_no_code_blocks():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "noblocks" in phmresult.log[0][1]
+    assert "noblocks" in phmresult.log[0][RESULT]
 
 
 def test_no_sessions():
@@ -208,7 +212,7 @@ def test_no_sessions():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "noblocks" in phmresult.log[0][1]
+    assert "noblocks" in phmresult.log[0][RESULT]
 
 
 def test_bad_session_output():
@@ -317,7 +321,7 @@ def test_no_fcbs():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "noblocks" in phmresult.log[0][1]
+    assert "noblocks" in phmresult.log[0][RESULT]
 
 
 def test_phmdoctest_mark_skip():
@@ -336,7 +340,7 @@ def test_phmdoctest_mark_skip():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "phmdoctest-mark.skip" in phmresult.log[0][2]
+    assert "phmdoctest-mark.skip" in phmresult.log[0][REASON]
 
 
 def test_unexpected_output():

@@ -24,8 +24,8 @@ def test_code_raises():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is False
-    assert "error" in phmresult.log[4][1]
-    assert "failed" in phmresult.log[5][1]
+    assert "error" in log[4][phmutest.summary.RESULT]
+    assert "failed" in log[5][phmutest.summary.RESULT]
 
 
 def test_unittest_fail_fast():
