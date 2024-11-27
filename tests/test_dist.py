@@ -32,7 +32,7 @@ class TestSameVersions:
 
     def test_changelog(self):
         """Check the version is anywhere in CHANGELOG.md."""
-        self.verify_found_in_file("CHANGELOG.md", "{} - ")
+        self.verify_found_in_file("CHANGELOG.md", "[{}] - ")
 
     def test_tool_api(self):
         """Check the version is anywhere in docs/api.md."""

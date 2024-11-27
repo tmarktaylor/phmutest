@@ -1,20 +1,25 @@
 # Changelog
 
-todo- conform to the guide, see photos
+todo- conform to the guide, see photos https://keepachangelog.com/en/1.1.0/
 
-0.1.0 - 2024-XX-XX todo-
+## [0.1.0] - 2024-XX-XX todo-
 
-0.0.4 - 2024-09-05
+### Changed
+
+- Renamed docs/recent_changes.md to CHANGELOG.md and rewrite to
+  conform to [keep a changelog]
+
+## [0.0.4] - 2024-09-05
 
 - Bugfix- Issue- The generated expected output check in code mode
   asserts if the FCB length is greater than a fairly small value.
 - Python source formatting updates per Black 24.3.0.
 
-0.0.3 - 2023-09-24
+## [0.0.3] - 2023-09-24
 
 - Add test_importer.py. Cleanups
 
-0.0.2 - 2023-09-15
+## [0.0.2] - 2023-09-15
 
 - Bugfix- Use new recipe in importer.py to import the fixture function.
 - Add main.command().
@@ -29,6 +34,18 @@ todo- conform to the guide, see photos
 - Move twine check to build.yml.
 - serialize ci.yml jobs
 
-0.0.1 - 2023-08-14
+## [0.0.1] - 2023-08-14
 
 - Initial upload to Python Package Index.
+
+[0.1.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.1.0
+
+[0.0.4]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.4
+
+[0.0.3]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.3
+
+[0.0.2]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.2
+
+[0.0.1]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.1
+
+[keep a changelog]: https://keepachangelog.com/en/1.1.0/
