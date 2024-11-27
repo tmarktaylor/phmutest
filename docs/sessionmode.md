@@ -7,7 +7,8 @@ There is one docstring for each Markdown file.
 ## --generate
 
 The --generate option outputs the generated docstring to stdout or the named
-file.
+file.  The generated docstring does not have lines added at runtime for
+--share-across-files.
 
 ## Fixture globs
 
