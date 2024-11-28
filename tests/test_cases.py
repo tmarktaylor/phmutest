@@ -24,11 +24,11 @@ def test_chop_final_newline():
         tests/md/code_groups.md:9
         tests/md/code_groups.md:15"""
     )
-    chopped_text = phmutest.subtest.chop_final_newline(text)
+    chopped_text = phmutest.fillin.chop_final_newline(text)
     assert chopped_text == text
 
     text2 = text + "\n"
-    chopped_text2 = phmutest.subtest.chop_final_newline(text2)
+    chopped_text2 = phmutest.fillin.chop_final_newline(text2)
     assert chopped_text2 == text
 
 
