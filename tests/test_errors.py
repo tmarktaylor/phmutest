@@ -206,7 +206,7 @@ def test_setup_across_raises(capsys, endswith_checker):
 
     The setup block is rendered in setUpModule().
     The error in setUpModule() cancels the rest of the unittest.
-    Try with 2 imput files.
+    Try with 2 input files.
     """
     command = (
         "tests/md/badsetup.md tests/md/badteardown.md --summary "
