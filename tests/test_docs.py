@@ -179,7 +179,7 @@ def test_fixture_globs_example(capsys):
     assert output == capsys.readouterr().out.lstrip()
 
 
-def test_fixture_chdir_example():
+def test_fixture_chdir_example(capsys):
     """Test --fixture example that changes current working directory."""
     command, output = get_command_and_log("docs/fix/code/chdir.md")
     args = arg_list(command)
@@ -195,11 +195,15 @@ def test_fixture_chdir_example():
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
+    assert output == capsys.readouterr().out.lstrip()
 
 
-def test_fixture_drink_example():
+def test_fixture_drink_example(capsys):
     """Test --fixture example that acquires/releases resource in --replmode."""
-    command, output = get_command_and_log("docs/fix/repl/drink.md")
+    command, _ = get_command_and_log("docs/fix/repl/drink.md")
+    # The expected output is the last FCB in the file.
+    content_strings = phmutest.tool.fenced_code_blocks("docs/fix/repl/drink.md")
+    output = content_strings[-1]
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
@@ -213,6 +217,7 @@ def test_fixture_drink_example():
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
+    assert output == capsys.readouterr().out.lstrip()
 
 
 def test_replmode_example(capsys):
