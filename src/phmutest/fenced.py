@@ -21,21 +21,23 @@ class PythonMatcher:
 
     def __init__(self) -> None:
         self.python_patterns = [
-            r"^python" + self.delimiter_chars,
-            r"^py" + self.delimiter_chars,
-            r"^py3" + self.delimiter_chars,
-            r"python3" + self.delimiter_chars,
-            r"pycon" + self.delimiter_chars,
-            r"^[{].*?[.]python.*?[}]" + self.delimiter_chars,
+            r"^python",
+            r"^py",
+            r"^py3",
+            r"python3",
+            r"pycon",
+            r"^[{].*?[.]python.*?[}]",
         ]
         """List of re patterns applied to FCB info_string to identify Python."""
         self.compile()
 
     def compile(self) -> None:
-        self.re = re.compile("|".join(self.python_patterns))
+        delimited_patterns = [p + self.delimiter_chars for p in self.python_patterns]
+        self.re = re.compile("|".join(delimited_patterns))
 
 
-# This is a designated patch point. Developers: Please treat this as if it were an API.
+# This is a designated patch point. Developers: Please treat this and the entire
+# PythonMatcher class as if it were an API.
 # To patch:
 # - Create new instance of PythonMatcher.
 # - Optionally, modify the delimiter_chars attribute.
@@ -43,6 +45,12 @@ class PythonMatcher:
 # - Call compile().
 # - with mock.patch("phmutest.fenced.python_matcher", <the new instance>):
 # - See example in tests/test_patching.py.
+#
+# To modify the class:
+# - Retain at least delimiter_chars = r"([
+# - OK to add new python_patterns to the list.
+#
+# See patching example in tests/test_patching.py.
 python_matcher = PythonMatcher()
 
 

@@ -53,6 +53,33 @@ def test_python_infostring_patch(capsys):
     assert python_infostring_log == capsys.readouterr().out.lstrip()
 
 
+def test_python_infostring_delimiter_patch(capsys):
+    """Also patch info_string delimiter chars."""
+    matcher = phmutest.fenced.PythonMatcher()
+    # Also match additional info strings
+    matcher.python_patterns.append("ladenpython")
+    matcher.python_patterns.append("awesomepython")
+    # Add ! as a delimiter for the info string.
+    # This patch should work on future versions of delimiter_chars
+    # that have more choices.
+    matcher.delimiter_chars = matcher.delimiter_chars.replace(r"([", r"([!")
+    matcher.compile()
+    with mock.patch("phmutest.fenced.python_matcher", matcher):
+        line = "tests/md/patching1.md --log"
+        phmresult = phmutest.main.command(line)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=4,
+        passed=4,  # counts the ladenpython and awesomepython FCB
+        failed=0,
+        skipped=0,
+        suite_errors=0,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+
+
 def make_finder(old_name, new_name):
     """Make a directive MarkerPattern to match new_name that behaves like old_name."""
     assert old_name != new_name
