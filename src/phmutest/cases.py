@@ -28,6 +28,19 @@ def deindent(text: str) -> str:
         else:
             lines.append(line)
     return "\n".join(lines)
+#
+# The unittest.doModuleCleanups() are needed when both:
+#   1. A user --fixture function calls unittest.addModuleCleanup().
+#   2. A testfile is generated with --generate, saved to a file
+#      and later run with pytest.
+# unittest calls doModuleCleanups() after test cases complete.
+# pytest does not call doModuleCleanups().
+# When the user supplies a --fixture function, the generated testfile
+# calls doModuleCleanups() in setUpModule() and tearDownModule().
+# This happens slightly before unittest would make the call.
+# We call doModuleCleanups() if setUpModule() raises an exception.
+# We call doModuleCleanups() if tearDownModule() raises an exception
+# or when tearDownModule completes normally.
 
 
 def is_verbose_sharing(args: argparse.Namespace, path: Path) -> bool:
@@ -43,9 +56,11 @@ def setUpModule():
     _phm_log.append(["setUpModule", "", ""])
     $showprogressenter
     _phm_globals = _phmGlobals(__name__, shareid=$shareid)
-    $userfixtureglobs
+    $entercontext
+        $userfixtureglobs
 $setupblocks
-    $showprogressexit
+        $showprogressexit
+        $preventexitcallback
 """
 
 
@@ -85,15 +100,41 @@ def render_setup_module(
         )
 
     if args.fixture:
+        replacements["entercontext"] = phmutest.fillin.justify(
+            setup_module_form,
+            "$entercontext",
+            fixture_enter_context_code,
+        )
+        replacements["preventexitcallback"] = "_phm_stack.pop_all()"
         replacements["userfixtureglobs"] = phmutest.fillin.justify(
             setup_module_form,
             "$userfixtureglobs",
             fixture_globs_update_code,
         )
+    else:
+        # This maintains the indent if there is no $entercontext replacement.
+        # The pass is needed when no more code is rendered after the if True.
+        replacements["entercontext"] = phmutest.fillin.justify(
+            setup_module_form,
+            "$entercontext",
+            "if True:\n    pass",
+        )
+
     return phmutest.fillin.fill_in(
         setup_module_form,
         replacements,
     )
+
+
+# Explicitly call unittest.doModuleCleanups() if exception.
+fixture_enter_context_code = """\
+from contextlib import ExitStack
+with ExitStack() as _phm_stack:
+    if _phm_sys.version_info() < (3, 11):
+        _phm_stack.callback(unittest.case.doModuleCleanups)
+    else:
+        _phm_stack.callback(unittest.doModuleCleanups)
+"""
 
 
 fixture_globs_update_code = """\
@@ -105,12 +146,12 @@ if _phm_fixture is not None:
 
 teardown_module_form = """\
 def tearDownModule():
-
-    _phm_log.append(["tearDownModule", "", ""])
-    $showprogressenter
+    $entercontext
+        _phm_log.append(["tearDownModule", "", ""])
+        $showprogressenter
 $teardownblocks
-    _phm_globals.clear()
-    $showprogressexit
+        _phm_globals.clear()
+        $showprogressexit
 """
 
 
@@ -136,6 +177,16 @@ def render_teardown_module(
         replacements["showprogressexit"] = (
             '_phm_sys.stderr_printer("leaving tearDownModule.")'
         )
+
+    if args.fixture:
+        replacements["entercontext"] = phmutest.fillin.justify(
+            teardown_module_form,
+            "$entercontext",
+            fixture_enter_context_code,
+        )
+    else:
+        # This maintains the indent if there is no $entercontext replacement.
+        replacements["entercontext"] = "if True:"
 
     return phmutest.fillin.fill_in(
         teardown_module_form,

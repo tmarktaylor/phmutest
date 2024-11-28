@@ -3,7 +3,8 @@
 ## Testfile generation
 
 Code and expected output blocks are tested internally with Python
-standard library [unittest][1].
+standard library [unittest][1]. The generated testfile can also
+be run with [pytest]
 
 A temporary unittest Python source file is generated and run.
 Added logic records the pass/failed/error/skip status and
@@ -30,9 +31,8 @@ in Markdown can spread across several fenced code blocks.
 
 The --generate option outputs the generated testfile to stdout or the named
 file. Keep in mind the testfile is a snapshot in time of the Markdown blocks.
-This file may be run later with unittest **or run with pytest**. Run with pytest
-is ok provided a --fixture does not call **addModuleCleanup()**.
-Working with generated testfile separately is an effective way to
+This file may be run later with unittest **or run with pytest**.
+Working with the generated testfile separately is an effective way to
 troubleshoot test failures and to understand the execution context.
 
 ## Fixture globs
