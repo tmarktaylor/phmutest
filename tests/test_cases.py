@@ -32,19 +32,6 @@ def test_chop_final_newline():
     assert chopped_text2 == text
 
 
-def test_deindent():
-    """Show leading 4 spaces removed only if present."""
-    lines1 = ["    4 indent", "no indent", "        8 indent"]
-    text1 = "\n".join(lines1)
-    dedented1 = "4 indent\nno indent\n    8 indent"
-    assert dedented1 == phmutest.cases.deindent(text1)
-
-    lines2 = ["no indent", "no indent", "   3 indent"]
-    text2 = "\n".join(lines2)
-    dedented2 = "no indent\nno indent\n   3 indent"
-    assert dedented2 == phmutest.cases.deindent(text2)
-
-
 def test_no_files():
     """Run with no files specified on the command line."""
     # This covers the cases.py line near the end: test_classes += "\n"

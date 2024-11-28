@@ -17,17 +17,6 @@ import phmutest.subtest
 # (defined by _phm_expected_str in the generated code) must not be
 # indented. See $setupblocks, $teardownblocks, $subtests,
 # $setupmodule, $teardownmodule, $testclasses below.
-
-
-def deindent(text: str) -> str:
-    """Shift lines indented by 4 or more spaces to the left 4 spaces."""
-    lines = []
-    for line in text.splitlines():
-        if line.startswith("    "):
-            lines.append(line[4:])
-        else:
-            lines.append(line)
-    return "\n".join(lines)
 #
 # The unittest.doModuleCleanups() are needed when both:
 #   1. A user --fixture function calls unittest.addModuleCleanup().
