@@ -90,6 +90,28 @@ def badfixture(**kwargs):
     return None
 
 
+def test_code_fixture_raises():
+    """A fixture raises an exception."""
+    command = "tests/md/project.md --fixture tests.test_errors.badfixture"
+    args = command.split()
+    with contextlib.redirect_stderr(io.StringIO()) as err:
+        phmresult = phmutest.main.main(args)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=0,
+        passed=0,
+        failed=0,
+        skipped=0,
+        suite_errors=1,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+    assert phmresult.is_success is False
+    output = err.getvalue()
+    assert "ValueError: badfixture- having a bad day" in output
+
+
 def test_repl_fixture_raises(capsys):
     """In --replmode a fixture raises an exception."""
     command = "tests/md/replerror.md --fixture tests.test_errors.badfixture --replmode"
@@ -101,7 +123,7 @@ def test_repl_fixture_raises(capsys):
         failed=0,
         skipped=0,
         suite_errors=1,
-        number_of_files=0,
+        number_of_files=1,
         files_with_no_blocks=0,
         number_of_deselected_blocks=0,
     )
