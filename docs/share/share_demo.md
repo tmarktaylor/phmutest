@@ -25,7 +25,7 @@ shared.
 
 ## phmutest command line
 
-```
+```shell
 phmutest docs/share/file1.md docs/share/file2.md docs/share/file3.md --share-across-files docs/share/file1.md docs/share/file2.md --log --summary
 ```
 
@@ -33,7 +33,7 @@ phmutest docs/share/file1.md docs/share/file2.md docs/share/file3.md --share-acr
 
 Terminal output after the `OK` line.
 
-```
+```txt
 summary:
 metric
 --------------------  -
