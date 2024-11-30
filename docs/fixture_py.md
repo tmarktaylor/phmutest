@@ -14,7 +14,7 @@ log
         status
             The strings pass, failed, error, skip, noblocks count towards metrics.
 
-        skip reason
+        reason
 
 
 is_replmode
