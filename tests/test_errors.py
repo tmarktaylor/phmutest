@@ -86,6 +86,13 @@ def test_replmode_errors():
 
 def badfixture(**kwargs):
     """phmutest fixture raises an exception."""
+    is_replmode = kwargs["is_replmode"]
+    if not is_replmode:
+        # In code mode add a cleanup function to restore the current working
+        # directory and change it.
+        # This will show the cleanup function got called.
+        unittest.addModuleCleanup(os.chdir, Path.cwd())
+        os.chdir("docs/fix/code")
     raise ValueError("badfixture- having a bad day")
     return None
 
@@ -94,6 +101,7 @@ def test_code_fixture_raises():
     """A fixture raises an exception."""
     command = "tests/md/project.md --fixture tests.test_errors.badfixture"
     args = command.split()
+    current_workdir = Path.cwd()
     with contextlib.redirect_stderr(io.StringIO()) as err:
         phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
@@ -110,6 +118,7 @@ def test_code_fixture_raises():
     assert phmresult.is_success is False
     output = err.getvalue()
     assert "ValueError: badfixture- having a bad day" in output
+    assert current_workdir == Path.cwd(), "still the original working dir."
 
 
 def test_repl_fixture_raises(capsys):

@@ -126,7 +126,7 @@ with ExitStack() as _phm_stack:
 
 
 fixture_globs_update_code = """\
-_phm_fixture = _phm_user_setup_function(log=_phm_log)
+_phm_fixture = _phm_user_setup_function(log=_phm_log, is_replmode=False)
 if _phm_fixture is not None:
     if _phm_fixture.globs is not None:
         _phm_globals.update(additions=_phm_fixture.globs)"""
