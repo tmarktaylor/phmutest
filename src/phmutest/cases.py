@@ -64,9 +64,8 @@ def render_setup_module(
             args,
             fileblocks,
         )
-    deindented_setup_blocks = deindent(setup_blocks)
-    if deindented_setup_blocks:  # Share the names in the setup blocks.
-        deindented_setup_blocks += "\n    _phm_globals.update(additions=locals())"
+    if setup_blocks:  # Share the names in the setup blocks.
+        setup_blocks += "\n        _phm_globals.update(additions=locals())"
 
     files_with_sharing = list(args.setup_across_files)
     files_with_sharing.extend(args.share_across_files)
@@ -79,7 +78,7 @@ def render_setup_module(
 
     replacements = {}
     replacements["shareid"] = shareid
-    replacements["setupblocks"] = deindented_setup_blocks
+    replacements["setupblocks"] = setup_blocks
     if args.progress:
         replacements["showprogressenter"] = (
             '_phm_sys.stderr_printer("setUpModule()...")'
@@ -155,9 +154,8 @@ def render_teardown_module(
             args,
             fileblocks,
         )
-    deindented_teardown_blocks = deindent(teardown_blocks)
     replacements = {}
-    replacements["teardownblocks"] = deindented_teardown_blocks
+    replacements["teardownblocks"] = teardown_blocks
 
     if args.progress:
         replacements["showprogressenter"] = (
