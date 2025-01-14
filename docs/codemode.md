@@ -26,6 +26,7 @@ in Markdown can spread across several fenced code blocks.
 
 - The blocks are not isolated.
 - Names assigned at the top level of a block are visible to other blocks.
+- Each block must start with no indent level.
 
 ## --generate
 
