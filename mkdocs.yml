@@ -17,20 +17,22 @@ nav:
         - 'Changelog' : CHANGELOG.md
 
     - Demos:
-        - 'replmode': docs/replmode.md
-        - 'fixture change workdir': docs/fix/code/chdir.md
-        - 'fixture set globals': docs/fix/code/globdemo.md
-        - 'replmode fixture cleanup': docs/fix/repl/drink.md
+        - 'REPL Mode' : docs/replmode.md
+        - 'REPL Mode broken example' : docs/repl/REPLexample.md
+        - 'fixture change workdir' : docs/fix/code/chdir.md
+        - 'fixture set globals' : docs/fix/code/globdemo.md
+        - 'fixture cleanup REPL Mode': docs/fix/repl/drink.md
         - 'share across files': docs/share/share_demo.md
-        - 'select groups': docs/group/select.md
-        - 'deselect groups': docs/group/deselect.md
-        - 'setup/teardown': docs/setup/setup.md
-        - 'setup across files': docs/setup/across1.md
         - 'REPL Mode share across files': docs/repl/replshare_demo.md
+        - 'select groups' : docs/group/select.md
+        - 'deselect groups' : docs/group/deselect.md
+        - 'setup/teardown' : docs/setup/setup.md
+        - 'setup across files' : docs/setup/across1.md
 
     - 'un-navd':
-        - 'project testfile': docs/generated_project_py.md
-        - 'sharedemo testfile': docs/generated_share_demo_py.md
+        - docs/answerlib_py.md
+        - 'project testfile' : docs/generated_project_py.md
+        - 'sharedemo testfile' : docs/generated_share_demo_py.md
         - tests/md/project.md
         - docs/fixture_py.md
         - docs/fix/code/chdir_py.md
@@ -43,11 +45,11 @@ nav:
         - docs/repl/repl1.md
         - docs/repl/repl2.md
         - docs/repl/repl3.md
+        - docs/traceback.md
         - 'demos' : docs/demos.md
         - 'skip' : docs/advanced/skip.md
         - 'skipif' : docs/advanced/skipif.md
         - 'label' : docs/advanced/label.md
         - 'label any FCB' : docs/advanced/labelanyfcb.md
-        - 'Junit help' : docs/junit.md
 
 
