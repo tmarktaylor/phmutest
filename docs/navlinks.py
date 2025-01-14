@@ -16,28 +16,28 @@ def make_nav_links():
         pattern=r"^\s*- \w*:$.*?\n\n", string=text, flags=re.MULTILINE | re.DOTALL
     )
     lines.append("# Sections and Demos")
-    for s in sections:
+    for section in sections:
         lines.append("")
-        s = textwrap.dedent(s)
-        for g in s.splitlines():
-            if g:
-                if g.startswith("-"):
+        section = textwrap.dedent(section)
+        for line in section.splitlines():
+            if line:
+                if line.startswith("-"):
                     # Make the heading.
-                    g = g.replace("-", "##")
-                    g = g.replace(":", "\n")
+                    line = line.replace("-", "##")
+                    line = line.replace(":", "\n")
                 else:
                     # Make the link.
-                    g = g.replace("    - '", "- [")
-                    g = g.replace("': ", "](")
-                    g = g.replace("' : ", "](")
+                    line = line.replace("    - '", "- [")
+                    line = line.replace("': ", "](")
+                    line = line.replace("' : ", "](")
                     # Skip files not in docs folder.
                     # Remove docs/ from pathname since paths are relative to docs.
-                    if "(docs/" in g:
-                        g = g.replace("(docs/", "(")
+                    if "(docs/" in line:
+                        line = line.replace("(docs/", "(")
                     else:
                         continue
-                    g += ")"
-                lines.append(g)
+                    line += ")"
+                lines.append(line)
     lines.append("")  # Final newline.
     return "\n".join(lines)
 
