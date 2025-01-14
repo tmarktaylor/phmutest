@@ -52,7 +52,7 @@ def test_no_files():
 
 
 def test_skipif_no_output():
-    """Source Code block with no ouput and skipif directive. Empty Python block."""
+    """Source Code block with no output and skipif directive. Empty Python block."""
     line = "tests/md/cases.md --log"
     phmresult = phmutest.main.command(line)
     want = phmutest.summary.Metrics(

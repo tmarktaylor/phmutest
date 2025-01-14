@@ -171,7 +171,7 @@ def test_share_across_precedence():
 
 
 def fixture(**kwargs):
-    """Phmutest fixture funciton."""
+    """Phmutest fixture function."""
     log = kwargs["log"]
     log.append(["fixture", "complete", ""])
     raise unittest.SkipTest

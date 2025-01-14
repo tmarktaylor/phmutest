@@ -42,7 +42,7 @@ def startswith_checker():
 
 @pytest.fixture()
 def endswith_checker():
-    """Return Callable(str, str) that dedents want and compares to start of got.
+    """Return Callable(str, str) that dedents want and compares to end of got.
 
     Note that want string's final newline is removed by inspect.cleandoc().
     """

@@ -115,7 +115,7 @@ def labeled_fenced_code_blocks(markdown_filename: str) -> List[LabeledFCB]:
     Returns:
         List of LabeledFCB objects.
 
-        LabeledFCB is has these fields:
+        LabeledFCB has these fields:
 
         - label is the value of a label directive
           placed in a HTML comment before the fenced code block.

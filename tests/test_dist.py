@@ -66,7 +66,7 @@ class TestSameVersions:
 
 def test_consistent_copyright():
     """Assure same copyright phrasing in the various source locations."""
-    year = 2024
+    year = 2025
     assert f"Copyright (c) {year}" in Path("LICENSE").read_text(encoding="utf-8")
     assert f"Copyright (c) {year}" in Path("mkdocs.yml").read_text(encoding="utf-8")
 

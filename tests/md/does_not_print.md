@@ -10,5 +10,5 @@ a += 5
 Expected output-
 
 ```expected-output
-a= 8
+8
 ```
