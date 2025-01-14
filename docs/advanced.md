@@ -56,10 +56,8 @@ pressing the `Code` button in the banner at the top of the file.
 
 ### Directive Examples
 
-[Skip directive](advanced/skip.md)
-
-[Skipif directive](advanced/skipif.md)
-
+[Skip directive](advanced/skip.md) |
+[Skipif directive](advanced/skipif.md) |
 [Label directive, label and skipif example](advanced/label.md)
 
 ## Test groups
