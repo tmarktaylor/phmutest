@@ -73,6 +73,8 @@ Test groups can be included or excluded from testing by the --select and
 - The --report option lists excluded blocks.
 - The --summary option shows the number of deselected blocks.
 
+Examples: [select groups](group/select.md) | [deselect groups](group/deselect.md)
+
 ## Setup and teardown
 
 Blocks can be designated setup or teardown blocks by adding the
@@ -96,6 +98,8 @@ A positional argument FILE may be added to the --setup-across-files option.
 The file's setup blocks are run by **unittest.setUpModule()** and the names assigned in the
 setup blocks are shared to **all** FILEs. Teardown blocks in FILE
 are run by **unittest.tearDownModule()**.
+
+Examples: [setup/teardown](setup/setup.md) | [setup across files](setup/across1.md)
 
 [1]: https://github.com/tmarktaylor/phmutest/blob/master/tests/md/directive1.md?plain=1
 [2]: https://tmarktaylor.github.io/phmdoctest

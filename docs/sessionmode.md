@@ -39,6 +39,8 @@ the names assigned by the docstring.
 - The globs mapping is updated after running a share-across-files FILE.
 - One globs mapping is used for the entire phmutest run.
 
+[REPL Mode share across files example](repl/replshare_demo.md).
+
 ## --sharing
 
 The --sharing option turns on verbose printing showing the names

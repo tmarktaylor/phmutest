@@ -107,6 +107,8 @@ A section in the --summary output shows setup and teardown errors.
 In the --log and --progress outputs the suffix "setup" is added
 to the Markdown location.
 
+Example: [setup/teardown](setup/setup.md)
+
 ## Setup across files
 
 Setup and teardown blocks in a single Markdown file are applied to all FILEs
@@ -117,6 +119,8 @@ by --setup-across-files.
 
 Code is generated at the bottom of **setUpModule()**
 to copy the names assigned by the entire function to module level globals.
+
+Example: [setup across files](setup/across1.md)
 
 ## --progress
 
