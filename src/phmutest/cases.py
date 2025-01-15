@@ -121,7 +121,7 @@ with ExitStack() as _phm_stack:
     if _phm_sys.version_info() < (3, 11):
         _phm_stack.callback(unittest.case.doModuleCleanups)
     else:
-        _phm_stack.callback(unittest.doModuleCleanups)
+        _phm_stack.callback(unittest.doModuleCleanups)\
 """
 
 
