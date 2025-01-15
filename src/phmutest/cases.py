@@ -38,6 +38,7 @@ def is_verbose_sharing(args: argparse.Namespace, path: Path) -> bool:
 
 
 # Note- Module level $setupblocks and $teardownblocks implement --setup-across-files.
+# Note- The setUpModule log entry will be first even if library call supplied a log.
 setup_module_form = """\
 def setUpModule():
 
@@ -54,7 +55,8 @@ $setupblocks
 
 
 def render_setup_module(
-    args: argparse.Namespace, block_store: phmutest.select.BlockStore
+    args: argparse.Namespace,
+    block_store: phmutest.select.BlockStore,
 ) -> str:
     """Generate code for unittest setUpModule() fixture."""
     setup_blocks = ""
