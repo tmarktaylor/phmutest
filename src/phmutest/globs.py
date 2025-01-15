@@ -12,6 +12,8 @@ class Globals:
     """Add, remove, and keep track of globals added to a module.
 
     Dynamically add and remove values as module attributes.
+    Prevents adding globals present in the testfile.
+    Avoids adding globals for already imported modules.
     The attribute names are stored in the set global_names.
     The attribute values are stored in the module name passed
     to the constructor.
@@ -200,7 +202,7 @@ class AssignmentExtractor:
         self.start_names = set(start_names)
 
     def finish(self, finish_locals: Mapping[str, Any]) -> None:
-        """Copy names and values assigned since start() was called."""
+        """Shallow copy of names and values assigned since start() was called."""
         finish_names = set(finish_locals.keys())
         added_names = finish_names - self.start_names
         for k in added_names:
