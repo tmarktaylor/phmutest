@@ -6,6 +6,7 @@ import textwrap
 import unittest
 
 import phmutest.cases
+import phmutest.fillin
 import phmutest.main
 import phmutest.subtest
 import phmutest.summary
