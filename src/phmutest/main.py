@@ -29,7 +29,7 @@ def main_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="phmutest",
         description=(
-            "Detect broken Python examples in Markdown."
+            "Detect and troubleshoot broken Python examples in Markdown."
             " Accepts relevant unittest options."
         ),
     )
@@ -62,6 +62,16 @@ def main_argparser() -> argparse.ArgumentParser:
         help="Function run before testing.",
         metavar="DOTTED_PATH.FUNCTION",
         type=pathlib.Path,
+    )
+
+    parser.add_argument(
+        "--runpytest",
+        choices=phmutest.config.RUNPYTEST_CHOICES,
+        help=(
+            "only=run pytest only."
+            " on-error=run pytest if unittest fails."
+            " otherwise run unittest."
+        ),
     )
 
     parser.add_argument(
@@ -114,6 +124,21 @@ def main_argparser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
+        "--color",
+        "-c",
+        help="Enable --log pass/failed/error/skip result colors.",
+        default=False,
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--style",
+        help="Specify a Pygments style name as STYLE to enable syntax highlighting.",
+        metavar="STYLE",
+        default=None,
+    )
+
+    parser.add_argument(
         "-g",
         "--generate",
         help=("Write generated Python or docstring to output file or stdout."),
@@ -152,6 +177,13 @@ def main_argparser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
+        "--stdout",
+        help="Print output printed by blocks.",
+        default=False,
+        action="store_true",
+    )
+
+    parser.add_argument(
         "--report",
         help="Print fenced code block configuration, deselected blocks.",
         default=False,
@@ -160,39 +192,16 @@ def main_argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def check_across_files(args: argparse.Namespace) -> None:
-    """Avoid hard to troubleshoot KeyError in phmutest.select.get_blocks()."""
-    for f in args.share_across_files:
-        assert (
-            f in args.files
-        ), f"{f} in share-across-files must also be positional argument."
-    for f in args.setup_across_files:
-        assert (
-            f in args.files
-        ), f"{f} in setup-across-files must also be positional argument."
-
-
-def remove_duplicate_files(args: argparse.Namespace) -> None:
-    """Remove duplicate positional args files. Modifies in place."""
-    unique_files = []
-    for f in args.files:
-        if f not in unique_files:
-            unique_files.append(f)
-    args.files = unique_files
-    assert len(args.files) == len(set(args.files)), "no duplicates"
-
-
-def generate_and_run(known_args: KnownArgs) -> Optional[phmutest.summary.PhmResult]:
+def generate_and_run(
+    known_args: KnownArgs,
+) -> Optional[phmutest.summary.PhmResult]:
     """Check args, delete duplicate files, read FCBs, call a test runner."""
-
-    args = known_args[0]
-    if args.config:
-        phmutest.config.process_config_file(args)
-    check_across_files(args)
-    remove_duplicate_files(args)
+    settings = phmutest.config.get_settings(known_args)
+    args = settings.args
 
     # Find, process, and select/deselect Python fenced code blocks.
-    block_store = phmutest.select.BlockStore(args)
+    block_store = phmutest.select.BlockStore(settings.args)
+    markdown_map = None
     if args.report:
         print("Command line plus --config file args:")
         phmutest.summary.show_args(args)
@@ -200,7 +209,9 @@ def generate_and_run(known_args: KnownArgs) -> Optional[phmutest.summary.PhmResu
             fileblocks = block_store.get_blocks(path)
             print(f"\nFenced blocks from {fileblocks.built_from}:")
             for block in fileblocks.all_blocks:
-                print(block)
+                htext = settings.highlighter.highlight(str(block))
+                print(htext)
+
         print("\nDeselected blocks:")
         for location in block_store.deselected_names:
             print(location)
@@ -208,23 +219,25 @@ def generate_and_run(known_args: KnownArgs) -> Optional[phmutest.summary.PhmResu
 
     if args.generate:
         if args.replmode:
-            _ = phmutest.session.run_repl(args, known_args[1], block_store)
+            _ = phmutest.session.run_repl(settings, block_store)
         else:
-            text = phmutest.cases.testfile(args, block_store)
+            text, markdown_map = phmutest.cases.testfile(args, block_store)
             text = text.rstrip()
             args.generate.write(text + "\n")
             args.generate.close()
         return None
 
     if args.replmode:
-        phmresult = phmutest.session.run_repl(args, known_args[1], block_store)
-    else:
-        num_deselected_names = len(block_store.deselected_names)
-        text = phmutest.cases.testfile(args, block_store)
-        phmresult = phmutest.code.run_code(
-            args, known_args[1], num_deselected_names, text
+        phmresult = phmutest.session.run_repl(
+            settings,
+            block_store,
         )
-    phmutest.summary.show_results(args, phmresult)
+    else:
+        text, markdown_map = phmutest.cases.testfile(args, block_store)
+        phmresult = phmutest.code.run_code(settings, text)
+
+    phmresult.metrics.number_of_deselected_blocks = len(block_store.deselected_names)
+    phmutest.summary.show_results(settings, block_store, markdown_map, phmresult)
     return phmresult
 
 
