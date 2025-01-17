@@ -242,20 +242,36 @@ def generate_and_run(
 
 
 def main(argv: Optional[List[str]] = None) -> Optional[phmutest.summary.PhmResult]:
-    """For call from Python that does not call sys.exit()."""
+    """Library function that accepts command line args as a list of strings.
+
+    Args:
+        argv
+            The command line args as a list of strings.
+
+    Returns:
+        phmutest.summary.PhmResult
+    """
     parser = main_argparser()
     known_args = parser.parse_known_args(argv)
     return generate_and_run(known_args)
 
 
 def command(line: str) -> Optional[phmutest.summary.PhmResult]:
-    """For call from Python with command line as a string and no sys.exit()."""
+    """Library function that accepts command line args as a single string.
+
+    Args:
+        line
+            The command line args as a single string.
+
+    Returns:
+        phmutest.summary.PhmResult
+    """
     return main(line.split())
 
 
-def entry_point(argv: Optional[List[str]] = None) -> None:
+def entry_point() -> None:
     """Entry point for command line invocation."""
-    phmresult = main(argv)
+    phmresult = main()
     if phmresult is not None:
         sys.exit(not phmresult.is_success)
     else:
