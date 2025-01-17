@@ -19,10 +19,16 @@ Checklist
 - Build docs python docs/premkdocs.py --start-server --clean
 
 Prepare release on the develop branch.
-( ) On GitHub manually dispatch action "CI" (ci.yml) on the develop branch.
-
 ( ) On GitHub manually dispatch action "Buildable" (build.yml).
     Inspect the log to make sure newly added files are copied to the dist.
+
+( ) On GitHub manually dispatch action "CI" (ci.yml) on the develop branch.
+
+( ) On GitHub manually dispatch action "Dev" (dev.yml) on the develop branch.
+    Here we try the scripts in the dev folder with the installation extra [dev].
+    The dev scripts are useful during development on a local machine.
+    Not all the commands return success.
+    Success of the Dev action is not required for publishing.
 
 ( ) Open pull request and merge develop branch to main branch.
 
