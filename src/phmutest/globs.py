@@ -122,6 +122,7 @@ class Globals:
         _ = additions.pop("_phm_expected_str", None)
         _ = additions.pop("_phm_printer", None)
         _ = additions.pop("_phm_fixture", None)
+        _ = additions.pop("_phm_stack", None)
 
         # Module level imports by the generated test file should not be
         # modified. If they are present in additions they will
