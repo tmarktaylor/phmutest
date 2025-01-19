@@ -5,65 +5,85 @@ import unittest
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
 
+import phmutest.color
+import phmutest.config
+import phmutest.fcb
+import phmutest.printer
+import phmutest.select
 import phmutest.subtest
+import phmutest.syntax
+from phmutest.printer import (
+    DIFFS,
+    DOC_LOCATION,
+    FRAME,
+    REASON,
+    RESULT,
+    STDOUT,
+    TRACE,
+    Log,
+)
 
+Column = List[str]
+Columns = List[Column]
 Row = List[str]
 Rows = List[Row]
-Log = List[List[str]]
+Widths = List[int]
 
 
-def left_align_columns(rows: Rows) -> Tuple[Rows, List[int]]:
+def transpose(grid: Iterable[Iterable[str]]) -> List[List[str]]:
+    """Swap rows for columns or columns for rows."""
+    return [list(tup) for tup in zip(*grid)]
+
+
+def left_align_columns(rows: Rows) -> Tuple[Columns, Widths]:
     """Left align each cell and justify to maximum item width to visually align."""
-    columns = list(zip(*rows))
+    columns = transpose(rows)
     widths = [max([len(item) for item in col]) for col in columns]
     justified_columns = []
     for width, column in zip(widths, columns):
         justified_columns.append([item.ljust(width) for item in column])
-    # Convert zip's tuples to lists to avoid mypy error.
-    aligned_rows = [list(tup) for tup in zip(*justified_columns)]
-    return list(aligned_rows), widths
+    return justified_columns, widths
 
 
-def dot_fill_first_column(rows: Rows, minimum_width: int) -> Rows:
-    """Rewrite first column using dot instead of space to fill to width."""
-    # Convert zip's tuples to lists to avoid mypy error.
-    columns = [list(tup) for tup in zip(*rows)]
-    column = columns[0]
-    width = max([len(item) for item in column])
-    width = max(width, minimum_width)
-    filled_column = [item.ljust(width, ".") for item in column]
-    # Convert zip's tuples to lists to avoid mypy error.
-    filled_columns = [filled_column] + columns[1:]
-    filled_rows = [list(tup) for tup in zip(*filled_columns)]
-    return list(filled_rows)
+def dot_fill_column(column: Column, width: int) -> None:
+    """Modifies in place a column replacing up to width trailing spaces with '.'."""
+    for i, item in enumerate(column):
+        column[i] = item.rstrip().ljust(width, ".")
 
 
 def show_table(rows: Rows) -> None:
-    """Print table with separators after header row and at end."""
-    aligned, widths = left_align_columns(rows)
-    aligned.insert(1, ["-" * width for width in widths])
-    aligned.append(["-" * width for width in widths])
-    for row in aligned:
+    """Align, justify and print table with header."""
+    justified_columns, widths = left_align_columns(rows)
+    aligned_rows = transpose(justified_columns)
+    add_table_headers(aligned_rows, widths)
+    for row in aligned_rows:
         print("  ".join(row).rstrip())
+
+
+def add_table_headers(aligned: Rows, widths: Widths) -> None:
+    """Print table with separators after header row and at end."""
+    headers = ["-" * width for width in widths]
+    aligned.insert(1, headers)
+    aligned.append(headers)
 
 
 def show_setup_errors(log: Log) -> bool:
     """Find errors from setup/teardown in the log and print them. Return true if any."""
     setup_errors = []
     for item in log:
-        is_setup = item[0].endswith(phmutest.subtest.SETUP_SUFFIX) or item[0].endswith(
-            phmutest.subtest.TEARDOWN_SUFFIX
-        )
-        if is_setup and item[1] == "error":
+        is_setup = item[DOC_LOCATION].endswith(phmutest.subtest.SETUP_SUFFIX) or item[
+            DOC_LOCATION
+        ].endswith(phmutest.subtest.TEARDOWN_SUFFIX)
+        if is_setup and item[RESULT] == "error":
             setup_errors.append(item)
     if setup_errors:
         print()
         print("setup and teardown errors")
         print("-------------------------")
         for item in setup_errors:
-            print(item[0])
+            print(item[DOC_LOCATION])
     return bool(setup_errors)
 
 
@@ -86,9 +106,10 @@ class PhmResult:
     """phmutest.main.command() return type.  Markdown Python example test results."""
 
     test_program: Optional[unittest.TestProgram]
-    is_success: bool
+    is_success: Optional[bool]
     metrics: Metrics
     log: List[List[str]]
+    pytest_returncode: Optional[int]
 
 
 EMPTY_METRICS = Metrics(
@@ -105,9 +126,10 @@ EMPTY_METRICS = Metrics(
 
 EMPTY_PHMRESULT = PhmResult(
     test_program=None,
-    is_success=True,
+    is_success=None,
     metrics=EMPTY_METRICS,
     log=[[]],
+    pytest_returncode=None,
 )
 """Used when --generate and --replmode to avoid an Optional return value."""
 
@@ -120,7 +142,7 @@ def compute_metrics(
     # The second string is the status of the log entry,
     # Code in printer.py, cases.py and skip.py append log entries
     # using hard coded string constants.
-    status = [item[1] for item in log]
+    status = [item[RESULT] for item in log]
     counts = Counter(status)
     metrics = Metrics(
         number_blocks_run=counts["pass"] + counts["failed"] + counts["error"],
@@ -157,7 +179,9 @@ def show_metrics(metrics: Metrics) -> None:
 
 def show_skips(log: Log) -> None:
     """Print table of blocks that were skipped with the reason."""
-    if skips := [[item[0], item[2]] for item in log if item[1] == "skip"]:
+    if skips := [
+        [item[DOC_LOCATION], item[REASON]] for item in log if item[RESULT] == "skip"
+    ]:
         cells = [["skipped blocks", "reason"]] + skips
         print()
         show_table(cells)
@@ -184,12 +208,16 @@ def show_args(args: argparse.Namespace) -> None:
     ]
     single = [
         "fixture",
+        "runpytest",
         "config",
         "replmode",
+        "color",
+        "style",
         "generate",  # When True main.generate_and_run() returns without showing args.
         "progress",
         "log",
         "summary",
+        "stdout",
         "report",
     ]
 
@@ -211,25 +239,80 @@ def show_args(args: argparse.Namespace) -> None:
     print()
 
 
-def show_log(log: Log) -> None:
+def show_log(
+    log: Log, highighter: phmutest.syntax.Highlighter, use_color: bool = False
+) -> None:
     """Print a table of the log entries."""
     if log:
-        empty_3rd_col = not any([entry[2] for entry in log])
+        empty_3rd_col = not any([entry[REASON] for entry in log])
         column_title = "location|label"
         if empty_3rd_col:
-            titles = [column_title, "result"]
-            log2 = [[entry[0], entry[1]] for entry in log]
+            log2 = [[column_title, "result"]]
+            log2.extend([[entry[DOC_LOCATION], entry[RESULT]] for entry in log])
+            log3 = log2
         else:
-            titles = [column_title, "result", "skip reason"]
-            log2 = log
-        titled_log = [titles]
-        filled_log = dot_fill_first_column(log2, len(column_title))
-        titled_log.extend(filled_log)
-        show_table(titled_log)
+            log2 = [[column_title, "result", "reason"]]
+            # Remove entries for RESULT values that aren't displayed.
+            log2a = [
+                entry for entry in log if entry[RESULT] not in [TRACE, FRAME, DIFFS]
+            ]
+            log2.extend(log2a)
+            # Remove the remaining columns, if present.
+            log3 = [row[0:3] for row in log2]
+
+        # Align and justify. Return columns and column widths.
+        columns, widths = left_align_columns(log3)
+
+        # Disassemble into justified titles and justified columns.
+        rows = transpose(columns)
+        justified_titles = rows.pop(0)
+        justified_columns = transpose(rows)
+
+        # Replace space fill with "." in the first column of cells.
+        dot_fill_column(justified_columns[0], widths[0])
+
+        # Colorize the result values in the second column,
+        colorize_results(justified_columns[RESULT], use_color)
+
+        # Syntax highlight exception names in the third column
+        if len(justified_columns) >= 3:
+            column = justified_columns[REASON]
+            for i, text in enumerate(column):
+                column[i] = highighter.highlight_exception(text)
+
+        # Assemble the table from the title row and the rows.
+        justified_rows = transpose(justified_columns)
+        table = [justified_titles]
+        table.extend(justified_rows)
+        add_table_headers(table, widths)
+        for row in table:
+            print("  ".join(row).rstrip())
 
 
-def show_results(args: argparse.Namespace, phmresult: PhmResult) -> None:
+def colorize_results(results: List[str], use_color: bool = False) -> None:
+    """Insert ANSI terminal color sequences to list of test results. Modify in place."""
+    # Replace matching result string with the colorized version of it.
+    if hasattr(phmutest.color, "colorize_result"):
+        for ix, item in enumerate(results):
+            results[ix] = phmutest.color.colorize_result(item, use_color)
+
+
+def show_results(
+    settings: phmutest.config.Settings,
+    block_store: phmutest.select.BlockStore,
+    markdown_map: Optional[phmutest.fcb.FcbLineMap],
+    phmresult: PhmResult,
+) -> None:
     """Print requested test results."""
+    args = settings.args  # rename
+    if args.runpytest in ["only", "on-error"]:
+        print(f"pytest subprocess returncode= {phmresult.pytest_returncode}")
+
+    # When the runpytest is "only" unittest does not run
+    # and there are no more results to show.
+    if args.runpytest == "only":
+        return
+
     if args.summary:
         print()
         print("summary:")
@@ -239,8 +322,20 @@ def show_results(args: argparse.Namespace, phmresult: PhmResult) -> None:
         show_metrics(phmresult.metrics)
         show_skips(phmresult.log)
 
-    if args.log:
+    if args.log and phmresult.log:
         print()
         print("log:")
         show_args(args)
-        show_log(phmresult.log)
+        show_log(phmresult.log, settings.highlighter, args.color)
+        phmutest.fcb.show_broken_fcbs(
+            phmresult.log,
+            block_store,
+            markdown_map,
+            settings.highlighter,
+        )
+
+    if args.stdout and phmresult.log:
+        print("\nstdout:")
+        for entry in phmresult.log:
+            if len(entry) == (STDOUT + 1) and entry[STDOUT]:
+                print(entry[STDOUT], end="")
