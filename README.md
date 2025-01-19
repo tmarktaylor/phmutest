@@ -268,9 +268,9 @@ by pressing the `Code` button in the banner at the top of the file.
 
 ## main branch status
 
-[![](https://img.shields.io/pypi/l/phmutest.svg)](https://github.com/tmarktaylor/phmutest/blob/main/LICENSE)
-[![](https://img.shields.io/pypi/v/phmutest.svg)](https://pypi.python.org/pypi/phmutest)
-[![](https://img.shields.io/pypi/pyversions/phmutest.svg)](https://pypi.python.org/pypi/phmutest)
+[![license](https://img.shields.io/pypi/l/phmutest.svg)](https://github.com/tmarktaylor/phmutest/blob/main/LICENSE)
+[![pypi](https://img.shields.io/pypi/v/phmutest.svg)](https://pypi.python.org/pypi/phmutest)
+[![python](https://img.shields.io/pypi/pyversions/phmutest.svg)](https://pypi.python.org/pypi/phmutest)
 
 [![CI](https://github.com/tmarktaylor/phmutest/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tmarktaylor/phmutest/actions/workflows/ci.yml)
 [![Build status](https://ci.appveyor.com/api/projects/status/nbu1xlraoii8x377?svg=true)](https://ci.appveyor.com/project/tmarktaylor/phmutest)
@@ -649,7 +649,7 @@ breakage in future versions. Look for examples in tests/test_patching.py.
   when the testfile is run.
 - In code mode printing a class (not an instance) and then checking it in an
   expected-output FCB is not feasible because Python prints the
-  __qualname__. See the file tests/md/qualname.md for an explanation.
+  `__qualname__`. See the file tests/md/qualname.md for an explanation.
 - phmutest is implemented with non-thread-safe context managers.
 
 ## Related projects
