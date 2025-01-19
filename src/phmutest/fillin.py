@@ -43,7 +43,7 @@ def justify(template: str, key: str, text: str) -> str:
 
 
 def fill_in(template: str, replacements: Mapping[str, str]) -> str:
-    """Return filled in the template with replacements less the unused/un-truthy keys.
+    """Return filled in template with replacements less the unused/un-truthy keys.
 
     The keys in the String.Template template start with "$", but
     keys in the mapping passed to Template.substitute do not.
