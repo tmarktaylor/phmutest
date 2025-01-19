@@ -26,4 +26,8 @@ addopts = "--ignore tests/check_classifiers.py"
 # select = []
 # deselect = []
 # skip = []
+# color = false
+# style = ""
+# runpytest = ""
+# pytest_command = ""
 

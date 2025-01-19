@@ -3,10 +3,9 @@
 include-globs = [
     "tests/md/project.md",
     "tests/md/directive1.md",
-    "tests/md/un*_output.md"  # wildcard
+    "tests/md/unexpected_output.md"
 ]
-# exclude a matching include-globs file
-exclude-globs = ["tests/md/unexpected_*.md"]  # wildcard
+exclude-globs = []
 fixture = ""
 share-across-files = []
 setup-across-files = []
@@ -17,4 +16,4 @@ skip = []
 color = false
 style = ""
 runpytest = ""
-pytest_command = ""
+pytest_command = "pytest -vv --capture=tee-sys"

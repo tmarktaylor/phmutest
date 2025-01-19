@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+import pytest
+
 import phmutest.main
 import phmutest.select
 
@@ -16,7 +18,6 @@ def get_selected_blocks(filename, args):
 
 def test_select_no_group_match():
     filename = "tests/md/code_groups.md"
-    args = [filename, "--select", "groupp-1"]  # mispelled group
     args = [filename, "--select", "groupp-1"]  # misspelled group
     blocks = get_selected_blocks(filename, args)
     assert len(blocks) == 0
@@ -24,7 +25,6 @@ def test_select_no_group_match():
 
 def test_deselect_no_group_match():
     filename = "tests/md/code_groups.md"
-    args = [filename, "--deselect", "groupp-1"]  # mispelled group
     args = [filename, "--deselect", "groupp-1"]  # misspelled group
     blocks = get_selected_blocks(filename, args)
     assert len(blocks) == 4
@@ -158,3 +158,15 @@ def test_deselect_repl6and7():
     assert "legacy-repl-5" in blocks[2].contents
     # Note= The leading blank below prevents a match with 'legacy-repl-5'.
     assert " repl-5" in blocks[3].contents
+
+
+def test_get_contents():
+    """Coverage for assertion when looking up a line number that has no open fence."""
+    filename = "README.md"
+    args = [filename]
+    parser = phmutest.main.main_argparser()
+    known_args = parser.parse_known_args(args)
+    blockstore = phmutest.select.BlockStore(known_args[0])
+    with pytest.raises(ValueError) as exc_info:
+        _ = blockstore.get_contents("README.md", 12)
+    assert "No block has start line= 12" in str(exc_info.value)

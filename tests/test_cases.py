@@ -16,6 +16,7 @@ DOC_LOCATION = phmutest.printer.DOC_LOCATION
 RESULT = phmutest.printer.RESULT
 REASON = phmutest.printer.REASON
 
+
 def test_chop_final_newline():
     """Call with text that does not end with newline."""
     text = textwrap.dedent(
@@ -129,15 +130,15 @@ def test_print_captured_output(startswith_checker):
 
     output = ferr.getvalue()
     expected = """tests/md/printer.md:7 ... failed
-        === phmutest: captured stdout ===
+        === tests/md/printer.md:7 stdout ===
         asserting False...
         === end ===
-        === phmutest: captured stderr ===
+        === tests/md/printer.md:7 stderr ===
         asserting False...
         === end ===
         tests/md/printer.md:18 ... pass
         tests/md/printer.md:31 ... failed
-        === phmutest: captured stdout ===
+        === tests/md/printer.md:31 stdout ===
         (10, 1)
         === end ===
         tests/md/printer.md:46 ... skip   phmutest-skip

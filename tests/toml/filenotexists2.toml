@@ -9,4 +9,7 @@ setup-across-files = ["tests/md/setupnoteardown.md", "NotAnExistingFile2.md"]
 select = []
 deselect = []
 skip = []
-
+color = false
+style = ""
+runpytest = ""
+pytest_command = ""

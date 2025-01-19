@@ -8,6 +8,7 @@ DOC_LOCATION = phmutest.printer.DOC_LOCATION
 RESULT = phmutest.printer.RESULT
 REASON = phmutest.printer.REASON
 
+
 def test_sample():
     """Run Python code block with expected output block in project.md."""
     line = "tests/md/project.md"

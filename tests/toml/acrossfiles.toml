@@ -9,4 +9,8 @@ setup-across-files = ["tests/md/setupnoteardown.md"]
 select = []
 deselect = []
 skip = []
+color = false
+style = ""
+runpytest = ""
+pytest_command = ""
 

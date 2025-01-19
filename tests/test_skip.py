@@ -8,6 +8,7 @@ DOC_LOCATION = phmutest.printer.DOC_LOCATION
 RESULT = phmutest.printer.RESULT
 REASON = phmutest.printer.REASON
 
+
 def test_skip_text1():
     """Command line --skip removes 1 test case containing TEXT squares."""
     command = "tests/md/example2.md --log --skip squares"

@@ -1,12 +1,10 @@
 [tool.phmutest]
 # Use fnmatch like patterns on the -globs keys
 include-globs = [
-    "tests/md/project.md",
+    "README.md",
     "tests/md/directive1.md",
-    "tests/md/un*_output.md"  # wildcard
 ]
-# exclude a matching include-globs file
-exclude-globs = ["tests/md/unexpected_*.md"]  # wildcard
+exclude-globs = []
 fixture = ""
 share-across-files = []
 setup-across-files = []
@@ -15,6 +13,6 @@ select = []
 deselect = []
 skip = []
 color = false
-style = ""
+style = "material"
 runpytest = ""
 pytest_command = ""

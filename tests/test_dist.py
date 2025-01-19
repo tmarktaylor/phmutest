@@ -91,3 +91,67 @@ def test_trail_spaces_and_only_ascii():
                 print(name, "line", num, "has trailing whitespace.")
                 found_trailing_spaces = True
     assert not found_trailing_spaces, "Line has trailing whitespace."
+
+
+def string_to_dependencies(text: str) -> set:
+    """Return the set of pip dependencies from a multi-line string.
+
+    Whitespace and empty lines are not significant.
+    Comment lines are ignored.
+    """
+    lines = text.splitlines()
+    lines = [line for line in lines if not line.startswith("#")]
+    collapsed_lines = [line.replace(" ", "") for line in lines if line]
+    items = set(collapsed_lines)
+    if "" in items:
+        items.remove("")  # empty string from blank lines
+    return items
+
+
+def setup_dependencies(section, option) -> set:
+    """Extract set of dependencies from setup.cfg section/option."""
+    config = configparser.ConfigParser()
+    config.read("setup.cfg", encoding="utf-8")
+    text = config.get(section, option)
+    return string_to_dependencies(text)
+
+
+def file_dependencies(filename: str) -> set:
+    """Extract set of dependencies from a requirements.txt file."""
+    text = Path(filename).read_text(encoding="utf-8")
+    return string_to_dependencies(text)
+
+
+def test_install_requires():
+    """setup.cfg install_requires == requirements.txt."""
+    setup_values = setup_dependencies("options", "install_requires")
+    requirements_values = file_dependencies("requirements.txt")
+    assert setup_values == requirements_values
+
+
+def notest_extras_require_color():
+    """setup.cfg extras_require:color values are in dev/requirements_dev.txt."""
+    requirements_values = file_dependencies("dev/requirements_dev.txt")
+    setup_color_values = setup_dependencies("options.extras_require", "color")
+    assert setup_color_values.issubset(requirements_values)
+
+
+def notest_extras_require_traceback():
+    """setup.cfg extras_require:traceback values are in dev/requirements_dev.txt."""
+    requirements_values = file_dependencies("dev/requirements_dev.txt")
+    setup_traceback_values = setup_dependencies("options.extras_require", "traceback")
+    assert setup_traceback_values.issubset(requirements_values)
+
+
+def notest_extras_require_dev():
+    """setup.cfg extras_require:dev values are in dev/requirements_dev.txt."""
+    requirements_values = file_dependencies("dev/requirements_dev.txt")
+    setup_dev_values = setup_dependencies("options.extras_require", "dev")
+    assert setup_dev_values.issubset(requirements_values), f"{setup_dev_values=}"
+
+
+def test_requirements_inspect():
+    """tests/requirements_inspect.txt values are in setup.cfg extras_require:dev."""
+    requirements_values = file_dependencies("tests/requirements_inspect.txt")
+    setup_dev_values = setup_dependencies("options.extras_require", "dev")
+    assert requirements_values.issubset(setup_dev_values)

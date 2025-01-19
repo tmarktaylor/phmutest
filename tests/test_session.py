@@ -106,23 +106,23 @@ def test_progress(capsys, endswith_checker):
     assert want == phmresult.metrics
     assert phmresult.test_program is None
     assert phmresult.is_success is False
-    expected = """location|label            result  skip reason
-        ------------------------  ------  -------------------
+    expected = """location|label            result  reason
+        ------------------------  ------  ------------------------------------------------------
         tests/md/replerror.md:3.  pass
         tests/md/replerror.md:7.  pass
         tests/md/replerror.md:11  pass
         tests/md/replerror.md:18  pass
         tests/md/replerror.md:26  skip    phmutest-skip
-        tests/md/replerror.md:33  error
-        tests/md/replerror.md:40  error
+        tests/md/replerror.md:33  error   TypeError: can only concatenate str (not "int") to str
+        tests/md/replerror.md:40  error   AssertionError: --skip identified block
         tests/md/replerror.md:49  skip    requires >=py3.9999
         tests/md/replerror.md:57  pass
-        ------------------------  ------  -------------------
+        ------------------------  ------  ------------------------------------------------------
         location|label          result
         ----------------------  ------
         tests/md/example1.md:5  pass
         ----------------------  ------
-        """
+        """  # noqa: E501
     output = capsys.readouterr().out.rstrip()
     endswith_checker(expected, output)
 
