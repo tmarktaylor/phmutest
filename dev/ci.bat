@@ -10,8 +10,11 @@ py -m phmutest docs/fix/code/globdemo.md --fixture docs.fix.code.globdemo.init_g
 py -m phmutest tests/md/tracer_repl.md --log --replmode --color
 py -m phmutest tests/md/tracer.md --log -c
 rem
+rem This test has intentional failing FCBs.
+py -m phmutest tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir --log --runpytest only
+
 isort . --profile black --skip "*_cache"
-black **/*.py --check --force-exclude="tests/py|dev|t[0-9].py"
+black **/*.py --check --force-exclude="tests/py|dev|t.py|t[0-9].py"
 mypy src/phmutest --strict
 mypy tests/test_type_packaging.py --strict
-flake8 --max-complexity=10 --exclude .mine,tests/py,dev,t[0-9].py
+flake8 --max-complexity=10 --exclude .mine,tests/py,dev,t.py,t[0-9].py
