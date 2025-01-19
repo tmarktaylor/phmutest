@@ -128,4 +128,8 @@ Example: [setup across files](setup/across1.md)
 This option turns on per block verbose printing. The printing is directed
 to the standard error stream shared with unittest's verbose printing.
 
+## --stdout
+
+Show printing by FCBs to standard output when testing is complete.
+
 [1]: https://docs.python.org/3/library/unittest.html

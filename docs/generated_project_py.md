@@ -12,6 +12,7 @@ _phm_globals = None
 _phm_testcase = unittest.TestCase()
 _phm_testcase.maxDiff = None
 _phm_log = []
+_phmPrinter.testfile_name = None
 
 
 class Test001(unittest.TestCase):
@@ -21,7 +22,7 @@ class Test001(unittest.TestCase):
 
         # ------ tests/md/project.md:11 ------
         with self.subTest(msg="tests/md/project.md:11"):
-            with _phmPrinter(_phm_log, "tests/md/project.md:11", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "tests/md/project.md:11", flags=0x0, testfile_lineno=22) as _phm_printer:
 
                 def greeting(name: str) -> str:
                     return "Hello" + "\n\n" + name
@@ -38,7 +39,7 @@ World!
 
         # ------ tests/md/project.md:29 ------
         with self.subTest(msg="tests/md/project.md:29"):
-            with _phmPrinter(_phm_log, "tests/md/project.md:29", False):
+            with _phmPrinter(_phm_log, "tests/md/project.md:29", flags=0x0, testfile_lineno=39):
                 text = greeting("Planet!")
                 text = text.replace("\n\n", " ")
                 assert text == "Hello Planet!"  # this assert is in the Markdown example.

@@ -12,6 +12,7 @@
 ## Demos
 
 - [REPL Mode](replmode.md)
+- [REPL Mode broken example](repl/REPLexample.md)
 - [fixture change workdir](fix/code/chdir.md)
 - [fixture set globals](fix/code/globdemo.md)
 - [fixture cleanup REPL Mode](fix/repl/drink.md)
