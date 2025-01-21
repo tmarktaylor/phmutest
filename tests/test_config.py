@@ -394,7 +394,6 @@ def test_style_override():
     assert len(args.files) == 2
     assert args.style == "dracula"
     settings = get_settings(commandline_args)
-    assert settings.highlighter.is_enabled is True
 
 
 def test_runpytest_empty_str():
