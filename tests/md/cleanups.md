@@ -16,7 +16,8 @@ when running with pytest.
 Run the command below and look for the print message in the pytest output.
 
 ```txt
-phmutest tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir --log --runpytest only
+phmutest tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir --log --generate t.txt
+pytest -vv t.txt
 ```
 
 ```python

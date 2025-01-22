@@ -369,6 +369,5 @@ def run_repl(
         is_success=success,
         metrics=metrics,
         log=log,
-        pytest_returncode=None,
     )
     return phmresult

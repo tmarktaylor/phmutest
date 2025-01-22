@@ -176,8 +176,6 @@ jobs:
         coverage run --branch --source=src --append -m phmutest --version
         coverage run --branch --source=src --append -m phmutest tests/md/no_code_blocks.md --log
         coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m phmutest README.md --runpytest only
-        coverage run --branch --source=src --append -m phmutest README.md --runpytest on-error
         coverage run --branch --source=src --append -m phmutest README.md --log --style
         coverage run --branch --source=src --append -m phmutest README.md --log --style default
         coverage run --branch --source=src --append -m pytest tests

@@ -164,8 +164,7 @@ Code button. (Code is between Preview and Blame).
 When phmutest is installed with the `[traceback]` extra,
 a [stackprinter][21] formatted
 traceback prints after each broken FCB. [Here](docs/traceback.md)
-is an example traceback. A pytest traceback is also available by
-installing the `[pytest]` extra and specifying the --runpytest option.
+is an example traceback.
 
 #### unittest stderr
 
@@ -240,7 +239,6 @@ FAILED (failures=2, errors=2)
 - Support for setup and cleanup. Acquire and release resources, change context,
   Pass objects as global variables to the examples. Cleans up even when fail-fast.
   [Suite initialization and cleanup](#suite-initialization-and-cleanup)
-- Optionally runs tests with [pytest][20] for more error traceback information.
 - Write a pytest testfile into an existing pytest test suite.
 - Runs files in user specified order.
 - TOML configuration available.
@@ -289,7 +287,6 @@ by pressing the `Code` button in the banner at the top of the file.
 [FILE](#file) |
 [REPL mode](#repl-mode) |
 [Suite initialization and cleanup](#suite-initialization-and-cleanup) |
-[--runpytest](#runpytest-option) |
 [--color](#color-option) |
 [--style](#style-option) |
 [Extend an example across files](#extend-an-example-across-files) |
@@ -332,7 +329,7 @@ python -m pip install 'phmutest[color]'  # Unix/macOS
 ```
 
 The extra 'pytest' installs pytest and the plugin
-pytest-subtests to enable the --run-pytest option.
+pytest-subtests.
 pytest-subtests continues running subtests after
 the first subtest failure. pytest prints a very
 helpful traceback when FCBs break.
@@ -362,8 +359,8 @@ python -m pip install 'phmutest[dev]'  # Unix/macOS
 Install with all the extras.
 
 ```shell
-python -m pip install "phmutest[color, traceback, pytest, dev]"  # Windows
-python -m pip install 'phmutest[color, traceback, pytest, dev]'  # Unix/macOS
+python -m pip install "phmutest[color, traceback, dev]"  # Windows
+python -m pip install 'phmutest[color, traceback, dev]'  # Unix/macOS
 ```
 
 ## Usage
@@ -372,7 +369,7 @@ python -m pip install 'phmutest[color, traceback, pytest, dev]'  # Unix/macOS
 
 ```txt
 usage: phmutest [-h] [--version] [--skip [TEXT ...]] [--fixture DOTTED_PATH.FUNCTION]
-                [--runpytest {only,on-error}] [--share-across-files [FILE ...]]
+                [--share-across-files [FILE ...]]
                 [--setup-across-files [FILE ...]] [--select [GROUP ...] | --deselect
                 [GROUP ...]] [--config TOMLFILE] [--replmode] [--color]
                 [--style STYLE] [-g OUTFILE]
@@ -390,9 +387,6 @@ options:
   --skip [TEXT ...]     Any block that contains the substring TEXT is not tested.
   --fixture DOTTED_PATH.FUNCTION
                         Function run before testing.
-  --runpytest {only,on-error}
-                        only=run pytest only. on-error=run pytest if unittest fails.
-                        otherwise run unittest.
   --share-across-files [FILE ...]
                         Shares names from Markdown file to later positional files.
   --setup-across-files [FILE ...]
@@ -471,16 +465,6 @@ The test case test_doctest_optionflags_patch() shows an
 example with a fixture that applies a patch to
 doctest optionflags in --replmode.
 
-### Calling from python with --run-pytest
-
-If calling from python with --run-pytest
-Pytest is run on the generated testfile in a subprocess
-in a new Python interpreter. Any mock.patch patches or
-context changes will not be carried over to the new Python interpreter.
-Patches can only be made to phmutest patch points. [here](#patch-points)
-since these contribute to the generated testfile and not
-the context in which it runs.
-
 ### Calling phmutest from pytest
 
 In some of the tests the --fixture function is in the same pytest file as the
@@ -500,31 +484,6 @@ The fixture function must be at the top level of a .py file.
 - The preceding components identify parent folders. Folders should be
   relative to the current working directory which is typically the
   project root.
-
-## runpytest option
-
-The --runpytest option will run the generated testfile with pytest in a
-subprocess. Choose "on-error" to run pytest after unittest detected
-an error. Choose 'only' to skip running unittest and just run
-pytest. Install the `[pytest]` extra to install pytest
-and the pytest-subtests plugin.
-Without pytest-subtests the testing stops on the first error.
-This option has no effect in --replmode.
-
-```txt
---runpytest on-error
---runpytest only
-```
-
-The testfile is run with the pytest command line:
-
-```shell
-pytest -vv
-```
-
-The pytest command line can be set in a
-[TOML configuration](#toml-configuration) file.
-See an example in tests/toml/pytest_command.toml.
 
 ## color option
 
@@ -578,8 +537,6 @@ Zero or more of these TOML keys may be present in the `[tool.phmutest]` section.
 | share-across-files | --share-across-files  | list of path
 | setup-across-files | --setup-across-files  | list of path
 | fixture            | --fixture           | dotted path
-| runpytest          | --runpytest         | "only" or "on-error"
-| pytest_command     |                     | pytest shell command line as a string
 | select             | --select            | list of group directive name
 | deselect           | --deselect          | list of group directive name
 | color              | --color             | Use unquoted true to set

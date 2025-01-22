@@ -28,6 +28,4 @@ addopts = "--ignore tests/check_classifiers.py"
 # skip = []
 # color = false
 # style = ""
-# runpytest = ""
-# pytest_command = ""
 

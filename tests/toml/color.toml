@@ -15,5 +15,3 @@ deselect = []
 skip = []
 color = true
 style = ""
-runpytest = ""
-pytest_command = ""

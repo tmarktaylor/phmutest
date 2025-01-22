@@ -65,16 +65,6 @@ def main_argparser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "--runpytest",
-        choices=phmutest.config.RUNPYTEST_CHOICES,
-        help=(
-            "only=run pytest only."
-            " on-error=run pytest if unittest fails."
-            " otherwise run unittest."
-        ),
-    )
-
-    parser.add_argument(
         "--share-across-files",
         help="Shares names from Markdown file to later positional files.",
         metavar="FILE",

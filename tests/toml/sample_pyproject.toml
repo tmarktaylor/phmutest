@@ -40,8 +40,6 @@ skip = ["hello-world", "abcd"]   # ] in string ignored, no breakage
 skipbogus = ["333"]   # ] in string ignored, no breakage
 globs = "a,b"
 style = ""
-runpytest = ""
-pytest_command = ""
 
 [tool.someothertool]
 skip = ["bogushello-world", "bogusabcd"]   # same keys as phmutest

@@ -52,7 +52,6 @@ class PhmResult:
     is_success: Optional[bool]
     metrics: Metrics
     log: List[List[str]]
-    pytest_returncode: Optional[int]
 ```
 
 ## Example

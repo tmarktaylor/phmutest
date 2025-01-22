@@ -3,7 +3,6 @@
 import copy
 import importlib
 import itertools
-import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -40,39 +39,28 @@ def run_code(
             "_phmPrinter.testfile_name = None", f'_phmPrinter.testfile_name = r"{dest}"'
         )
         _ = dest.write_text(testfile, encoding="utf-8")
-        if args.runpytest is None or args.runpytest == "on-error":
-            # unittest is the default test runner. Run unittest now.
-            sys.path.append(tmpdir)
-            unittest_args = ["unittest.main"]
-            if settings.extra_args:
-                unittest_args.extend(settings.extra_args)
-            # Run the testfile
-            testprog: unittest.TestProgram = unittest.main(
-                module=genmodulename, argv=unittest_args, exit=False
-            )
-            # Note: unittest should have already imported genmodulename.
-            phmgen = importlib.import_module(genmodulename)
-            log = copy.copy(phmgen._phm_log)
-            metrics = phmutest.summary.compute_metrics(
-                num_files=len(args.files),
-                suite_errors=len(testprog.result.errors),
-                num_deselected=-1,  # fill in later in main:generate_and_run
-                log=log,
-            )
-            phmresult = phmutest.summary.PhmResult(
-                test_program=testprog,
-                is_success=testprog.result.wasSuccessful(),
-                metrics=metrics,
-                log=log,
-                pytest_returncode=None,
-            )
-        else:
-            phmresult = phmutest.summary.EMPTY_PHMRESULT
-
-        if args.runpytest == "only" or (
-            args.runpytest == "on-error" and not phmresult.is_success
-        ):
-            command = f"{sys.executable} -m {settings.pytest_command} {dest}"
-            completed = subprocess.run(command, shell=True, check=False, text=True)
-            phmresult.pytest_returncode = completed.returncode
+        # unittest is the default test runner. Run unittest now.
+        sys.path.append(tmpdir)
+        unittest_args = ["unittest.main"]
+        if settings.extra_args:
+            unittest_args.extend(settings.extra_args)
+        # Run the testfile
+        testprog: unittest.TestProgram = unittest.main(
+            module=genmodulename, argv=unittest_args, exit=False
+        )
+        # Note: unittest should have already imported genmodulename.
+        phmgen = importlib.import_module(genmodulename)
+        log = copy.copy(phmgen._phm_log)
+        metrics = phmutest.summary.compute_metrics(
+            num_files=len(args.files),
+            suite_errors=len(testprog.result.errors),
+            num_deselected=-1,  # fill in later in main:generate_and_run
+            log=log,
+        )
+        phmresult = phmutest.summary.PhmResult(
+            test_program=testprog,
+            is_success=testprog.result.wasSuccessful(),
+            metrics=metrics,
+            log=log,
+        )
     return phmresult

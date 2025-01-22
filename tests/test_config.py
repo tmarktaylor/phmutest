@@ -131,14 +131,6 @@ def test_setup_across_not_exists():
     assert "NotAnExistingFile2.md not found" in str(exc_info.value)
 
 
-def test_bad_runpytest_key():
-    """runpytest key in .toml not an allowed value."""
-    command = "--config tests/toml/badrunpytest.toml --log"
-    with pytest.raises(ValueError) as exc_info:
-        phmutest.main.command(command)
-    assert f"must be one of {phmutest.config.RUNPYTEST_CHOICES}" in str(exc_info.value)
-
-
 def test_skip_pattern_override():
     """Command line skip pattern overrides the config file skip key."""
     command = "--config tests/toml/sample_pyproject.toml --skip partying --log"
@@ -402,46 +394,3 @@ def test_style_override():
     assert len(args.files) == 2
     assert args.style == "dracula"
     settings = get_settings(commandline_args)
-
-
-def test_runpytest_empty_str():
-    """Show empty string runpytest key indicates no value."""
-    commandline_args = ["--config", "tests/toml/project.toml"]
-    args = process_args(commandline_args)
-    assert args.runpytest is None
-
-
-def test_runpytest_key():
-    """Show runpytest key value is read from .toml."""
-    commandline_args = ["--config", "tests/toml/runpytest.toml"]
-    args = process_args(commandline_args)
-    assert args.runpytest == "on-error"
-
-
-def test_runpytest_override():
-    """Show --runpytest on command line has precedence over runpytest key from TOML."""
-    commandline_args = ["--config", "tests/toml/runpytest.toml", "--runpytest", "only"]
-    args = process_args(commandline_args)
-    assert args.runpytest == "only"
-
-
-def test_runpytest_and_replmode(capsys):
-    """Show runpytest key value is read from .toml."""
-    commandline_args = ["README.md", "--runpytest", "only", "--replmode"]
-    _ = get_settings(commandline_args)
-    output = capsys.readouterr().out.strip()
-    assert "--runpytest has no effect when used with --replmode." in output
-
-
-def test_pytest_command_empty_str():
-    """Show empty string pytest_command key indicates the default value."""
-    commandline_args = ["--config", "tests/toml/runpytest.toml"]
-    settings = get_settings(commandline_args)
-    assert settings.pytest_command == "pytest -vv"
-
-
-def test_pytest_command_key():
-    """Show the pytest_command key value is read from .toml."""
-    commandline_args = ["--config", "tests/toml/pytest_command.toml"]
-    settings = get_settings(commandline_args)
-    assert settings.pytest_command == "pytest -vv --capture=tee-sys"

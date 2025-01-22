@@ -109,7 +109,6 @@ class PhmResult:
     is_success: Optional[bool]
     metrics: Metrics
     log: List[List[str]]
-    pytest_returncode: Optional[int]
 
 
 EMPTY_METRICS = Metrics(
@@ -129,7 +128,6 @@ EMPTY_PHMRESULT = PhmResult(
     is_success=None,
     metrics=EMPTY_METRICS,
     log=[[]],
-    pytest_returncode=None,
 )
 """Used when --generate and --replmode to avoid an Optional return value."""
 
@@ -208,7 +206,6 @@ def show_args(args: argparse.Namespace) -> None:
     ]
     single = [
         "fixture",
-        "runpytest",
         "config",
         "replmode",
         "color",
@@ -305,14 +302,6 @@ def show_results(
 ) -> None:
     """Print requested test results."""
     args = settings.args  # rename
-    if args.runpytest in ["only", "on-error"]:
-        print(f"pytest subprocess returncode= {phmresult.pytest_returncode}")
-
-    # When the runpytest is "only" unittest does not run
-    # and there are no more results to show.
-    if args.runpytest == "only":
-        return
-
     if args.summary:
         print()
         print("summary:")

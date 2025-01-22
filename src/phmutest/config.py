@@ -7,13 +7,11 @@ Read values from [tool.phmuttest] table in a .toml document.
         exclude-globs
         share-across-files
         setup-across-files
-        runpytest
         fixture
         select
         deselect
         color
         style
-        pytest_command
     Command positional FILEs extend configured files list.
     For all other keys, if also present as command line options
     the command line options take precedence.
@@ -40,36 +38,25 @@ else:
 KnownArgs = Tuple[argparse.Namespace, List[str]]
 
 
-RUNPYTEST_CHOICES = ["only", "on-error"]
-"""Choices for runpytest key."""
-
-
-PYTEST_COMMAND = "pytest -vv"
-"""Command line to invoke pytest."""
-
-
 @dataclass
 class Settings:
     args: argparse.Namespace
     extra_args: List[str]
-    pytest_command: str
     highlighter: phmutest.syntax.Highlighter
 
 
 def get_settings(known_args: KnownArgs) -> Settings:
     """Determine settings from caller's known args and config file."""
     args = known_args[0]
-    args, pytest_command = process_config_file(args)
+    args = process_config_file(args)
     check_across_files(args)
     remove_duplicate_files(args)
-    check_disallowed(args)
     highlighter: phmutest.syntax.Highlighter = phmutest.syntax.Highlighter(
         style=args.style
     )
     return Settings(
         args=args,
         extra_args=known_args[1],
-        pytest_command=pytest_command,
         highlighter=highlighter,
     )
 
@@ -95,12 +82,6 @@ def remove_duplicate_files(args: argparse.Namespace) -> None:
         if f not in unique_files:
             unique_files.append(f)
     args.files = unique_files
-
-
-def check_disallowed(args: argparse.Namespace) -> None:
-    """Point out combinations of args that don't make sense."""
-    if args.runpytest and args.replmode:
-        print("--runpytest has no effect when used with --replmode.")
 
 
 class ConfigSection:
@@ -182,21 +163,11 @@ class ConfigSection:
         else:
             return None
 
-    def get_runpytest_choice(self) -> Optional[str]:
-        """Get runpytest key, if present it must be one of choices."""
-        runpytest: Optional[str] = self.get_string_key("runpytest")
-        if runpytest is not None:
-            if runpytest not in RUNPYTEST_CHOICES:
-                raise ValueError(f"{runpytest} must be one of {RUNPYTEST_CHOICES}")
-        return runpytest
 
-
-def process_config_file(
-    args: argparse.Namespace,
-) -> Tuple[argparse.Namespace, str]:
+def process_config_file(args: argparse.Namespace) -> argparse.Namespace:
     """Rewrite args using values from the .toml configuration file."""
     if not args.config:
-        return args, PYTEST_COMMAND
+        return args
     toml = ConfigSection(args)
     section = toml.section  # rename
 
@@ -214,12 +185,9 @@ def process_config_file(
         "setup-across-files"
     )
     args.fixture = args.fixture or toml.get_fixture_path()
-    args.runpytest = args.runpytest or toml.get_runpytest_choice()
     args.color = args.color or section.get("color", False)
     args.style = args.style or toml.get_string_key("style")
     args.select = args.select or section.get("select", [])
     args.deselect = args.deselect or section.get("deselect", [])
     toml.validate_select_and_deselect(args.select, args.deselect)
-    pytest_command = toml.get_string_key("pytest_command", PYTEST_COMMAND)
-    assert pytest_command is not None  # avoid mypy nag
-    return args, pytest_command
+    return args
