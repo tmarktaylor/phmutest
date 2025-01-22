@@ -75,4 +75,4 @@ def run_code(
             command = f"{sys.executable} -m {settings.pytest_command} {dest}"
             completed = subprocess.run(command, shell=True, check=False, text=True)
             phmresult.pytest_returncode = completed.returncode
-        return phmresult
+    return phmresult
