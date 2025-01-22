@@ -36,3 +36,13 @@ def test_pytest_returncode_is_none():
     line = "README.md"
     phmresult = phmutest.main.command(line)
     assert phmresult.pytest_returncode is None
+
+
+def test_cleanups():
+    """Show unittest.doModuleCleanups() gets called."""
+    line = (
+        "tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir"
+        " --log --runpytest only"
+    )
+    phmresult = phmutest.main.command(line)
+    assert phmresult.pytest_returncode == 1, phmresult.pytest_returncode
