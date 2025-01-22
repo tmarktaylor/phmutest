@@ -11,8 +11,9 @@ py -m phmutest tests/md/tracer_repl.md --log --replmode --color
 py -m phmutest tests/md/tracer.md --log -c
 rem
 rem This test has intentional failing FCBs.
-py -m phmutest tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir --log --runpytest only
-
+rem todo- This test works on local Windows dev machine but fails on GitHub action dev.yml (Windows).
+rem Observed ERROR ::::Documents and Settings - PermissionError: [WinError 5] in the action log.
+rem py -m phmutest tests/md/cleanups.md --fixture docs.fix.code.chdir.change_dir --log --runpytest only
 isort . --profile black --skip "*_cache"
 black **/*.py --check --force-exclude="tests/py|dev|t.py|t[0-9].py"
 mypy src/phmutest --strict
