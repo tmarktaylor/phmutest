@@ -208,7 +208,8 @@ def make_markdown_map(
             )
         elif location and "_phm_testcase.assertEqual(" in line:
             # Add a testfile line for the expected output assertEqual statement.
-            # Use the 3 values left over from the with _phmPrinter line
+            # Use built_from, open_fence left over from the
+            # 'if "with _phmPrinter" in line:' if suite.
             markdown_map.add_expected_output_check(
                 built_from=built_from,
                 open_fence=open_fence,
