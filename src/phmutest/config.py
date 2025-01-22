@@ -186,11 +186,8 @@ class ConfigSection:
         """Get runpytest key, if present it must be one of choices."""
         runpytest: Optional[str] = self.get_string_key("runpytest")
         if runpytest is not None:
-            # This is a development time sanity check.
-            # main_argparser() checks the runpytest arg with choices=.
-            assert (
-                runpytest in RUNPYTEST_CHOICES
-            ), f"{runpytest} must be one of {RUNPYTEST_CHOICES}"
+            if runpytest not in RUNPYTEST_CHOICES:
+                raise ValueError(f"{runpytest} must be one of {RUNPYTEST_CHOICES}")
         return runpytest
 
 

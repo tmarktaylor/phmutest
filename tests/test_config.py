@@ -131,6 +131,14 @@ def test_setup_across_not_exists():
     assert "NotAnExistingFile2.md not found" in str(exc_info.value)
 
 
+def test_bad_runpytest_key():
+    """runpytest key in .toml not an allowed value."""
+    command = "--config tests/toml/badrunpytest.toml --log"
+    with pytest.raises(ValueError) as exc_info:
+        phmutest.main.command(command)
+    assert f"must be one of {phmutest.config.RUNPYTEST_CHOICES}" in str(exc_info.value)
+
+
 def test_skip_pattern_override():
     """Command line skip pattern overrides the config file skip key."""
     command = "--config tests/toml/sample_pyproject.toml --skip partying --log"
