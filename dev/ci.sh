@@ -16,4 +16,4 @@ isort . --profile black --skip "*_cache"
 black **/*.py --check --force-exclude="tests/py|dev|t.py|t[0-9].py"
 mypy src/phmutest --strict
 mypy tests/test_type_packaging.py --strict
-flake8 --max-complexity=10 --exclude .mine,tests/py,dev,t.py|t[0-9].py
+flake8 --max-complexity=10 --exclude .mine,tests/py,dev,t.py,t[0-9].py
