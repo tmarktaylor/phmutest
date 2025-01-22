@@ -7,32 +7,63 @@
 
 ### Changed
 
-- Allow malformed dotted path to raise exception. ([`93b0af3`](https://github.com/tmarktaylor/phmutest/commit/93b0af3))
-- Rewrite toml configuration logic, add code for new features. ([`0049211`](https://github.com/tmarktaylor/phmutest/commit/0049211))
-- Move fill_in() and helpers to new file fillin.py. ([`f1a9dee`](https://github.com/tmarktaylor/phmutest/commit/f1a9dee)) ([`bf240be`](https://github.com/tmarktaylor/phmutest/commit/bf240be)) ([`2af6fc7`](https://github.com/tmarktaylor/phmutest/commit/2af6fc7)) ([`9c0c702`](https://github.com/tmarktaylor/phmutest/commit/9c0c702))
-- Move SysTool from skip.py to systool.py ([`57b831b`](https://github.com/tmarktaylor/phmutest/commit/57b831b))
-- No longer de-indenting setup/teardown blocks. ([`3641b32`](https://github.com/tmarktaylor/phmutest/commit/3641b32))
-- Move docs/recent_changes.md to CHANGELOG.md and format based on advice in [common-changelog] and [keep a changelog]. ([`43b2bd7`](https://github.com/tmarktaylor/phmutest/commit/43b2bd7)) ([`6b75fb6`](https://github.com/tmarktaylor/phmutest/commit/6b75fb6))  ([`8ff5a1e`](https://github.com/tmarktaylor/phmutest/commit/8ff5a1e))
+- Allow malformed dotted path to raise exception.
+  ([`93b0af3`](https://github.com/tmarktaylor/phmutest/commit/93b0af3))
+- Rewrite toml configuration logic, add code for new features.
+  ([`0049211`](https://github.com/tmarktaylor/phmutest/commit/0049211))
+- Move fill_in() and helpers to new file fillin.py.
+  ([`f1a9dee`](https://github.com/tmarktaylor/phmutest/commit/f1a9dee))
+  ([`bf240be`](https://github.com/tmarktaylor/phmutest/commit/bf240be))
+  ([`2af6fc7`](https://github.com/tmarktaylor/phmutest/commit/2af6fc7))
+  ([`9c0c702`](https://github.com/tmarktaylor/phmutest/commit/9c0c702))
+- Move SysTool from skip.py to systool.py
+  ([`57b831b`](https://github.com/tmarktaylor/phmutest/commit/57b831b))
+- No longer de-indenting setup/teardown blocks.
+  ([`3641b32`](https://github.com/tmarktaylor/phmutest/commit/3641b32))
+- Move docs/recent_changes.md to CHANGELOG.md and format based on advice in [common-changelog] and [keep a changelog].
+  ([`43b2bd7`](https://github.com/tmarktaylor/phmutest/commit/43b2bd7))
+  ([`6b75fb6`](https://github.com/tmarktaylor/phmutest/commit/6b75fb6))
+  ([`8ff5a1e`](https://github.com/tmarktaylor/phmutest/commit/8ff5a1e))
 
 ### Added
 
-- New features: Show broken FCBs, traceback, --color, --runpytest, --stdout, sytax highlighting --style. ([`8ab39c3`](https://github.com/tmarktaylor/phmutest/commit/8ab39c3)) ([`9f83e09`](https://github.com/tmarktaylor/phmutest/commit/9f83e09)) ([`153022e`](https://github.com/tmarktaylor/phmutest/commit/153022e)) ([`8a3b4b2`](https://github.com/tmarktaylor/phmutest/commit/8a3b4b2)) ([`a79d946`](https://github.com/tmarktaylor/phmutest/commit/a79d946))
-- Support doModuleCleanups() for --runpytest. ([`0de3c40`](https://github.com/tmarktaylor/phmutest/commit/0de3c40)) ([`c410da7`](https://github.com/tmarktaylor/phmutest/commit/c410da7))
-- Add ':' as a delimiter of the FCB info string. ([`44c0032`](https://github.com/tmarktaylor/phmutest/commit/44c0032)) ([`49f49fb`](https://github.com/tmarktaylor/phmutest/commit/49f49fb)) ([`039cb0e`](https://github.com/tmarktaylor/phmutest/commit/039cb0e))
-- Add dev folder local development scripts. ([`785ddcf`](https://github.com/tmarktaylor/phmutest/commit/785ddcf)) ([`613cfbf`](https://github.com/tmarktaylor/phmutest/commit/613cfbf))
-- Add note to docs: Each block must start with no indent level. ([`139acd6`](https://github.com/tmarktaylor/phmutest/commit/139acd6))
+- New features: Show broken FCBs, traceback, --color, --runpytest, --stdout, syntax highlighting --style.
+  ([`8ab39c3`](https://github.com/tmarktaylor/phmutest/commit/8ab39c3))
+  ([`9f83e09`](https://github.com/tmarktaylor/phmutest/commit/9f83e09))
+  ([`153022e`](https://github.com/tmarktaylor/phmutest/commit/153022e))
+  ([`8a3b4b2`](https://github.com/tmarktaylor/phmutest/commit/8a3b4b2))
+  ([`a79d946`](https://github.com/tmarktaylor/phmutest/commit/a79d946))
+- Support doModuleCleanups() for --runpytest.
+  ([`0de3c40`](https://github.com/tmarktaylor/phmutest/commit/0de3c40))
+  ([`c410da7`](https://github.com/tmarktaylor/phmutest/commit/c410da7))
+- Add ':' as a delimiter of the FCB info string.
+  ([`44c0032`](https://github.com/tmarktaylor/phmutest/commit/44c0032))
+  ([`49f49fb`](https://github.com/tmarktaylor/phmutest/commit/49f49fb))
+  ([`039cb0e`](https://github.com/tmarktaylor/phmutest/commit/039cb0e))
+- Add dev folder local development scripts.
+  ([`785ddcf`](https://github.com/tmarktaylor/phmutest/commit/785ddcf))
+  ([`613cfbf`](https://github.com/tmarktaylor/phmutest/commit/613cfbf))
+- Add note to docs: Each block must start with no indent level.
+  ([`139acd6`](https://github.com/tmarktaylor/phmutest/commit/139acd6))
 
 ### Removed
 
-- Remove cases.deindent() since no longer used. ([`8f64dfd`](https://github.com/tmarktaylor/phmutest/commit/8f64dfd))
-- Delete junit XML example. ([`4397244`](https://github.com/tmarktaylor/phmutest/commit/4397244))
-- Remove requirement for typing module. ([`e8051f6`](https://github.com/tmarktaylor/phmutest/commit/e8051f6))
-- Remove extra blank line in generated testfile. ([`a4424ff`](https://github.com/tmarktaylor/phmutest/commit/a4424ff))
+- Remove cases.deindent() since no longer used.
+  ([`8f64dfd`](https://github.com/tmarktaylor/phmutest/commit/8f64dfd))
+- Delete junit XML example.
+  ([`4397244`](https://github.com/tmarktaylor/phmutest/commit/4397244))
+- Remove requirement for typing module.
+  ([`e8051f6`](https://github.com/tmarktaylor/phmutest/commit/e8051f6))
+- Remove extra blank line in generated testfile.
+  ([`a4424ff`](https://github.com/tmarktaylor/phmutest/commit/a4424ff))
 
 ### Fixed
 
-- Update main.py- Add docstrings, fix entry_point(). ([`7c23dae`](https://github.com/tmarktaylor/phmutest/commit/7c23dae))
-- Doc fixes- ([`2fcdfc9`](https://github.com/tmarktaylor/phmutest/commit/2fcdfc9)) ([`9aaf826`](https://github.com/tmarktaylor/phmutest/commit/9aaf826))
+- Update main.py- Add docstrings, fix entry_point().
+  ([`7c23dae`](https://github.com/tmarktaylor/phmutest/commit/7c23dae))
+- Doc fixes-
+  ([`2fcdfc9`](https://github.com/tmarktaylor/phmutest/commit/2fcdfc9))
+  ([`9aaf826`](https://github.com/tmarktaylor/phmutest/commit/9aaf826))
 
 ## [0.0.4] - 2024-09-05
 
