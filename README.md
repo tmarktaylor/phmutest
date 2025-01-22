@@ -327,7 +327,8 @@ The extra 'color' enables the --color and
 --style options.
 
 ```shell
-python -m pip install phmutest[color]
+python -m pip install "phmutest[color]"  # Windows
+python -m pip install 'phmutest[color]'  # Unix/macOS
 ```
 
 The extra 'pytest' installs pytest and the plugin
@@ -337,7 +338,8 @@ the first subtest failure. pytest prints a very
 helpful traceback when FCBs break.
 
 ```shell
-python -m pip install phmutest[pytest]
+python -m pip install "phmutest[pytest]"  # Windows
+python -m pip install 'phmutest[pytest]'  # Unix/macOS
 ```
 
 The extra 'traceback' enables [stackprinter][21] traceback
@@ -345,20 +347,23 @@ printing for each broken FCB. The traceback is
 slightly different than pytest's.
 
 ```shell
-python -m pip install phmutest[traceback]
+python -m pip install "phmutest[traceback]"  # Windows
+python -m pip install 'phmutest[traceback]'  # Unix/macOS
 ```
 
 Install with the extra 'dev' to install locally the same tools used by
 the continuous integration scripts.
 
 ```shell
-python -m pip install phmutest[dev]
+python -m pip install "phmutest[dev]"  # Windows
+python -m pip install 'phmutest[dev]'  # Unix/macOS
 ```
 
 Install with all the extras.
 
 ```shell
-python -m pip install phmutest[color, traceback, pytest, dev]
+python -m pip install "phmutest[color, traceback, pytest, dev]"  # Windows
+python -m pip install 'phmutest[color, traceback, pytest, dev]'  # Unix/macOS
 ```
 
 ## Usage
