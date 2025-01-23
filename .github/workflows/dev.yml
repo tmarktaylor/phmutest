@@ -58,7 +58,7 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/src
       continue-on-error: true
 
-    - name: Linux/macOS  Coverage
+    - name: Linux/macOS Coverage
       run: |
         chmod u+x dev/runcoverage.sh
         ./dev/runcoverage.sh
