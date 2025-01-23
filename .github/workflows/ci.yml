@@ -83,7 +83,7 @@ jobs:
           phmutest tests/md/optionflags.md --log --replmode --fixture tests.test_patching.setflags
           phmutest docs/fix/code/globdemo.md --fixture docs.fix.code.globdemo.init_globals --log
           phmutest tests/md/project.md --report
-      - name: Broken examples
+      - name: Broken examples (1 error annotation per version)
         run: |
           phmutest README.md tests/md/directive1.md --log --color --style one-dark
           phmutest tests/md/tracer.md --log --color
