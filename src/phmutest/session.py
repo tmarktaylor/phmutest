@@ -51,7 +51,9 @@ class ExampleOutcomeRunner(doctest.DocTestRunner):
         line_number = example.lineno + 1
         self.phm_outcomes[line_number] = "error"
         self.phm_number_of_errors += 1
-        exception_class = phmutest.printer.get_exception_description(exc_info[1])
+        exception_class = phmutest.printer.get_exception_description(
+            exc_info[0], exc_info[1]
+        )
         self.phm_error_reasons[line_number] = (
             exception_class,
             line_number,

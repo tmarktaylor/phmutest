@@ -30,9 +30,9 @@ TRACE = "phmtrace"
 DIFFS = "phmdiffs"
 
 
-def get_exception_description(exc_value) -> str:  # type: ignore
+def get_exception_description(exc_type, exc_value) -> str:  # type: ignore
     """Return formatted exception class name and the instance value."""
-    lines = traceback.format_exception_only(exc_value)
+    lines = traceback.format_exception_only(exc_type, exc_value)
     return lines[-1].rstrip()
 
 
@@ -109,7 +109,7 @@ class Printer:
         else:
             # Show FCB line where exception propagates out of the FCB.
             # Show exception class name and value.
-            reason = get_exception_description(exc_value)
+            reason = get_exception_description(exc_type, exc_value)
             exc_lineno_str = str(exc_traceback.tb_lineno)
             if exc_type == AssertionError:
                 # The AssertionError is raised by either:
