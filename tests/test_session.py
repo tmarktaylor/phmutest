@@ -121,9 +121,13 @@ def test_progress(capsys, endswith_checker):
         lines = traceback.format_exception_only(exc_info[0], exc_info[1])
         description = lines[-1]
         description = description.replace("\n", "")
+    column_3_width = max(
+        len(description), len("AssertionError: --skip identified block")
+    )
+    dashes = "-" * column_3_width
 
     expected = f"""location|label            result  reason
-        ------------------------  ------  ------------------------------------------------------
+        ------------------------  ------  {dashes}
         tests/md/replerror.md:3.  pass
         tests/md/replerror.md:7.  pass
         tests/md/replerror.md:11  pass
@@ -133,7 +137,7 @@ def test_progress(capsys, endswith_checker):
         tests/md/replerror.md:40  error   AssertionError: --skip identified block
         tests/md/replerror.md:49  skip    requires >=py3.9999
         tests/md/replerror.md:57  pass
-        ------------------------  ------  ------------------------------------------------------
+        ------------------------  ------  {dashes}
         location|label          result
         ----------------------  ------
         tests/md/example1.md:5  pass
