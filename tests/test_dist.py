@@ -129,21 +129,21 @@ def test_install_requires():
     assert setup_values == requirements_values
 
 
-def notest_extras_require_color():
+def test_extras_require_color():
     """setup.cfg extras_require:color values are in dev/requirements_dev.txt."""
     requirements_values = file_dependencies("dev/requirements_dev.txt")
     setup_color_values = setup_dependencies("options.extras_require", "color")
     assert setup_color_values.issubset(requirements_values)
 
 
-def notest_extras_require_traceback():
+def test_extras_require_traceback():
     """setup.cfg extras_require:traceback values are in dev/requirements_dev.txt."""
     requirements_values = file_dependencies("dev/requirements_dev.txt")
     setup_traceback_values = setup_dependencies("options.extras_require", "traceback")
     assert setup_traceback_values.issubset(requirements_values)
 
 
-def notest_extras_require_dev():
+def test_extras_require_dev():
     """setup.cfg extras_require:dev values are in dev/requirements_dev.txt."""
     requirements_values = file_dependencies("dev/requirements_dev.txt")
     setup_dev_values = setup_dependencies("options.extras_require", "dev")
