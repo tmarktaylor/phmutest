@@ -607,7 +607,7 @@ def test_usage_options():
     assert fcb_options == help_options
 
 
-@pytest.mark.skip("Minor version specific. Run on py 3.11.")
+@pytest.mark.skip("Minor version specific. Run manually on py 3.11.")
 def test_usage_text_exactly():
     """Check exact --help text documented in README.md."""
     readme_fcbs = phmutest.tool.FCBChooser("README.md")
