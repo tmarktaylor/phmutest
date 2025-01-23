@@ -4,7 +4,7 @@ py -m coverage run --branch --source=src --append -m phmutest docs/repl/REPLexam
 py -m coverage run --branch --source=src --append -m phmutest --version
 py -m coverage run --branch --source=src --append -m phmutest tests/md/no_code_blocks.md --log
 py -m coverage run --branch --source=src --append -m phmutest README.md
-py -m coverage run --branch --source=src --append -m phmutest README.md --log --style
+py -m coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
 py -m coverage run --branch --source=src --append -m phmutest README.md --log --style default
 py -m coverage run --branch --source=src --append -m pytest tests
 rem Coverage for running a generated testfile with errors separately with pytest.

@@ -4,7 +4,7 @@ python3 -m coverage run --branch --source=src --append -m phmutest docs/repl/REP
 python3 -m coverage run --branch --source=src --append -m phmutest --version
 python3 -m coverage run --branch --source=src --append -m phmutest tests/md/no_code_blocks.md --log
 python3 -m coverage run --branch --source=src --append -m phmutest README.md
-python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style
+python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
 python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style default
 python3 -m coverage run --branch --source=src --append -m pytest tests
 # Coverage for running a generated testfile with errors separately with pytest.

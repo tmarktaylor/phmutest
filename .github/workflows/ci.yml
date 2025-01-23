@@ -85,9 +85,9 @@ jobs:
           phmutest tests/md/project.md --report
       - name: Broken examples
         run: |
-          phmutest README.md tests/md/directive1.md --log --color --style
+          phmutest README.md tests/md/directive1.md --log --color --style one-dark
           phmutest tests/md/tracer.md --log --color
-          phmutest docs/repl/REPLexample.md --log --replmode -c --style
+          phmutest docs/repl/REPLexample.md --log --replmode -c --style one-dark
           phmutest tests/md/tracer_repl.md --log --replmode -c
         continue-on-error: true
 
@@ -176,7 +176,7 @@ jobs:
         coverage run --branch --source=src --append -m phmutest --version
         coverage run --branch --source=src --append -m phmutest tests/md/no_code_blocks.md --log
         coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m phmutest README.md --log --style
+        coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
         coverage run --branch --source=src --append -m phmutest README.md --log --style default
         coverage run --branch --source=src --append -m pytest tests
         # Coverage for running a generated testfile with errors separately with pytest.
