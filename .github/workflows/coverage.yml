@@ -26,15 +26,11 @@ jobs:
         pip install coverage
         pip install -r tests/requirements.txt
         pip freeze
-    - name: Tests, coverage report
+
+    - name: Coverage report
       run: |
-        coverage erase
-        coverage run --branch --source=src -m phmutest --version
-        coverage run --branch --source=src --append -m phmutest README.md --report
-        coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m pytest -vv tests
-        coverage report --show-missing
-        coverage xml
+        chmod u+x .github/workflows/coverage.sh
+        ./.github/workflows/coverage.sh
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       continue-on-error: true

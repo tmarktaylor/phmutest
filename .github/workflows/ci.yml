@@ -151,39 +151,10 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.x
-    - name: Coverage Report
+    - name: Coverage report
       run: |
-        python -m pip install --upgrade pip
-        pip install coverage
-        coverage erase
-        coverage run --branch --source=src --append -m phmutest --version
-
-        # Exercise code that handles import errors when the
-        # extras modules are not installed.
-        coverage run --branch --source=src --append -m phmutest README.md --log
-
-        # Manually install the setup.cfg extras here.
-        # Typically they are installed by
-        # pip install phmutest[colors, pytest, traceback]
-        # Here, we run checked out sources for coverage, not an installed phmutest.
-        pip install colorama
-        pip install pygments
-        pip install pytest
-        pip install pytest-subtests
-        pip install stackprinter
-        coverage run --branch --source=src --append -m phmutest README.md --report
-        coverage run --branch --source=src --append -m phmutest docs/repl/REPLexample.md --log --replmode
-        coverage run --branch --source=src --append -m phmutest --version
-        coverage run --branch --source=src --append -m phmutest tests/md/no_code_blocks.md --log
-        coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
-        coverage run --branch --source=src --append -m phmutest README.md --log --style default
-        coverage run --branch --source=src --append -m pytest tests
-        # Coverage for running a generated testfile with errors separately with pytest.
-        phmutest tests\md\does_not_print.md --generate dev/test_temptestfile.py
-        coverage run --branch --source=src --append -m pytest dev/test_temptestfile.py
-        coverage report --show-missing --precision=2
-        coverage xml
+        chmod u+x .github/workflows/coverage.sh
+        ./.github/workflows/coverage.sh
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       continue-on-error: true
