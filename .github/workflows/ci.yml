@@ -85,6 +85,9 @@ jobs:
           phmutest tests/md/project.md --report
       - name: Broken examples
         run: |
+          # Install color and traceback extras. This should be last step in steps:.
+          # phmutest was installed above.
+          pip install --no-deps '.[color, traceback]'
           chmod u+x .github/workflows/broken_examples.sh
           ./.github/workflows/broken_examples.sh
 
