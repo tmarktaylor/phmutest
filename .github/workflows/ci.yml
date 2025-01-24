@@ -87,9 +87,6 @@ jobs:
         run: |
           chmod u+x .github/workflows/broken_examples.sh
           ./.github/workflows/broken_examples.sh
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-        continue-on-error: true
 
 
   inspect:
