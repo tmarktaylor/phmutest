@@ -653,5 +653,4 @@ breakage in future versions. Look for examples in tests/test_patching.py.
 [17]: https://pypi.python.org/pypi/phmdoctest
 [18]: https://docs.python.org/3/library/unittest.html
 [19]: https://pypi.python.org/pypi/pygments
-[20]: https://docs.pytest.org
 [21]: https://github.com/cknd/stackprinter/blob/master/README.md
