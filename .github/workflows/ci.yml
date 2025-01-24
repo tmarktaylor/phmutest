@@ -83,12 +83,12 @@ jobs:
           phmutest tests/md/optionflags.md --log --replmode --fixture tests.test_patching.setflags
           phmutest docs/fix/code/globdemo.md --fixture docs.fix.code.globdemo.init_globals --log
           phmutest tests/md/project.md --report
-      - name: Broken examples (1 error annotation per version)
+      - name: Broken examples
         run: |
-          phmutest README.md tests/md/directive1.md --log --color --style one-dark
-          phmutest tests/md/tracer.md --log --color
-          phmutest docs/repl/REPLexample.md --log --replmode -c --style one-dark
-          phmutest tests/md/tracer_repl.md --log --replmode -c
+          chmod u+x .github/workflows/broken_examples.sh
+          ./.github/workflows/broken_examples.sh
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         continue-on-error: true
 
 
