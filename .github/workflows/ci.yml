@@ -151,6 +151,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.x
+    - name: Install phmutest
+      run: |
+        python -m pip install --upgrade pip
+        pip install coverage
+        pip install -r tests/requirements.txt
+
     - name: Coverage report
       run: |
         chmod u+x .github/workflows/coverage.sh
