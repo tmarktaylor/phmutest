@@ -159,8 +159,14 @@ jobs:
 
     - name: Coverage report
       run: |
+        coverage erase
+        coverage run --branch --source=src --append -m phmutest --version
+        python -m phmutest tests/md/does_not_print.md --generate dev/test_temptestfile.py
         chmod u+x .github/workflows/coverage.sh
         ./.github/workflows/coverage.sh
+        coverage run --branch --source=src --append -m pytest tests
+        coverage report --show-missing --precision=2
+        coverage xml
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       continue-on-error: true
