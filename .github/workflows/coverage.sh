@@ -21,7 +21,7 @@ python3 -m coverage run --branch --source=src --append -m phmutest README.md --l
 python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style default
 python3 -m coverage run --branch --source=src --append -m pytest tests
 # Coverage for running a generated testfile with errors separately with pytest.
-python3 -m phmutest tests\md\does_not_print.md --generate dev/test_temptestfile.py
+python3 -m phmutest tests/md/does_not_print.md --generate dev/test_temptestfile.py
 python3 -m coverage run --branch --source=src --append -m pytest dev/test_temptestfile.py
 python3 -m coverage report --show-missing --precision=2
 python3 -m coverage xml
