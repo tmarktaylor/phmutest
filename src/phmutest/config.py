@@ -94,7 +94,7 @@ class ConfigSection:
             toml_config = tomllib.load(f)
         self.section = toml_config["tool"]["phmutest"]
 
-    def get_string_key(self, key: str, default: str = "") -> Optional[str]:
+    def get_string_key(self, key: str) -> Optional[str]:
         """Return key's value or None if key is empty string or key does not exist.
 
         If default is truthy, return it instead of None.
@@ -102,8 +102,6 @@ class ConfigSection:
         value = self.section.get(key, None)
         if value:
             return str(value)  # avoid mypy nag
-        elif default:
-            return default
         else:
             return None
 
