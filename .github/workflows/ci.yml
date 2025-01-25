@@ -176,7 +176,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml # optional
-        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest # optional
+        flags: python-${{ steps.setuppython.outputs.python-version }} # optional
         name: codecov-umbrella # optional
         fail_ci_if_error: false # optional (default = false)
         verbose: true # optional (default = false)
