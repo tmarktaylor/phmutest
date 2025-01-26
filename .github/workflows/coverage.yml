@@ -29,8 +29,11 @@ jobs:
     - name: Coverage report
       run: |
         coverage erase
+        # Get coverage for no extras installed.
         coverage run --branch --source=src --append -m phmutest --version
+        coverage run --branch --source=src --append -m pytest tests/test_color.py tests/test_traceback.py
         python -m phmutest tests/md/does_not_print.md --generate dev/test_temptestfile.py
+        # This script installs the extras and handles phmutest runs with failing tests.
         chmod u+x .github/workflows/coverage.sh
         ./.github/workflows/coverage.sh
         coverage run --branch --source=src --append -m pytest tests
