@@ -6,6 +6,7 @@ py -m coverage run --branch --source=src --append -m phmutest tests/md/no_code_b
 py -m coverage run --branch --source=src --append -m phmutest README.md
 py -m coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
 py -m coverage run --branch --source=src --append -m phmutest README.md --log --style default
+py -m coverage run --branch --source=src --append -m phmutest tests/md/tracer.md --log
 py -m coverage run --branch --source=src --append -m pytest tests
 rem Coverage for running a generated testfile with errors separately with pytest.
 py -m phmutest tests\md\does_not_print.md --generate dev/test_temptestfile.py

@@ -17,6 +17,7 @@ python3 -m coverage run --branch --source=src --append -m phmutest tests/md/no_c
 python3 -m coverage run --branch --source=src --append -m phmutest README.md
 python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style solarized-dark
 python3 -m coverage run --branch --source=src --append -m phmutest README.md --log --style default
+python3 -m coverage run --branch --source=src --append -m phmutest tests/md/tracer.md --log
 # Coverage for running pytest on a generated testfile with errors.
 python3 -m coverage run --branch --source=src --append -m pytest dev/test_temptestfile.py
 # Avoid Error: Process completed with exit code 1. in invoking GitHub action run:.
