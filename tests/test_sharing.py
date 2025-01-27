@@ -238,8 +238,8 @@ def test_share_across_sharing():
 
     Note the dot after --sharing. That means print sharing debug messages
     for all shared files.
-    The --quiet option pases through to unittest and suppresses printing.
-    Otherwise the case suceeded status character "." gets into the
+    The --quiet option passes through to unittest and suppresses printing.
+    Otherwise the case succeeded status character "." gets into the
     output.
     """
     with contextlib.redirect_stderr(io.StringIO()) as err:

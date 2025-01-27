@@ -1,16 +1,25 @@
-"""pytest tests for README.md and other Markdown doc files."""
+"""pytest tests for README.md and other Markdown doc files. Suggest pytest -vv."""
 
 import contextlib
 import re
+import string
+import sys
 import textwrap
 from io import StringIO
 from pathlib import Path
 from typing import List
+from unittest import mock
 
+import pytest
+
+import phmutest.config
+import phmutest.fcb
 import phmutest.main
 import phmutest.summary
 import phmutest.tool
+from docs.navlinks import make_nav_links
 from docs.quicklinks import make_quick_links
+from phmutest.printer import EXCEPTION_LINE, RESULT
 
 # Note- unittest appears to be printing to stderr when it is running
 #       the generated test file when called from Python.
@@ -87,17 +96,29 @@ readme_chooser = phmutest.tool.FCBChooser("README.md")
 """Helper to select lists of FCB contents from the Markdown file."""
 
 
+NUM_README_ERROR = 2
+"""Number of Python code FCBs in README.md broken example that raise an exception."""
+
+
+NUM_README_FAILED = 2
+"""Number of Python code FCBs in README.md broken example that log as 'failed'."""
+
+
+NUM_README_ASSERTION_FAILED = 1
+"""FCBs counted by NUM_README_FAILED that failed due to assert in the FCB."""
+
+
 def test_readme_code_metrics():
     """Test the metrics when running on README.md."""
     command = readme_chooser.select(info_string="shell")[0]  # 1st of selected FCBs
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=3,
+        number_blocks_run=7,
         passed=3,
-        failed=0,
+        failed=NUM_README_FAILED,
         skipped=0,
-        suite_errors=0,
+        suite_errors=NUM_README_ERROR,
         number_of_files=1,
         files_with_no_blocks=0,
         number_of_deselected_blocks=0,
@@ -105,26 +126,79 @@ def test_readme_code_metrics():
     assert want == phmresult.metrics
 
 
+@pytest.mark.skipif(sys.version_info > (3, 12), reason="Skip py 3.12+")
 def test_readme_code_output(capsys):
-    """Test the shell expected output block when running on README.md."""
-    command = readme_chooser.select(info_string="shell")[0]  # 1st of selected FCBs
-    output = readme_chooser.select(contains="args.files: 'README.md'")[0]
-    args = arg_list(command)
-    _ = phmutest.main.main(args)
-    assert output == capsys.readouterr().out.lstrip()
+    """Test the 'phmutest stdout' FCB in README.md.
+
+    Run without showing the extra [traceback] tracebacks for broken FCBs.
+    Test the exception line numbers in the 'unittest stderr' FCB in README.md.
+    """
+    with mock.patch("phmutest.fcb.SHOW_TRACEBACK", False):
+        # first of selected FCBs
+        command = readme_chooser.select(info_string="shell")[0]
+        assert len(command)
+        output = readme_chooser.select(contains="args.files: 'README.md'")[0]
+        assert len(output)
+        args = arg_list(command)
+        results = phmutest.main.main(args)
+        captured_output = capsys.readouterr().out.lstrip()
+    assert output == captured_output
+
+    # Check the example unittest tracebacks.
+    # Check that the exception line numbers in the log for the
+    # "failed" and "error" entries are present in the README.md
+    # FCB showing the tracebacks unittest printed to stderr.
+    # If this test fails the example unittest traceback may be stale.
+    log = results.log
+    elines = [e[EXCEPTION_LINE] for e in log if e[RESULT] in ["failed", "error"]]
+    assert len(elines)
+    txt_fcbs = readme_chooser.select(info_string="txt")
+    stderr_fcb = txt_fcbs[1]  # This is the FCB with the unittest tracebacks
+    assert len(stderr_fcb)
+    for line in elines:
+        assert f", line {line}, in" in stderr_fcb, f"README is missing line {line}"
 
 
-def test_readme_repl_metrics():
-    """Test the metrics when running on README.md."""
-    command = readme_chooser.select(info_string="shell")[1]  # 2nd of selected FCBs
+@pytest.mark.skipif(sys.version_info > (3, 12), reason="Skip py 3.12+")
+def test_readme_stderr():
+    """Test the 'phmutest stderr' FCB in README.md.
+
+    Check the unittest output stderr FCB is consistent with the log FCB.
+    Check that user name and tmpdir name are sanitized.
+    """
+    txt_fcbs = readme_chooser.select(info_string="txt")
+    log_fcb = txt_fcbs[0]
+    stderr_fcb = txt_fcbs[1]
+    # Check that username and the tempdir name are replaced.
+    lines = stderr_fcb.splitlines()
+    for line in lines:
+        if r"C:\Users" in line:
+            assert r"C:\Users\XXX" + "\\" in line, "username should be XXX"
+
+        if r"AppData\Local" in line:
+            assert r"AppData\Local\Temp\YYY" + "\\" in line, "tmpdir should be YYY"
+
+    # Check the log testfile ERROR: line numbers in the log FCB in parenthesis
+    # are all present in the stderr FCB as ",line NN, in tests".
+    num_errors = log_fcb.count("error   ")
+    assert num_errors == NUM_README_ERROR
+
+
+replexample_chooser = phmutest.tool.FCBChooser("docs/repl/REPLexample.md")
+"""Helper to select lists of FCB contents from the Markdown file."""
+
+
+def test_replexample_metrics():
+    """Test the metrics when running on docs/repl/REPLexample.md."""
+    command = replexample_chooser.select(info_string="shell")[0]
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=4,
-        passed=4,
-        failed=0,
+        number_blocks_run=7,
+        passed=3,
+        failed=2,
         skipped=0,
-        suite_errors=0,
+        suite_errors=2,  # counts all lines that raise exceptions
         number_of_files=1,
         files_with_no_blocks=0,
         number_of_deselected_blocks=0,
@@ -132,13 +206,72 @@ def test_readme_repl_metrics():
     assert want == phmresult.metrics
 
 
-def test_readme_repl_output(capsys):
-    """Test the shell expected output block when running on README.md."""
-    command = readme_chooser.select(info_string="shell")[1]  # 2nd of selected FCBs
-    output = readme_chooser.select(contains="args.files: 'README.md'")[1]
+NUM_REPL_ERROR = 2
+"""Number of Python REPL FCBs in REPLexample.md that raise an exception."""
+
+
+@pytest.mark.skipif(sys.version_info > (3, 12), reason="Skip py 3.12+")
+def test_replexample(capsys, endswith_checker):
+    """Check expected output block in the example docs/repl/REPLexample.md."""
+    command = replexample_chooser.select(info_string="shell")[0]
+    expected_output = replexample_chooser.select(info_string="txt")[0]
+    start = expected_output.index("summary:\nmetric")
+    doctests = expected_output[:start]
+    summary_log = expected_output[start:]
     args = arg_list(command)
     _ = phmutest.main.main(args)
-    assert output == capsys.readouterr().out.lstrip()
+
+    # Check that username is replaced.
+    lines = doctests.splitlines()
+    for line in lines:
+        if r"C:\Users" in line:
+            assert r"C:\Users\XXX" + "\\" in line, "username should be XXX"
+
+    # Check the result "error" reason line numbers in the --log part
+    # are all present in the doctest printing.
+    num_errors = summary_log.count("error   ")
+    assert num_errors == NUM_REPL_ERROR
+
+    # check line NN in ask is the raise ValueError... in answerlib.py
+    all_answerlib_lineno = re.findall(
+        r'answerlib.py", line (\d+)[,]', doctests, flags=re.DOTALL | re.MULTILINE
+    )
+    assert len(all_answerlib_lineno) == 1
+    answerlib_lineno = int(all_answerlib_lineno[0])
+    text = Path("docs/answerlib.py").read_text(encoding="utf-8")
+    lines = list(text.splitlines())
+    assert "raise ValueError" in lines[answerlib_lineno - 1]
+
+    # Check the summary and log at the end of the example
+    got = capsys.readouterr().out.strip()
+    endswith_checker(summary_log, got)
+
+
+def test_main_call_api():
+    """Show main.main in Markdown FCB is the same as in the code."""
+    chooser = phmutest.tool.FCBChooser("docs/callfrompython.md")
+    fcb = chooser.contents("api-main")
+    assert fcb
+    text = Path("src/phmutest/main.py").read_text(encoding="utf-8")
+    assert "\n\n" + fcb in text, "changed in the python file?"
+
+
+def test_command_call_api():
+    """Show main.main in Markdown FCB is the same as in the code."""
+    chooser = phmutest.tool.FCBChooser("docs/callfrompython.md")
+    fcb = chooser.contents("api-command")
+    assert fcb
+    text = Path("src/phmutest/main.py").read_text(encoding="utf-8")
+    assert "\n\n" + fcb in text, "changed in the python file?"
+
+
+def test_phmresult():
+    """Show PhmResult dataclass in Markdown FCB is the same as in the code."""
+    chooser = phmutest.tool.FCBChooser("docs/callfrompython.md")
+    example = chooser.contents("phmresult")
+    assert example
+    text = Path("src/phmutest/summary.py").read_text(encoding="utf-8")
+    assert example + "\n\n" in text, "changed in the python file?"
 
 
 def test_call_from_python():
@@ -149,15 +282,6 @@ def test_call_from_python():
     indented_example = textwrap.indent(example, "    ")
     text = Path("tests/test_examples.py").read_text(encoding="utf-8")
     assert indented_example in text, "changed in the python file?"
-
-
-def test_phmresult():
-    """Show PhmResult dataclass in Markdown FCB is the same as in the code."""
-    chooser = phmutest.tool.FCBChooser("docs/callfrompython.md")
-    example = chooser.contents("phmresult")
-    assert example
-    text = Path("src/phmutest/summary.py").read_text(encoding="utf-8")
-    assert example in text, "changed in the python file?"
 
 
 def test_fixture_globs_example(capsys):
@@ -179,7 +303,7 @@ def test_fixture_globs_example(capsys):
     assert output == capsys.readouterr().out.lstrip()
 
 
-def test_fixture_chdir_example():
+def test_fixture_chdir_example(capsys):
     """Test --fixture example that changes current working directory."""
     command, output = get_command_and_log("docs/fix/code/chdir.md")
     args = arg_list(command)
@@ -195,11 +319,15 @@ def test_fixture_chdir_example():
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
+    assert output == capsys.readouterr().out.lstrip()
 
 
-def test_fixture_drink_example():
+def test_fixture_drink_example(capsys):
     """Test --fixture example that acquires/releases resource in --replmode."""
-    command, output = get_command_and_log("docs/fix/repl/drink.md")
+    command, _ = get_command_and_log("docs/fix/repl/drink.md")
+    # The expected output is the last FCB in the file.
+    content_strings = phmutest.tool.fenced_code_blocks("docs/fix/repl/drink.md")
+    output = content_strings[-1]
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
@@ -213,6 +341,7 @@ def test_fixture_drink_example():
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
+    assert output == capsys.readouterr().out.lstrip()
 
 
 def test_replmode_example(capsys):
@@ -459,10 +588,12 @@ def test_usage_options():
     # Check usage options in the README FCB against argparser's help text.
     # Tolerate minor formatting changes in argparse help output between
     # Python major and minor versions.
+    # Note- Does not check the help descriptions or the nargs indications in the usage
+    # part.
     readme_fcbs = phmutest.tool.FCBChooser("README.md")
     # This string must be present verbatim in at most one FCB in README.md.
     identify_usage_fcb = (
-        "Detect broken Python examples in Markdown. "
+        "Detect and troubleshoot broken Python examples in Markdown. "
         "Accepts relevant unittest options."
     )
     usage_fcbs = readme_fcbs.select(contains=identify_usage_fcb)
@@ -476,6 +607,29 @@ def test_usage_options():
     assert fcb_options == help_options
 
 
+@pytest.mark.skip("Minor version specific. Run manually on py 3.11.")
+def test_usage_text_exactly():
+    """Check exact --help text documented in README.md."""
+    readme_fcbs = phmutest.tool.FCBChooser("README.md")
+    # This string must be present verbatim in at most one FCB in README.md.
+    identify_usage_fcb = (
+        "Detect and troubleshoot broken Python examples in Markdown. "
+        "Accepts relevant unittest options."
+    )
+    usage_fcbs = readme_fcbs.select(contains=identify_usage_fcb)
+    assert len(usage_fcbs) == 1, "No substring in an FCB or found in more than one FCB."
+    usage = usage_fcbs[0]
+    # Collapse whitespace.
+    for c in string.whitespace:
+        usage = usage.replace(c, "")
+    help = phmutest.main.main_argparser().format_help()
+    for c in string.whitespace:
+        help = help.replace(c, "")
+    assert usage, "non-empty"
+    assert help, "non-empty"
+    assert usage == help
+
+
 def test_quick_links():
     """Make sure the README.md quick links are up to date."""
     filename = "README.md"
@@ -483,3 +637,10 @@ def test_quick_links():
     github_links = make_quick_links(filename)
     # There must be at least one blank line after the last link.
     assert github_links + "\n\n" in readme
+
+
+def test_nav_links():
+    """Make sure the docs/demos.md links are up to date."""
+    want = make_nav_links()
+    got = Path("docs/demos.md").read_text(encoding="utf-8")
+    assert want == got

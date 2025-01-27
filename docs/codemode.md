@@ -3,7 +3,8 @@
 ## Testfile generation
 
 Code and expected output blocks are tested internally with Python
-standard library [unittest][1].
+standard library [unittest][1]. The generated testfile can also
+be run with [pytest]
 
 A temporary unittest Python source file is generated and run.
 Added logic records the pass/failed/error/skip status and
@@ -25,14 +26,14 @@ in Markdown can spread across several fenced code blocks.
 
 - The blocks are not isolated.
 - Names assigned at the top level of a block are visible to other blocks.
+- Each block must start with no indent level.
 
 ## --generate
 
 The --generate option outputs the generated testfile to stdout or the named
 file. Keep in mind the testfile is a snapshot in time of the Markdown blocks.
-This file may be run later with unittest **or run with pytest**. Run with pytest
-is ok provided a --fixture does not call **addModuleCleanup()**.
-Working with generated testfile separately is an effective way to
+This file may be run later with unittest **or run with pytest**.
+Working with the generated testfile separately is an effective way to
 troubleshoot test failures and to understand the execution context.
 
 ## Fixture globs
@@ -42,7 +43,7 @@ that calls the fixture function.
 
 The fixture function can inject global variables into the top level
 of the testfile module by returning a dict. See [fixture.py](fixture_py.md).
-The keys become global variable names in the gernerated module.
+The keys become global variable names in the generated module.
 This is done at runtime by an instance of phmutest.globs.Globals.
 It calls Python built in function setattr(moduleobject, key, value).
 
@@ -107,6 +108,8 @@ A section in the --summary output shows setup and teardown errors.
 In the --log and --progress outputs the suffix "setup" is added
 to the Markdown location.
 
+Example: [setup/teardown](setup/setup.md)
+
 ## Setup across files
 
 Setup and teardown blocks in a single Markdown file are applied to all FILEs
@@ -118,9 +121,15 @@ by --setup-across-files.
 Code is generated at the bottom of **setUpModule()**
 to copy the names assigned by the entire function to module level globals.
 
+Example: [setup across files](setup/across1.md)
+
 ## --progress
 
 This option turns on per block verbose printing. The printing is directed
 to the standard error stream shared with unittest's verbose printing.
+
+## --stdout
+
+Show printing by FCBs to standard output when testing is complete.
 
 [1]: https://docs.python.org/3/library/unittest.html

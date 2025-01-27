@@ -2,7 +2,10 @@
 
 import argparse
 from pathlib import Path
+from typing import Tuple
 
+import phmutest.fcb
+import phmutest.fillin
 import phmutest.select
 import phmutest.subtest
 
@@ -16,17 +19,19 @@ import phmutest.subtest
 # (defined by _phm_expected_str in the generated code) must not be
 # indented. See $setupblocks, $teardownblocks, $subtests,
 # $setupmodule, $teardownmodule, $testclasses below.
-
-
-def deindent(text: str) -> str:
-    """Shift lines indented by 4 or more spaces to the left 4 spaces."""
-    lines = []
-    for line in text.splitlines():
-        if line.startswith("    "):
-            lines.append(line[4:])
-        else:
-            lines.append(line)
-    return "\n".join(lines)
+#
+# The unittest.doModuleCleanups() are needed when both:
+#   1. A user --fixture function calls unittest.addModuleCleanup().
+#   2. A testfile is generated with --generate, saved to a file
+#      and later run with pytest.
+# unittest calls doModuleCleanups() after test cases complete.
+# pytest does not call doModuleCleanups().
+# When the user supplies a --fixture function, the generated testfile
+# calls doModuleCleanups() in setUpModule() and tearDownModule().
+# This happens slightly before unittest would make the call.
+# We call doModuleCleanups() if setUpModule() raises an exception.
+# We call doModuleCleanups() if tearDownModule() raises an exception
+# or when tearDownModule completes normally.
 
 
 def is_verbose_sharing(args: argparse.Namespace, path: Path) -> bool:
@@ -35,6 +40,7 @@ def is_verbose_sharing(args: argparse.Namespace, path: Path) -> bool:
 
 
 # Note- Module level $setupblocks and $teardownblocks implement --setup-across-files.
+# Note- The setUpModule log entry will be first even if library call supplied a log.
 setup_module_form = """\
 def setUpModule():
 
@@ -42,14 +48,17 @@ def setUpModule():
     _phm_log.append(["setUpModule", "", ""])
     $showprogressenter
     _phm_globals = _phmGlobals(__name__, shareid=$shareid)
-    $userfixtureglobs
+    $entercontext
+        $userfixtureglobs
 $setupblocks
-    $showprogressexit
+        $showprogressexit
+        $preventexitcallback
 """
 
 
 def render_setup_module(
-    args: argparse.Namespace, block_store: phmutest.select.BlockStore
+    args: argparse.Namespace,
+    block_store: phmutest.select.BlockStore,
 ) -> str:
     """Generate code for unittest setUpModule() fixture."""
     setup_blocks = ""
@@ -59,9 +68,8 @@ def render_setup_module(
             args,
             fileblocks,
         )
-    deindented_setup_blocks = deindent(setup_blocks)
-    if deindented_setup_blocks:  # Share the names in the setup blocks.
-        deindented_setup_blocks += "\n    _phm_globals.update(additions=locals())"
+    if setup_blocks:  # Share the names in the setup blocks.
+        setup_blocks += "\n        _phm_globals.update(additions=locals())"
 
     files_with_sharing = list(args.setup_across_files)
     files_with_sharing.extend(args.share_across_files)
@@ -74,7 +82,7 @@ def render_setup_module(
 
     replacements = {}
     replacements["shareid"] = shareid
-    replacements["setupblocks"] = deindented_setup_blocks
+    replacements["setupblocks"] = setup_blocks
     if args.progress:
         replacements["showprogressenter"] = (
             '_phm_sys.stderr_printer("setUpModule()...")'
@@ -84,19 +92,45 @@ def render_setup_module(
         )
 
     if args.fixture:
-        replacements["userfixtureglobs"] = phmutest.subtest.justify(
+        replacements["entercontext"] = phmutest.fillin.justify(
+            setup_module_form,
+            "$entercontext",
+            fixture_enter_context_code,
+        )
+        replacements["preventexitcallback"] = "_phm_stack.pop_all()"
+        replacements["userfixtureglobs"] = phmutest.fillin.justify(
             setup_module_form,
             "$userfixtureglobs",
             fixture_globs_update_code,
         )
-    return phmutest.subtest.fill_in(
+    else:
+        # This maintains the indent if there is no $entercontext replacement.
+        # The pass is needed when no more code is rendered after the if True.
+        replacements["entercontext"] = phmutest.fillin.justify(
+            setup_module_form,
+            "$entercontext",
+            "if True:\n    pass",
+        )
+
+    return phmutest.fillin.fill_in(
         setup_module_form,
         replacements,
     )
 
 
+# Explicitly call unittest.doModuleCleanups() if exception.
+fixture_enter_context_code = """\
+from contextlib import ExitStack
+with ExitStack() as _phm_stack:
+    if _phm_sys.version_info() < (3, 11):
+        _phm_stack.callback(unittest.case.doModuleCleanups)
+    else:
+        _phm_stack.callback(unittest.doModuleCleanups)\
+"""
+
+
 fixture_globs_update_code = """\
-_phm_fixture = _phm_user_setup_function(log=_phm_log)
+_phm_fixture = _phm_user_setup_function(log=_phm_log, is_replmode=False)
 if _phm_fixture is not None:
     if _phm_fixture.globs is not None:
         _phm_globals.update(additions=_phm_fixture.globs)"""
@@ -104,12 +138,12 @@ if _phm_fixture is not None:
 
 teardown_module_form = """\
 def tearDownModule():
-
-    _phm_log.append(["tearDownModule", "", ""])
-    $showprogressenter
+    $entercontext
+        _phm_log.append(["tearDownModule", "", ""])
+        $showprogressenter
 $teardownblocks
-    _phm_globals.clear()
-    $showprogressexit
+        _phm_globals.clear()
+        $showprogressexit
 """
 
 
@@ -124,9 +158,8 @@ def render_teardown_module(
             args,
             fileblocks,
         )
-    deindented_teardown_blocks = deindent(teardown_blocks)
     replacements = {}
-    replacements["teardownblocks"] = deindented_teardown_blocks
+    replacements["teardownblocks"] = teardown_blocks
 
     if args.progress:
         replacements["showprogressenter"] = (
@@ -136,7 +169,17 @@ def render_teardown_module(
             '_phm_sys.stderr_printer("leaving tearDownModule.")'
         )
 
-    return phmutest.subtest.fill_in(
+    if args.fixture:
+        replacements["entercontext"] = phmutest.fillin.justify(
+            teardown_module_form,
+            "$entercontext",
+            fixture_enter_context_code,
+        )
+    else:
+        # This maintains the indent if there is no $entercontext replacement.
+        replacements["entercontext"] = "if True:"
+
+    return phmutest.fillin.fill_in(
         teardown_module_form,
         replacements,
     )
@@ -164,7 +207,7 @@ def render_setup_class(
             setupblocks=setup_blocks,
             built_from=f'"{fileblocks.built_from}"',
         )
-        return phmutest.subtest.fill_in(
+        return phmutest.fillin.fill_in(
             setup_class_form,
             replacements,
         )
@@ -199,7 +242,7 @@ def render_teardown_class(
     teardown_blocks = phmutest.subtest.format_teardown_blocks(args, fileblocks)
     if teardown_blocks:
         replacements = {"teardownblocks": teardown_blocks}
-        return phmutest.subtest.fill_in(
+        return phmutest.fillin.fill_in(
             teardown_class_form,
             replacements,
         )
@@ -302,7 +345,7 @@ def markdown_file(
             f"_phm_globals.update(additions=locals(), {from_arg}, {existing_names})"
         )
         replacements["sharenames"] = statement
-    return phmutest.subtest.fill_in(
+    return phmutest.fillin.fill_in(
         class_form,
         replacements,
     )
@@ -314,30 +357,34 @@ import unittest
 
 from phmutest.globs import Globals as _phmGlobals
 from phmutest.printer import Printer as _phmPrinter
-from phmutest.skip import sys_tool as _phm_sys
-$importfixture
+from phmutest.systool import sys_tool as _phm_sys
+$importimporter
 
-$callfixture
+$importfunction
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
 _phm_testcase.maxDiff = None
 _phm_log = []
+_phmPrinter.testfile_name = None
 $setupmodule
 $teardownmodule
 $testclasses
 '''
 
 
-def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) -> str:
+def testfile(
+    args: argparse.Namespace,
+    block_store: phmutest.select.BlockStore,
+) -> Tuple[str, phmutest.fcb.FcbLineMap]:
     """Generate the unittest module source as directed by command line args args."""
     test_classes = ""
     replacements = {}
     if args.fixture:
-        replacements["importfixture"] = (
+        replacements["importimporter"] = (
             "from phmutest.importer import fixture_function_importer "
             "as _phm_fixture_function_importer"
         )
-        replacements["callfixture"] = (
+        replacements["importfunction"] = (
             f"_phm_user_setup_function = "
             f'_phm_fixture_function_importer("{args.fixture}")'
         )
@@ -354,7 +401,24 @@ def testfile(args: argparse.Namespace, block_store: phmutest.select.BlockStore) 
         test_classes += "\n"
     replacements["testclasses"] = test_classes
 
-    return phmutest.subtest.fill_in(
+    testfile = phmutest.fillin.fill_in(
         testfile_form,
         replacements,
     )
+
+    # Rewrite placeholders 'testfile_lineno=0' with the testfile line number.
+    lines = []
+    for testfile_lineno, line in enumerate(testfile.splitlines(), start=1):
+        # The testfile 'with _phmPrinter' lines are generated by subtest.py.
+        if "with _phmPrinter(" in line:
+            line = line.replace(
+                "testfile_lineno=0", f"testfile_lineno={testfile_lineno}"
+            )
+        lines.append(line)
+    testfile = "\n".join(lines)
+
+    # Save map relating testfile lines to FCBs from the Markdown.
+    markdown_map = phmutest.fcb.make_markdown_map(
+        testfile_lines=lines, block_store=block_store
+    )
+    return testfile, markdown_map

@@ -1,7 +1,7 @@
 # skip directive
 
 The skip directive identifies Python FCBs to exclude from testing.
-They will be noted in --log with result "skip" and skip reason "phmutest-skip".
+They will be noted in --log with result "skip" and reason "phmutest-skip".
 This example does not have a skip directive.
 
 ```python
@@ -53,7 +53,7 @@ log:
 args.files: 'docs/advanced/skip.md'
 args.log: 'True'
 
-location|label             result  skip reason
+location|label             result  reason
 -------------------------  ------  -------------
 docs/advanced/skip.md:7 o  pass
 docs/advanced/skip.md:19.  skip    phmutest-skip

@@ -13,10 +13,10 @@ If you are calling from Python there will be no shell wildcard expansion.
 
 - [docs/repl/repl1.md](repl1.md)
 - [docs/repl/repl2.md](repl2.md)
-- [docs/reol/repl3.md](repl3.md)
+- [docs/repl/repl3.md](repl3.md)
 
 All the names assigned at the top level of all the Python blocks in the
-file are shared. A later file might inadventently reassign a name that was
+file are shared. A later file might inadvertently reassign a name that was
 shared.
 
 ## phmutest command line

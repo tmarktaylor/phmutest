@@ -27,3 +27,11 @@ print("ladenpython is a made up FCB info string.")
 ```expected-output
 ladenpython is a made up FCB info string.
 ```
+
+```awesomepython!
+print("awesomepython is delimited by !")
+```
+
+```expected-output
+awesomepython is delimited by !
+```

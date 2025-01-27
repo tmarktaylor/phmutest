@@ -9,4 +9,5 @@ setup-across-files = []
 select = []
 deselect = ["group-4"]
 skip = []
+color = false
 

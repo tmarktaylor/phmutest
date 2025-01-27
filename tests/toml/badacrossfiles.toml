@@ -14,4 +14,6 @@ setup-across-files = ["not-existing-2.md"]
 select = []
 deselect = []
 skip = []
+color = false
+style = ""
 

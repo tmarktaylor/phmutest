@@ -2,9 +2,13 @@
 
 import contextlib
 import io
+import os
+import unittest
+from pathlib import Path
 
 import phmutest.main
 import phmutest.summary
+from phmutest.printer import DIFFS, FRAME, TRACE
 
 
 def test_code_raises():
@@ -22,10 +26,16 @@ def test_code_raises():
         files_with_no_blocks=0,
         number_of_deselected_blocks=0,
     )
+    # Drop log entries that are not displayed
+    log = []
+    for entry in phmresult.log:
+        if entry[phmutest.summary.RESULT] not in [TRACE, FRAME, DIFFS]:
+            log.append(entry)
+    assert len(log) == 6
     assert want == phmresult.metrics
     assert phmresult.is_success is False
-    assert "error" in phmresult.log[4][1]
-    assert "failed" in phmresult.log[5][1]
+    assert "error" in log[4][phmutest.summary.RESULT]
+    assert "failed" in log[5][phmutest.summary.RESULT]
 
 
 def test_unittest_fail_fast():
@@ -86,8 +96,45 @@ def test_replmode_errors():
 
 def badfixture(**kwargs):
     """phmutest fixture raises an exception."""
+    is_replmode = kwargs["is_replmode"]
+    if not is_replmode:
+        # In code mode add a cleanup function to restore the current working
+        # directory and change it.
+        # This will show the cleanup function got called.
+        unittest.addModuleCleanup(print, "Finished doing ModuleCleanup functions!")
+        unittest.addModuleCleanup(os.chdir, Path.cwd())
+        os.chdir("docs/fix/code")
     raise ValueError("badfixture- having a bad day")
     return None
+
+
+def test_code_fixture_raises():
+    """A fixture raises an exception."""
+    command = "tests/md/project.md --fixture tests.test_errors.badfixture"
+    args = command.split()
+    current_workdir = Path.cwd()
+    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+        with contextlib.redirect_stdout(io.StringIO()) as stdout:
+            phmresult = phmutest.main.main(args)
+    want = phmutest.summary.Metrics(
+        number_blocks_run=0,
+        passed=0,
+        failed=0,
+        skipped=0,
+        suite_errors=1,
+        number_of_files=1,
+        files_with_no_blocks=0,
+        number_of_deselected_blocks=0,
+    )
+    assert want == phmresult.metrics
+    assert phmresult.is_success is False
+    assert "ValueError: badfixture- having a bad day" in stderr.getvalue()
+    assert current_workdir == Path.cwd(), "still the original working dir."
+    # Show that the print cleanup function added by addModuleCleanup() gets called.
+    # We additionally need to run a generated testfile with pytest directly
+    # and look for the message in captured stdout to show the cleanups get called.
+    std_output = stdout.getvalue()
+    assert "Finished doing ModuleCleanup functions!" in std_output
 
 
 def test_repl_fixture_raises(capsys):
@@ -101,14 +148,13 @@ def test_repl_fixture_raises(capsys):
         failed=0,
         skipped=0,
         suite_errors=1,
-        number_of_files=0,
+        number_of_files=1,
         files_with_no_blocks=0,
         number_of_deselected_blocks=0,
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is False
     output = capsys.readouterr().out.strip()
-    assert "Caught an exception in --fixture tests.test_errors.badfixture..." in output
     assert "ValueError: badfixture- having a bad day" in output
 
 
@@ -206,7 +252,7 @@ def test_setup_across_raises(capsys, endswith_checker):
 
     The setup block is rendered in setUpModule().
     The error in setUpModule() cancels the rest of the unittest.
-    Try with 2 imput files.
+    Try with 2 input files.
     """
     command = (
         "tests/md/badsetup.md tests/md/badteardown.md --summary "

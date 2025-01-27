@@ -34,7 +34,7 @@ print(d)
 
 ## phmutest command line
 
-This command line selectes all blocks in this file that have a
+This command line selects all blocks in this file that have a
 `<!--phmutest-group slow-->` directive.
 
 ```shell

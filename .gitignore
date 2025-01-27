@@ -1,5 +1,17 @@
 # owner's
 .mine/
+todos.txt
+t.md
+t.py
+t.txt
+t[0-9].md
+t[0-9].py
+t[0-9].txt
+tmp[0-9].md
+tmp[0-9].txt
+
+# Reserved for local CI tests
+dev/test_temptestfile.py
 
 # PyCharm
 .idea/

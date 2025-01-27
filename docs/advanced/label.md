@@ -19,7 +19,7 @@ args.files: 'tests/md/directive1.md'
 args.replmode: 'True'
 args.log: 'True'
 
-location|label                                  result  skip reason
+location|label                                  result  reason
 ----------------------------------------------  ------  -------------
 tests/md/directive1.md:41.....................  skip    phmutest-skip
 tests/md/directive1.md:78 doctest_print_coffee  pass

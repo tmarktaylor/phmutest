@@ -12,33 +12,45 @@ import phmutest.reader
 class PythonMatcher:
     """RE to check beginning of FCB info string to see if Python.
 
+    The RE will only match if one of the delimiter chars is present.
     The info string can continue beyond the end of the matching pattern.
     The matching text is discarded.
     """
 
+    delimiter_chars = r"([ :]|$)"
+
     def __init__(self) -> None:
         self.python_patterns = [
-            r"^python( |$)",
-            r"^py( |$)",
-            r"^py3( |$)",
-            r"python3( |$)",
-            r"pycon( |$)",
-            r"^[{].*?[.]python.*?[}]( |$)",
+            r"^python",
+            r"^py",
+            r"^py3",
+            r"python3",
+            r"pycon",
+            r"^[{].*?[.]python.*?[}]",
         ]
         """List of re patterns applied to FCB info_string to identify Python."""
         self.compile()
 
     def compile(self) -> None:
-        self.re = re.compile("|".join(self.python_patterns))
+        delimited_patterns = [p + self.delimiter_chars for p in self.python_patterns]
+        self.re = re.compile("|".join(delimited_patterns))
 
 
-# This is a designated patch point. Developers: Please treat this as if it were an API.
+# This is a designated patch point. Developers: Please treat this and the entire
+# PythonMatcher class as if it were an API.
 # To patch:
 # - Create new instance of PythonMatcher.
-# - Modify the patterns attribute.
+# - Optionally, modify the delimiter_chars attribute.
+# - Modify the python_patterns attribute.
 # - Call compile().
 # - with mock.patch("phmutest.fenced.python_matcher", <the new instance>):
 # - See example in tests/test_patching.py.
+#
+# To modify the class:
+# - Retain at least delimiter_chars = r"([
+# - OK to add new python_patterns to the list.
+#
+# See patching example in tests/test_patching.py.
 python_matcher = PythonMatcher()
 
 

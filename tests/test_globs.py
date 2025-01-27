@@ -63,7 +63,7 @@ class TestGlobals:
         assert "MYGLOBAL" not in self.globs.get_names()
 
     def test_already_exists_error(self):
-        """Try to update a name that existed in the orignal module."""
+        """Try to update a name that existed in the original module."""
         with pytest.raises(AttributeError) as exc_info:
             self.globs.update(additions={"MYGLOBAL": None}, existing_names=set())
         print("\n" + str(exc_info.value))

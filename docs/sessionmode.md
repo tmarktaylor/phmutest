@@ -7,7 +7,8 @@ There is one docstring for each Markdown file.
 ## --generate
 
 The --generate option outputs the generated docstring to stdout or the named
-file.
+file.  The generated docstring does not have lines added at runtime for
+--share-across-files.
 
 ## Fixture globs
 
@@ -34,9 +35,11 @@ the generated docstring.
 An instance AssignmentExtractor from src/phmutest/globs.py discovers
 the names assigned by the docstring.
 
-- The globs mapping is empty or intialized by a fixture that returns globs.
+- The globs mapping is empty or initialized by a fixture that returns globs.
 - The globs mapping is updated after running a share-across-files FILE.
 - One globs mapping is used for the entire phmutest run.
+
+[REPL Mode share across files example](repl/replshare_demo.md).
 
 ## --sharing
 

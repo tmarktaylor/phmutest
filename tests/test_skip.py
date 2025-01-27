@@ -3,6 +3,11 @@
 import phmutest.main
 import phmutest.summary
 
+# indexes to log file entry
+DOC_LOCATION = phmutest.printer.DOC_LOCATION
+RESULT = phmutest.printer.RESULT
+REASON = phmutest.printer.REASON
+
 
 def test_skip_text1():
     """Command line --skip removes 1 test case containing TEXT squares."""
@@ -21,7 +26,7 @@ def test_skip_text1():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "--skip squares" in phmresult.log[0][2]
+    assert "--skip squares" in phmresult.log[0][REASON]
 
 
 def test_skip_text2():
@@ -41,7 +46,7 @@ def test_skip_text2():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "--skip datetime" in phmresult.log[4][2]
+    assert "--skip datetime" in phmresult.log[4][REASON]
 
 
 def test_two_skip_arg():
@@ -61,8 +66,8 @@ def test_two_skip_arg():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "--skip squares" in phmresult.log[0][2]
-    assert "--skip datetime" in phmresult.log[4][2]
+    assert "--skip squares" in phmresult.log[0][REASON]
+    assert "--skip datetime" in phmresult.log[4][REASON]
 
 
 def test_two_skip_option():
@@ -82,5 +87,5 @@ def test_two_skip_option():
     )
     assert want == phmresult.metrics
     assert phmresult.is_success is True
-    assert "--skip squares" in phmresult.log[0][2]
-    assert "--skip datetime" in phmresult.log[4][2]
+    assert "--skip squares" in phmresult.log[0][REASON]
+    assert "--skip datetime" in phmresult.log[4][REASON]

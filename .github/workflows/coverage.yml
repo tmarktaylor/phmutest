@@ -20,20 +20,24 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.x
-    - name: Install phmutest
+    - name: Install coverage, dependencies
       run: |
         python -m pip install --upgrade pip
         pip install coverage
         pip install -r tests/requirements.txt
-        pip freeze
-    - name: Tests, coverage report
+
+    - name: Coverage report
       run: |
         coverage erase
-        coverage run --branch --source=src -m phmutest --version
-        coverage run --branch --source=src --append -m phmutest README.md --report
-        coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m pytest -vv tests
-        coverage report --show-missing
+        # Get coverage for no extras installed.
+        coverage run --branch --source=src --append -m phmutest --version
+        coverage run --branch --source=src --append -m pytest tests/test_color.py tests/test_traceback.py
+        python -m phmutest tests/md/does_not_print.md --generate dev/test_temptestfile.py
+        # This script installs the extras and handles phmutest runs with failing tests.
+        chmod u+x .github/workflows/coverage.sh
+        ./.github/workflows/coverage.sh
+        coverage run --branch --source=src --append -m pytest tests
+        coverage report --show-missing --precision=2
         coverage xml
       env:
         PYTHONPATH: ${{ github.workspace }}/src
@@ -44,7 +48,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml # optional
-        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest # optional
+        flags: python-${{ steps.setuppython.outputs.python-version }} # optional
         name: codecov-umbrella # optional
         fail_ci_if_error: false # optional (default = false)
         verbose: true # optional (default = false)

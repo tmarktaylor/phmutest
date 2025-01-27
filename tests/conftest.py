@@ -2,11 +2,12 @@
 
 import inspect
 import unittest
+from typing import List
 
 import pytest
 
 testcase = unittest.TestCase()
-testcase.maxDiff = 20000
+testcase.maxDiff = None
 
 
 @pytest.fixture()
@@ -42,7 +43,7 @@ def startswith_checker():
 
 @pytest.fixture()
 def endswith_checker():
-    """Return Callable(str, str) that dedents want and compares to start of got.
+    """Return Callable(str, str) that dedents want and compares to end of got.
 
     Note that want string's final newline is removed by inspect.cleandoc().
     """
@@ -54,3 +55,22 @@ def endswith_checker():
         testcase.assertEqual(dedented, gotendswith)
 
     return got_endswith_want
+
+
+@pytest.fixture()
+def ordered_checker():
+    """Return Callable(str, List[str]) looks for each str in turn."""
+
+    def got_ordered_checker(got: str, substrings: List[str]) -> None:
+        start = 0
+        for want in substrings:
+            try:
+                start = got.index(want, start)
+                print(f"found   {want!r}")
+            except ValueError:
+                print(f"missing {want!r}")
+                assert False, f"missing {want!r} after index {start}"
+            start += len(want)
+        print("Success")
+
+    return got_ordered_checker

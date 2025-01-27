@@ -3,12 +3,13 @@ import unittest
 
 from phmutest.globs import Globals as _phmGlobals
 from phmutest.printer import Printer as _phmPrinter
-from phmutest.skip import sys_tool as _phm_sys
+from phmutest.systool import sys_tool as _phm_sys
 
 _phm_globals = None
 _phm_testcase = unittest.TestCase()
 _phm_testcase.maxDiff = None
 _phm_log = []
+_phmPrinter.testfile_name = None
 
 
 def setUpModule():
@@ -16,12 +17,14 @@ def setUpModule():
     global _phm_globals
     _phm_log.append(["setUpModule", "", ""])
     _phm_globals = _phmGlobals(__name__, shareid="")
+    if True:
+        pass
 
 
 def tearDownModule():
-
-    _phm_log.append(["tearDownModule", "", ""])
-    _phm_globals.clear()
+    if True:
+        _phm_log.append(["tearDownModule", "", ""])
+        _phm_globals.clear()
 
 
 class Test001(unittest.TestCase):
@@ -31,12 +34,12 @@ class Test001(unittest.TestCase):
 
         # ------ docs/share/file1.md:5 ------
         with self.subTest(msg="docs/share/file1.md:5"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:5", False):
+            with _phmPrinter(_phm_log, "docs/share/file1.md:5", flags=0x0, testfile_lineno=37):
                 from dataclasses import dataclass
 
         # ------ docs/share/file1.md:9 ------
         with self.subTest(msg="docs/share/file1.md:9"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:9", False):
+            with _phmPrinter(_phm_log, "docs/share/file1.md:9", flags=0x0, testfile_lineno=42):
                 @dataclass
                 class BeverageActivity:
                     beverage: str
@@ -50,7 +53,7 @@ class Test001(unittest.TestCase):
 
         # ------ docs/share/file1.md:24 ------
         with self.subTest(msg="docs/share/file1.md:24"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:24", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "docs/share/file1.md:24", flags=0x0, testfile_lineno=56) as _phm_printer:
                 cc = BeverageActivity("coffee", "coding")
                 print(cc.combine())
                 # line 29
@@ -62,7 +65,7 @@ enjoyment
 
         # ------ docs/share/file1.md:35 ------
         with self.subTest(msg="docs/share/file1.md:35"):
-            with _phmPrinter(_phm_log, "docs/share/file1.md:35", False):
+            with _phmPrinter(_phm_log, "docs/share/file1.md:35", flags=0x0, testfile_lineno=68):
                 we = BeverageActivity("water", "exercise")
 
         _phm_globals.update(additions=locals(), built_from="docs/share/file1.md", existing_names=None)
@@ -75,7 +78,7 @@ class Test002(unittest.TestCase):
 
         # ------ docs/share/file2.md:8 ------
         with self.subTest(msg="docs/share/file2.md:8"):
-            with _phmPrinter(_phm_log, "docs/share/file2.md:8", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "docs/share/file2.md:8", flags=0x0, testfile_lineno=81) as _phm_printer:
                 print(we.combine())
                 # line 12
                 _phm_expected_str = """\
@@ -86,7 +89,7 @@ water-exercise
 
         # ------ docs/share/file2.md:18 ------
         with self.subTest(msg="docs/share/file2.md:18"):
-            with _phmPrinter(_phm_log, "docs/share/file2.md:18", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "docs/share/file2.md:18", flags=0x0, testfile_lineno=92) as _phm_printer:
                 bp = BeverageActivity("beer", "partying")
                 print(bp.combine())
                 # line 23
@@ -106,7 +109,7 @@ class Test003(unittest.TestCase):
 
         # ------ docs/share/file3.md:7 ------
         with self.subTest(msg="docs/share/file3.md:7"):
-            with _phmPrinter(_phm_log, "docs/share/file3.md:7", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "docs/share/file3.md:7", flags=0x0, testfile_lineno=112) as _phm_printer:
                 print(bp.combine())
                 # line 11
                 _phm_expected_str = """\
@@ -117,7 +120,7 @@ beer-partying
 
         # ------ docs/share/file3.md:17 ------
         with self.subTest(msg="docs/share/file3.md:17"):
-            with _phmPrinter(_phm_log, "docs/share/file3.md:17", False) as _phm_printer:
+            with _phmPrinter(_phm_log, "docs/share/file3.md:17", flags=0x0, testfile_lineno=123) as _phm_printer:
                 ss = BeverageActivity("soda", "snacking")
                 print(ss.combine())
                 # line 22

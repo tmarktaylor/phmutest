@@ -1,6 +1,5 @@
 """Run the generated unittest source file with unittest.main."""
 
-import argparse
 import copy
 import importlib
 import itertools
@@ -8,20 +7,20 @@ import sys
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import List
 
+import phmutest.config
+import phmutest.fcb
 import phmutest.summary
 
 gen_file_counter = itertools.count(1)
 
 
 def run_code(
-    args: argparse.Namespace,
-    extra_args: List[str],
-    num_deselected_names: int,
+    settings: phmutest.config.Settings,
     testfile: str,
 ) -> phmutest.summary.PhmResult:
-    """Test the Python code in Markdown FCBs."""
+    """Run the generated testfile with unittest."""
+    args = settings.args  # rename
     # When phmutest is imported and called from a user Python script
     # consider the following:
     # The gen_file_counter makes each module name unique.
@@ -32,13 +31,19 @@ def run_code(
     #     imported modules
     genmodulename = f"_phm{next(gen_file_counter)}"
     genfilename = genmodulename + ".py"
+
     with TemporaryDirectory() as tmpdir:
         dest = Path(tmpdir) / genfilename
+        # Tell the Printer class the generated testfile name.
+        testfile = testfile.replace(
+            "_phmPrinter.testfile_name = None", f'_phmPrinter.testfile_name = r"{dest}"'
+        )
         _ = dest.write_text(testfile, encoding="utf-8")
+        # unittest is the default test runner. Run unittest now.
         sys.path.append(tmpdir)
         unittest_args = ["unittest.main"]
-        if len(extra_args):
-            unittest_args.extend(extra_args)
+        if settings.extra_args:
+            unittest_args.extend(settings.extra_args)
         # Run the testfile
         testprog: unittest.TestProgram = unittest.main(
             module=genmodulename, argv=unittest_args, exit=False
@@ -47,10 +52,10 @@ def run_code(
         phmgen = importlib.import_module(genmodulename)
         log = copy.copy(phmgen._phm_log)
         metrics = phmutest.summary.compute_metrics(
-            len(args.files),
-            len(testprog.result.errors),
-            num_deselected_names,
-            log,
+            num_files=len(args.files),
+            suite_errors=len(testprog.result.errors),
+            num_deselected=-1,  # fill in later in main:generate_and_run
+            log=log,
         )
         phmresult = phmutest.summary.PhmResult(
             test_program=testprog,
@@ -58,4 +63,4 @@ def run_code(
             metrics=metrics,
             log=log,
         )
-        return phmresult
+    return phmresult

@@ -1,0 +1,68 @@
+name: Dev
+
+# Installs the dev extra and runs the scripts in the dev folder.
+# Some of the commands within the scripts return error status.
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  dev:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+
+    - name:  Upgrade pip
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Windows install dev extra
+      shell: cmd
+      run: |
+        python -m pip install ".[dev]"
+      if: startswith(runner.os, 'Windows')
+
+    - name: Linux/macOS install dev extra
+      run: |
+        python -m pip install '.[dev]'
+      if: startswith(runner.os, 'Linux') || startswith(runner.os, 'macOS')
+
+    - name: Windows CI
+      shell: cmd
+      run: |
+        call dev\ci.bat
+      if: startswith(runner.os, 'Windows')
+      continue-on-error: true
+
+    - name: Linux/macOS CI
+      run: |
+        chmod u+x dev/ci.sh
+        ./dev/ci.sh
+      if: startswith(runner.os, 'Linux') || startswith(runner.os, 'macOS')
+      continue-on-error: true
+
+    - name: Windows Coverage
+      shell: cmd
+      run: |
+        call dev\runcoverage.bat
+      if: startswith(runner.os, 'Windows')
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
+      continue-on-error: true
+
+    - name: Linux/macOS Coverage
+      run: |
+        chmod u+x dev/runcoverage.sh
+        ./dev/runcoverage.sh
+      if: startswith(runner.os, 'Linux') || startswith(runner.os, 'macOS')
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
+      continue-on-error: true

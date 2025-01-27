@@ -1,5 +1,7 @@
 """Test cases for session.py."""
 
+import sys
+import traceback
 from unittest import mock
 
 import pytest
@@ -106,23 +108,41 @@ def test_progress(capsys, endswith_checker):
     assert want == phmresult.metrics
     assert phmresult.test_program is None
     assert phmresult.is_success is False
-    expected = """location|label            result  skip reason
-        ------------------------  ------  -------------------
+
+    # The FCB tests/md/replerror.md:33 raises a TypeError.
+    # The exception description can change between Python minor versions
+    # and Python implementations.
+    # Cause the same TypeError here and use its description as the expected output.
+    description = ""
+    try:
+        "" + int(3)
+    except TypeError:
+        exc_info = sys.exc_info()
+        lines = traceback.format_exception_only(exc_info[0], exc_info[1])
+        description = lines[-1]
+        description = description.replace("\n", "")
+    column_3_width = max(
+        len(description), len("AssertionError: --skip identified block")
+    )
+    dashes = "-" * column_3_width
+
+    expected = f"""location|label            result  reason
+        ------------------------  ------  {dashes}
         tests/md/replerror.md:3.  pass
         tests/md/replerror.md:7.  pass
         tests/md/replerror.md:11  pass
         tests/md/replerror.md:18  pass
         tests/md/replerror.md:26  skip    phmutest-skip
-        tests/md/replerror.md:33  error
-        tests/md/replerror.md:40  error
+        tests/md/replerror.md:33  error   {description}
+        tests/md/replerror.md:40  error   AssertionError: --skip identified block
         tests/md/replerror.md:49  skip    requires >=py3.9999
         tests/md/replerror.md:57  pass
-        ------------------------  ------  -------------------
+        ------------------------  ------  {dashes}
         location|label          result
         ----------------------  ------
         tests/md/example1.md:5  pass
         ----------------------  ------
-        """
+        """  # noqa: E501
     output = capsys.readouterr().out.rstrip()
     endswith_checker(expected, output)
 

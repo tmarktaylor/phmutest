@@ -13,11 +13,15 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import phmutest.cases
 import phmutest.globs
 import phmutest.importer
+import phmutest.printer
 import phmutest.select
 import phmutest.subtest
 import phmutest.summary
+import phmutest.syntax
 from phmutest.direct import Marker
 from phmutest.fenced import FencedBlock
+
+ReasonType = Tuple[str, int]
 
 
 class ExampleOutcomeRunner(doctest.DocTestRunner):
@@ -26,26 +30,39 @@ class ExampleOutcomeRunner(doctest.DocTestRunner):
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
         self.phm_outcomes = {}
+        self.phm_failed_reasons: Dict[int, ReasonType] = {}
+        self.phm_error_reasons: Dict[int, ReasonType] = {}
         self.phm_number_of_failures = 0
         self.phm_number_of_errors = 0
 
     def report_success(self, out, test, example, got):  # type: ignore
-        self.phm_outcomes[example.lineno + 1] = "pass"
+        line_number = example.lineno + 1
+        self.phm_outcomes[line_number] = "pass"
         super().report_success(out, test, example, got)
 
     def report_failure(self, out, test, example, got):  # type: ignore
-        self.phm_outcomes[example.lineno + 1] = "failed"
+        line_number = example.lineno + 1
+        self.phm_outcomes[line_number] = "failed"
         self.phm_number_of_failures += 1
+        self.phm_failed_reasons[line_number] = ("", line_number)
         super().report_failure(out, test, example, got)
 
     def report_unexpected_exception(self, out, test, example, exc_info):  # type: ignore
-        self.phm_outcomes[example.lineno + 1] = "error"
+        line_number = example.lineno + 1
+        self.phm_outcomes[line_number] = "error"
         self.phm_number_of_errors += 1
+        exception_class = phmutest.printer.get_exception_description(
+            exc_info[0], exc_info[1]
+        )
+        self.phm_error_reasons[line_number] = (
+            exception_class,
+            line_number,
+        )
         super().report_unexpected_exception(out, test, example, exc_info)
 
 
 def skip_block(block: FencedBlock, built_from: str) -> Optional[Tuple[int, List[str]]]:
-    """If block should be skipped return details for log enty, otherwise None."""
+    """If block should be skipped return details for log entry, otherwise None."""
     details = None
     if block.skip_patterns:
         doc_location = phmutest.subtest.make_location_string(block, built_from)
@@ -168,14 +185,43 @@ def run_one_file(
             doc_location = phmutest.subtest.make_location_string(
                 block, fileblocks.built_from
             )
-            details = (block.line, [doc_location, result, ""])
+            description, lineno = get_runner_reason(runner, line_range, result)
+            # block.line is the start of the FCB.
+            # lineno is the line associated with the result
+            details = (
+                block.line,
+                [doc_location, result, description, str(block.line), str(lineno)],
+            )
             lineno_log.append(details)
 
     lineno_log.sort()
-    log = [entry for lineno, entry in lineno_log]
+    log = [entry for _, entry in lineno_log]
     return SessionResult(
         log, runner.phm_number_of_failures, runner.phm_number_of_errors, docstring
     )
+
+
+def get_runner_reason(
+    runner: ExampleOutcomeRunner, line_range: range, result: str
+) -> ReasonType:
+    """From the runner, get first of (description, line number) for the line range."""
+    # For failed assert statements and raised exceptions in the block report
+    # log the reason saved by the test runner. Reports the first problem
+    # in the FCB, there may be more unless fail-fast.
+    if result == "failed":
+        reason_map = runner.phm_failed_reasons
+    elif result == "error":
+        reason_map = runner.phm_error_reasons
+    else:
+        return ("", 0)
+
+    reason_lineno = set(reason_map)
+    lineno = set(line_range) & reason_lineno
+    reasons: List[ReasonType] = []
+    for line in line_range:
+        if line in lineno:
+            reasons.append(reason_map[line])
+    return reasons[0]
 
 
 def generate(args: argparse.Namespace, block_store: phmutest.select.BlockStore) -> None:
@@ -236,7 +282,6 @@ def update_globs_show_sharing(
     extractor: Optional[phmutest.globs.AssignmentExtractor],
 ) -> None:
     """If sharing across files copy assigned names to globs, Do --sharing."""
-    # This is a refactoring to get run_repl() complexity down from 11.
     # Modifies globs in place. Clears the extractor.
     if extractor is not None and globs is not None:
         for name in extractor.assignments:
@@ -249,18 +294,21 @@ def update_globs_show_sharing(
         extractor.assignments.clear()
 
 
+DoctestGlobs = Optional[Dict[str, Any]]
+"""Type globs compatible with Python standard library doctest globs."""
+
+
 def run_repl(
-    args: argparse.Namespace,
-    extra_args: List[str],
+    settings: phmutest.config.Settings,
     block_store: phmutest.select.BlockStore,
 ) -> phmutest.summary.PhmResult:
     """Test the Python interactive sessions in Markdown FCBs."""
-
+    args = settings.args  # rename
     if args.generate:
         generate(args, block_store)
         return phmutest.summary.EMPTY_PHMRESULT
 
-    optionflags = doctest.FAIL_FAST if "-f" in extra_args else 0
+    optionflags = doctest.FAIL_FAST if "-f" in settings.extra_args else 0
     globs: Optional[Dict[str, Any]] = {}
     cleanup_function = null_cleanup
     log: List[List[str]] = []
@@ -269,6 +317,7 @@ def run_repl(
         globs, cleanup_function, success = process_user_fixture(args, log)
         if not success:
             phm_result = phmutest.summary.EMPTY_PHMRESULT
+            phm_result.metrics.number_of_files = len(args.files)
             phm_result.is_success = False
             phm_result.metrics.suite_errors = 1
             phm_result.log = [[str(args.fixture), "error", ""]]
@@ -287,7 +336,13 @@ def run_repl(
             result = run_one_file(args, fileblocks, optionflags, globs, extractor)
 
             if args.progress:
-                phmutest.summary.show_log(result.log)
+                null_highlighter = phmutest.syntax.Highlighter()
+                null_highlighter.disable()
+                phmutest.summary.show_log(
+                    log=result.log,
+                    highighter=null_highlighter,
+                    use_color=args.color,
+                )
 
             update_globs_show_sharing(args, globs, fileblocks, extractor)
 
@@ -305,13 +360,16 @@ def run_repl(
     cleanup_function()
 
     metrics = phmutest.summary.compute_metrics(
-        len(args.files),
-        number_of_errors,
-        len(block_store.deselected_names),
-        log,
+        num_files=len(args.files),
+        suite_errors=number_of_errors,
+        num_deselected=-1,  # fill in later in main:generate_and_run
+        log=log,
     )
     success = (metrics.failed == 0) and (number_of_errors == 0)
     phmresult = phmutest.summary.PhmResult(
-        test_program=None, is_success=success, metrics=metrics, log=log
+        test_program=None,
+        is_success=success,
+        metrics=metrics,
+        log=log,
     )
     return phmresult

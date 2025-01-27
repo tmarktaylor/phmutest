@@ -45,6 +45,14 @@ def test_drink_py_md():
     )
 
 
+def test_answerlib_py_md():
+    """The copy of .md file in fenced code block is the same as the file."""
+    check_first_block(
+        markdown_path="docs/answerlib_py.md",
+        contents_path="docs/answerlib.py",
+    )
+
+
 def test_generate_project_py_md():
     """The copy of .md file in fenced code block is the same as the file."""
     check_first_block(

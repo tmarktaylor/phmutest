@@ -4,7 +4,7 @@ N is a Python minor version number.
 
 The skipif directive identifies Python FCBs to exclude from testing.
 They will be noted in --log with result "skip" and
-skip reason "requires Python >= 3.N".
+reason "requires Python >= 3.N".
 
 This test case will only run when Python is version 3.999 or higher.
 
@@ -34,7 +34,7 @@ log:
 args.files: 'docs/advanced/skipif.md'
 args.log: 'True'
 
-location|label              result  skip reason
+location|label              result  reason
 --------------------------  ------  ------------------------
 docs/advanced/skipif.md:13  skip    requires Python >= 3.999
 --------------------------  ------  ------------------------

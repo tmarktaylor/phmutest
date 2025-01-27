@@ -1,13 +1,15 @@
-# Tool API for phmutest version 0.0.4
+# Tool API for phmutest version 0.1.0
 
-## API - phmutest.tool
+## Tool API - phmutest.tool
 
 Look for example uses of FCBChooser in tests/test_docs.py.
 
 ```python
 class FCBChooser:
     """Choose Markdown FCBs matching criteria."""
+```
 
+```python
     def __init__(self, markdown_filename: str):
         """Gather all the Markdown fenced code blocks in the file.
 
@@ -63,12 +65,11 @@ class FCBChooser:
 ```python
 @dataclass
 class LabeledFCB:
+    """Information about a fenced code block that has a label directive."""
+
     label: str  # the label directive's value
     line: str  # Markdown file line number of block contents
     contents: str  # fenced code block contents
-
-
-"""Information about a fenced code block that has a label directive."""
 ```
 
 ```python
@@ -91,7 +92,7 @@ def labeled_fenced_code_blocks(markdown_filename: str) -> List[LabeledFCB]:
     Returns:
         List of LabeledFCB objects.
 
-        LabeledFCB is has these fields:
+        LabeledFCB has these fields:
 
         - label is the value of a label directive
           placed in a HTML comment before the fenced code block.

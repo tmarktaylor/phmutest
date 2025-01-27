@@ -7,7 +7,7 @@ a different pytest file. This allows the test developer to write
 additional test cases for fenced code blocks that are not handled by
 phmutest. The directive value can be any string.
 
-[tool API](../api.md)
+[Tool API](../api.md)
 
 Here is a YAML FCB with a `<!--phmutest-label my-label-->` label directive.
 

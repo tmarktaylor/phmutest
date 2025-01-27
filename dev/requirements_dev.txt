@@ -1,0 +1,13 @@
+colorama >= 0.4.6 ; os_name == "nt"
+colorama >= 0.4.4 ; os_name != "nt"
+pygments
+pytest >= 6.2.5
+pytest-subtests
+stackprinter
+coverage
+flake8
+pep8-naming
+mkdocs
+mypy
+black
+isort

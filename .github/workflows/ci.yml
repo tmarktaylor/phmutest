@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "pypy-3.10", "3.8", "3.9", "3.10", "3.11"]
+        python-version: [ "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
@@ -83,6 +83,13 @@ jobs:
           phmutest tests/md/optionflags.md --log --replmode --fixture tests.test_patching.setflags
           phmutest docs/fix/code/globdemo.md --fixture docs.fix.code.globdemo.init_globals --log
           phmutest tests/md/project.md --report
+      - name: Broken examples
+        run: |
+          # Install color and traceback extras. This should be last step in steps:.
+          # phmutest was installed above.
+          pip install '.[color, traceback]'
+          chmod u+x .github/workflows/broken_examples.sh
+          ./.github/workflows/broken_examples.sh
 
 
   inspect:
@@ -93,7 +100,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.12"
     - name: Install phmutest
       run: |
         python -m pip install --upgrade pip
@@ -104,7 +111,7 @@ jobs:
         pip freeze
     - name: Isort
       run: |
-        isort -
+        isort . --profile black --skip "*_cache"
     - name: Formatting
       # Show reformatting changes.
       # Don't run black on the generated test files.
@@ -113,7 +120,7 @@ jobs:
       continue-on-error: true
     - name: Code Style
       run: |
-        flake8 --exit-zero --max-complexity=10
+        flake8 --exit-zero --max-complexity=10  --exclude tests/py,dev
     - name: Type Hints
       run: |
         mypy src/phmutest --strict
@@ -144,20 +151,24 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.x
-    - name: Install phmutest
+    - name: Install coverage, dependencies
       run: |
         python -m pip install --upgrade pip
         pip install coverage
         pip install -r tests/requirements.txt
-        pip freeze
-    - name: Tests, coverage report
+
+    - name: Coverage report
       run: |
         coverage erase
-        coverage run --branch --source=src -m phmutest --version
-        coverage run --branch --source=src --append -m phmutest README.md --report
-        coverage run --branch --source=src --append -m phmutest README.md
-        coverage run --branch --source=src --append -m pytest -vv tests
-        coverage report --show-missing
+        # Get coverage for no extras installed.
+        coverage run --branch --source=src --append -m phmutest --version
+        coverage run --branch --source=src --append -m pytest tests/test_color.py tests/test_traceback.py
+        python -m phmutest tests/md/does_not_print.md --generate dev/test_temptestfile.py
+        # This script installs the extras and handles phmutest runs with failing tests.
+        chmod u+x .github/workflows/coverage.sh
+        ./.github/workflows/coverage.sh
+        coverage run --branch --source=src --append -m pytest tests
+        coverage report --show-missing --precision=2
         coverage xml
       env:
         PYTHONPATH: ${{ github.workspace }}/src
@@ -168,7 +179,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml # optional
-        flags: pytest,python-${{ steps.setuppython.outputs.python-version }},ubuntu-latest # optional
+        flags: python-${{ steps.setuppython.outputs.python-version }} # optional
         name: codecov-umbrella # optional
         fail_ci_if_error: false # optional (default = false)
         verbose: true # optional (default = false)

@@ -28,7 +28,6 @@ def fixture_function_importer(dotted_path_string: str) -> FixtureFunction:
     """
     dotted_path = Path(dotted_path_string)
     function = dotted_path.suffix  # pathlib Rocks!
-    assert function.startswith("."), "Expecting .FUNCTION"
     function_name = function[1:]
     dotted_file_name = dotted_path.stem
     file_name = dotted_file_name.replace(".", "/")

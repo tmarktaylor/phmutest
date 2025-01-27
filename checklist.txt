@@ -3,7 +3,7 @@ Checklist
   until all version strings are the same.
 
 - Check for outstanding todo's.
-- update recent changes in recent_changes.md
+- update CHANGELOG.md
 - update copyright year
 - Run code inspections.
 - Run pytest cases on lowest Py version
@@ -18,27 +18,36 @@ Checklist
 - Run flake8 on doc and tests (fixture import and use errors are expected)
 - Build docs python docs/premkdocs.py --start-server --clean
 
-- Prepare release on the develop branch.
-  - On GitHub manually dispatch action "CI" (ci.yml) on the develop branch.
-  - On GitHub manually dispatch action "Buildable" (build.yml).
+Prepare release on the develop branch.
+( ) On GitHub manually dispatch action "Buildable" (build.yml).
     Inspect the log to make sure newly added files are copied to the dist.
 
-- Open pull request and merge develop branch to main branch.
+( ) On GitHub manually dispatch action "CI" (ci.yml) on the develop branch.
 
-- On main branch create a release on GitHub (where 0.0.0 -> published version)
+( ) On GitHub manually dispatch action "Dev" (dev.yml) on the develop branch.
+    Here we try the scripts in the dev folder with the installation extra [dev].
+    The dev scripts are useful during development on a local machine.
+    Not all the commands return success.
+    Success of the Dev action is not required for publishing.
+
+( ) Open pull request and merge develop branch to main branch.
+
+On main branch
+( ) Create a release on GitHub (where 0.0.0 -> published version)
   - tag= v0.0.0
   - release= phmutest 0.0.0
   - description= Version 0.0.0 uploaded to Python Package Index.
 
-- Publish to PYPI
+( ) Publish to PYPI
+  On GitHub manually dispatch action "Publish to PYPI" (publish.yml).
   Configure trusted publishing on both test PYPI and PYPI if this is
   the first release.
-  - On GitHub manually dispatch action "Publish to PYPI" (publish.yml).
 
-- Check the release on PYPI
-  - The hash on PYPI should be the same as the hash shown by the
+Check the release on PYPI
+( ) The hash on PYPI should be the same as the hash shown by the
     publish.yml builddist action step.
-  - Manually dispatch "Install from PYPI" (wheel.yml) to show pip
+
+( ) Manually dispatch "Install from PYPI" (wheel.yml) to show pip
     install succeeds.
 
   -------------------------------------------------------------------------

@@ -9,4 +9,6 @@ setup-across-files = []
 select = []
 deselect = []
 skip = []
+color = false
+style = ""
 

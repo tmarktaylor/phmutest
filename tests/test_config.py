@@ -10,11 +10,17 @@ import phmutest.main
 import phmutest.summary
 
 
-def process_args(commandline_args):
+def get_settings(commandline_args):
+    """Process command line args including a config file. Return settings."""
     parser = phmutest.main.main_argparser()
     known_args = parser.parse_known_args(commandline_args)
-    args = phmutest.config.process_config_file(known_args[0])
-    return args
+    return phmutest.config.get_settings(known_args)
+
+
+def process_args(commandline_args):
+    """Process command line args including a config file. Return args."""
+    settings = get_settings(commandline_args)
+    return settings.args
 
 
 def test_messy_toml_within_pyproject():
@@ -98,6 +104,24 @@ def test_share_across_not_exists():
     assert "NotAnExistingFile1.md not found" in str(exc_info.value)
 
 
+def test_share_across_not_in_files():
+    """Filename provided .toml share-across-files key does not exist."""
+    command = "--config tests/toml/share_across_not_in_files.toml --log"
+    args = command.split()
+    with pytest.raises(ValueError) as exc_info:
+        phmutest.main.main(args)
+    assert "share-across-files must also be positional argument" in str(exc_info.value)
+
+
+def test_setup_across_not_in_files():
+    """Filename provided .toml setup-across-files key does not exist."""
+    command = "--config tests/toml/setup_across_not_in_files.toml --log"
+    args = command.split()
+    with pytest.raises(ValueError) as exc_info:
+        phmutest.main.main(args)
+    assert "setup-across-files must also be positional argument" in str(exc_info.value)
+
+
 def test_setup_across_not_exists():
     """Filename provided .toml setup-across-files key does not exist."""
     command = "--config tests/toml/filenotexists2.toml --log"
@@ -146,7 +170,7 @@ def test_include_exclude_globs():
 
 
 def test_share_across_precedence():
-    """share-across-files on command line supercedes .toml section."""
+    """share-across-files on command line supersedes .toml section."""
     command = (
         " tests/md/setupnoteardown.md"
         " tests/md/sharedto2.md"
@@ -171,7 +195,7 @@ def test_share_across_precedence():
 
 
 def fixture(**kwargs):
-    """Phmutest fixture funciton."""
+    """Phmutest fixture function."""
     log = kwargs["log"]
     log.append(["fixture", "complete", ""])
     raise unittest.SkipTest
@@ -317,7 +341,7 @@ def test_deselect_override(capsys, endswith_checker):
 
 
 def test_mutual_exclusion():
-    """Both select and deselect keys are non-empty which raises ValeError."""
+    """Both select and deselect keys are non-empty which raises ValueError."""
     command = "--config tests/toml/badgroup.toml --log"
     args = command.split()
     with pytest.raises(ValueError) as exc_info:
@@ -326,3 +350,47 @@ def test_mutual_exclusion():
         "In tests/toml/badgroup.toml non-empty deselect not allowed with select"
         in str(exc_info.value)
     )
+
+
+def test_a_pygments_style():
+    """Show a pygments style name is read from style key in .toml."""
+    commandline_args = ["--config", "tests/toml/style-is-material.toml"]
+    args = process_args(commandline_args)
+    assert len(args.files) == 2
+    assert args.style == "material"
+
+
+def test_color_config():
+    """Show args.color is set when color key in .toml is true."""
+    commandline_args = ["--config", "tests/toml/color.toml"]
+    args = process_args(commandline_args)
+    assert len(args.files) == 3
+    assert args.color is True
+
+
+def test_color_override():
+    """Show a command line --color overrides .toml file style key."""
+    commandline_args = [
+        "--config",
+        "tests/toml/project.toml",
+        "--color",
+    ]
+    settings = get_settings(commandline_args)
+    args = settings.args
+    assert len(args.files) == 3
+    assert args.color is True
+
+
+def test_style_override():
+    """Show a command line --style overrides .toml file style key."""
+    commandline_args = [
+        "--config",
+        "tests/toml/style-is-material.toml",
+        "--style",
+        "dracula",
+    ]
+    settings = get_settings(commandline_args)
+    args = settings.args
+    assert len(args.files) == 2
+    assert args.style == "dracula"
+    settings = get_settings(commandline_args)
