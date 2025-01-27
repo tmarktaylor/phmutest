@@ -3,7 +3,7 @@
 <!-- Generate initial Markdown for commits contributing to the latest release.-->
 <!--git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-01-25"-->
 
-## [0.1.0] - 2025-01-XX todo-
+## [0.1.0] - 2025-01-27
 
 ### Changed
 
