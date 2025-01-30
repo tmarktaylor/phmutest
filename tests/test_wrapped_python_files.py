@@ -69,7 +69,7 @@ def test_generate_share_demo_py_md():
     )
 
 
-def notest_count_test_modules():
+def notest_count_test_modules():  # pragma: no cover
     """Count the number of sys.modules that are generated testfiles. Last in suite."""
     # Change notest to test above to do the count.
     import sys

@@ -71,7 +71,7 @@ def test_consistent_copyright():
     assert f"Copyright (c) {year}" in Path("mkdocs.yml").read_text(encoding="utf-8")
 
 
-def test_trail_spaces_and_only_ascii():
+def test_trail_spaces_and_only_ascii():  # pragma: no cover
     """Fail if files in repository have non-ASCII or trailing spaces.
 
     Note- The IDE and/or git may be configurable to prevent trailing spaces
@@ -102,9 +102,7 @@ def string_to_dependencies(text: str) -> set:
     lines = text.splitlines()
     lines = [line for line in lines if not line.startswith("#")]
     collapsed_lines = [line.replace(" ", "") for line in lines if line]
-    items = set(collapsed_lines)
-    if "" in items:
-        items.remove("")  # empty string from blank lines
+    items = set(collapsed_lines) - {""}  # remove an unlikely empty str
     return items
 
 

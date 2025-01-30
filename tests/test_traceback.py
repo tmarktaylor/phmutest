@@ -15,7 +15,7 @@ try:
     import stackprinter  # noqa: F401
 
     traceback_extra = True
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # pragma: no cover
     pass
 
 
@@ -30,6 +30,14 @@ def check_exception_line_numbers(log: Log):
     assert traces
     for line, trace in zip(elines, traces):
         assert f", line {line}, in" in trace
+
+
+def test_ordered_checker_miss(ordered_checker):
+    """Show ordered_checker fixture detects a missing line."""
+    with pytest.raises(AssertionError):
+        ordered_checker(
+            got="line1\nline2\nline3", substrings=["line1", "bogus", "line3"]
+        )
 
 
 @pytest.mark.skipif(not traceback_extra, reason="Requires install extra [traceback].")

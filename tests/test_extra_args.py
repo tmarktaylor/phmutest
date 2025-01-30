@@ -120,7 +120,7 @@ def test_buffer():
     assert phmresult.is_success is False
 
 
-@pytest.mark.skip("Causes unrelated tests to fail.")
+@pytest.mark.skip("Causes unrelated tests to fail.")  # pragma: no cover
 def test_namepatterns():
     """-k TESTNAMEPATTERNS. Use -k= otherwise it looks like a .md file."""
     command = "--config tests/toml/project.toml -k=NOMATCH --log"

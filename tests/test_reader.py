@@ -6,18 +6,19 @@ import phmutest.reader
 from phmutest.reader import NodeType
 
 
-def show_node(node):
-    print(node.line, node.ntype)
-    if node.payload:
-        print(repr(node.payload))
+# for debugging
+# def show_node(node):
+#     print(node.line, node.ntype)
+#     if node.payload:
+#         print(repr(node.payload))
 
 
-def show_file_nodes(filename):
-    """Helper to show the DocNode values during test development."""
-    nodes = phmutest.reader.read_markdown(Path(filename))
-    for node in nodes:
-        show_node(node)
-        print("-" * 40)
+# def show_file_nodes(filename):
+#     """Helper to show the DocNode values during test development."""
+#     nodes = phmutest.reader.read_markdown(Path(filename))
+#     for node in nodes:
+#         show_node(node)
+#         print("-" * 40)
 
 
 class TestReader:
