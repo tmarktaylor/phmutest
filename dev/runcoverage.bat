@@ -13,3 +13,9 @@ py -m phmutest tests\md\does_not_print.md --generate dev/test_temptestfile.py
 py -m coverage run --branch --source=src --append -m pytest dev/test_temptestfile.py
 py -m coverage report -m --precision=2
 py -m coverage html --precision=2
+rem Coverage for tests
+rem py -m coverage erase
+rem py -m coverage run --branch  --omit tests/check_classifiers.py --source=tests -m pytest tests
+rem py -m coverage report -m --precision=2
+rem py -m coverage html --precision=2 --dir htmltests
+
