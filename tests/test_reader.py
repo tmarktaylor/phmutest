@@ -5,7 +5,6 @@ from pathlib import Path
 import phmutest.reader
 from phmutest.reader import NodeType
 
-
 # for debugging
 # def show_node(node):
 #     print(node.line, node.ntype)

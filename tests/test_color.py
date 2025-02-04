@@ -32,14 +32,10 @@ def test_colorize_result(monkeypatch):
     # items that should not be colorized
     assert phmutest.color.colorize_result(item="", use_color=True) == ""
     assert phmutest.color.colorize_result(item="past", use_color=True) == "past"
-    assert (
-        phmutest.color.colorize_result(item="ifailed", use_color=True) == "ifailed"
-    )
+    assert phmutest.color.colorize_result(item="ifailed", use_color=True) == "ifailed"
     assert phmutest.color.colorize_result(item="01234", use_color=True) == "01234"
     assert phmutest.color.colorize_result(item="  pass", use_color=True) == "  pass"
-    assert (
-        phmutest.color.colorize_result(item="  error", use_color=True) == "  error"
-    )
+    assert phmutest.color.colorize_result(item="  error", use_color=True) == "  error"
 
 
 def test_highlighter():
