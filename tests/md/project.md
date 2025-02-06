@@ -32,7 +32,7 @@ text = text.replace("\n\n", " ")
 assert text == "Hello Planet!"  # this assert is in the Markdown example.
 ```
 
-## Interactive Python session requires `<BLANKINE>` in the expected output
+## Interactive Python session requires `<BLANKLINE>` in the expected output
 
 Blank lines in the expected output must be replaced with `<BLANKLINE>`.
 To see un-rendered Markdown navigate to tests/md/project.md on GitHub
