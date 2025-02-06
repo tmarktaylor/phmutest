@@ -3,7 +3,7 @@
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, MutableMapping, Set
+from typing import List, MutableMapping, Set, Tuple
 
 import phmutest.fenced
 import phmutest.reader
@@ -148,16 +148,16 @@ class BlockStore:
         """Return blocks for Markdown file at path."""
         return self._block_store[path]
 
-    def get_contents(self, built_from: str, line: int) -> str:
+    def get_contents_and_role(self, built_from: str, line: int) -> Tuple[str, Role]:
         """Return contents of block in file whose open fence is at line."""
         fileblocks = self.get_blocks(Path(built_from))
         assert fileblocks.built_from == built_from, "sanity check"
         for b in fileblocks.selected:
             if b.line == line:
-                return b.contents
+                return b.contents, b.role
         raise ValueError(f"No block has start line= {line}.")
 
     def number_of_lines(self, built_from: str, line: int) -> int:
         """Return number of lines of block in file whose open fence is at line."""
-        contents = self.get_contents(built_from, line)
+        contents, _ = self.get_contents_and_role(built_from, line)
         return contents.count("\n")

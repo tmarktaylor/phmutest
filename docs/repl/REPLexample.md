@@ -181,9 +181,11 @@ docs/repl/REPLexample.md:82  failed
 docs/repl/REPLexample.md:39
     40  >>> fail_bot = WrongAnswer()
 >   41  >>> fail_bot.ask(question="What floats?")
+    42  'apples'
 
 docs/repl/REPLexample.md:53
 >   54  >>> pass_bot.inquire(query="What floats?")
+    55  'apples'
         AttributeError: 'RightAnswer' object has no attribute 'inquire'
 
 docs/repl/REPLexample.md:71
@@ -193,6 +195,7 @@ docs/repl/REPLexample.md:71
 
 docs/repl/REPLexample.md:82
 >   83  >>> print("Incorrect expected output.")
+    84  Hello World!
 ```
 
 ## Notes

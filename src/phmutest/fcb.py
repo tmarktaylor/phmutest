@@ -1,11 +1,13 @@
 """Print breakage in broken FCBs."""
 
+import ast
 import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 import phmutest.select
 import phmutest.syntax
+from phmutest.fenced import Role
 from phmutest.printer import (
     DIFFS,
     DOC_LOCATION,
@@ -113,8 +115,11 @@ def show_broken_fcbs(
             # Print the FCB line by line indicating the broken line with ">"
             # and stopping there. Print the Markdown file line numbers.
             if built_from:
-                contents = block_store.get_contents(
+                contents, role = block_store.get_contents_and_role(
                     built_from=built_from, line=open_fence
+                )
+                broken_statement_end = find_end_of_statement(
+                    contents, role, open_fence, broken_code_line
                 )
                 print(f"{built_from}:{open_fence}")
                 highlighted_fcb = highlighter.highlight(contents)
@@ -122,9 +127,11 @@ def show_broken_fcbs(
                 for line_number, line in enumerate(lines, start=open_fence + 1):
                     if line_number == broken_code_line:
                         print(f"> {line_number:4.0f}  {line}")
-                        break  # show FCB until the breakage
                     else:
                         print(f"  {line_number:4.0f}  {line}")
+                    # show FCB until the breakage
+                    if line_number == broken_statement_end:
+                        break
 
                 # Highlight the exception name in the reason.
                 if text := entry[REASON]:
@@ -217,3 +224,30 @@ def make_markdown_map(
             )
             location = ""  # done until next with _phmPrinter line
     return markdown_map
+
+
+def find_end_of_statement(
+    contents: str, role: Role, open_fence: int, broken_code_line: int
+) -> int:
+    """Guess the end line number of the statement at broken_code_line."""
+    if role == Role.SESSION:
+        # For REPL try to print one extra line.
+        # This can be beyond the end of the FCB.
+        return broken_code_line + 1
+    at_most_lines = 12
+    guess = 0
+    relative_lineno = broken_code_line - open_fence
+    try:
+        tree = ast.parse(contents)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.stmt):
+                if node.lineno == relative_lineno:
+                    assert node.end_lineno is not None  # avoid mypy error
+                    guess = open_fence + node.end_lineno
+                    break
+    except Exception:
+        # If guess fails, just return the broken line number.
+        return broken_code_line
+    guess = max(guess, broken_code_line)  # at least the broken line
+    guess = min(guess, broken_code_line + at_most_lines - 1)
+    return guess
