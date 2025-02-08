@@ -221,8 +221,8 @@ class Printer:
             self.location,
             status,
             reason,
-            str(with_lineno_str),
-            str(exc_lineno_str),
+            with_lineno_str,
+            exc_lineno_str,
         ]
         if self.flags & SHOW_STDOUT:
             log_entry.append(self.capture_stdout.getvalue())
