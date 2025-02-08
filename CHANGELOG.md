@@ -46,6 +46,7 @@
   [`49f49fb`](https://github.com/tmarktaylor/phmutest/commit/49f49fb),
   [`039cb0e`](https://github.com/tmarktaylor/phmutest/commit/039cb0e))
 - Add dev folder local development scripts.
+  ([`785ddcf`](https://github.com/tmarktaylor/phmutest/commit/785ddcf))
 - Add note to docs: Each block must start with no indent level.
   ([`139acd6`](https://github.com/tmarktaylor/phmutest/commit/139acd6))
 
