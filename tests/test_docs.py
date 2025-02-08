@@ -608,7 +608,7 @@ def test_usage_options():
 
 
 @pytest.mark.skip("Minor version specific. Run manually on py 3.11.")
-def test_usage_text_exactly():
+def test_usage_text_exactly():  # pragma: no cover
     """Check exact --help text documented in README.md."""
     readme_fcbs = phmutest.tool.FCBChooser("README.md")
     # This string must be present verbatim in at most one FCB in README.md.

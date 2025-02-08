@@ -50,7 +50,7 @@ def test_loads_a_separate_module():
     assert module2.imported_funcion(message="shrubbery") == "shrubbery"
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     """Invoke this file with python to run the tests without pytest."""
     # prints test_importer three times
     print()

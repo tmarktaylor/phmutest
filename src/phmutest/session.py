@@ -1,4 +1,4 @@
-"""Generate and run docstests for Python interactive session FCBs."""
+"""Generate and run doctests for Python interactive session FCBs."""
 
 import argparse
 import doctest

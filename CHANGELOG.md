@@ -1,7 +1,20 @@
 # Changelog
 
 <!-- Generate initial Markdown for commits contributing to the latest release.-->
-<!--git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-01-25"-->
+<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" a2ab243..HEAD -->
+<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-02-08" -->
+
+## [1.0.0] - 2025-02-08
+
+### Changed
+
+- For broken FCB show whole statement if multiline.
+  ([`238c41a`](https://github.com/tmarktaylor/phmutest/commit/238c41a))
+
+### Removed
+
+- Remove syntax highlight exception names in log.
+  ([`d77e05a`](https://github.com/tmarktaylor/phmutest/commit/d77e05a))
 
 ## [0.1.0] - 2025-01-27
 
@@ -46,6 +59,7 @@
   [`49f49fb`](https://github.com/tmarktaylor/phmutest/commit/49f49fb),
   [`039cb0e`](https://github.com/tmarktaylor/phmutest/commit/039cb0e))
 - Add dev folder local development scripts.
+  ([`785ddcf`](https://github.com/tmarktaylor/phmutest/commit/785ddcf))
 - Add note to docs: Each block must start with no indent level.
   ([`139acd6`](https://github.com/tmarktaylor/phmutest/commit/139acd6))
 
@@ -97,6 +111,8 @@
 
 - Initial upload to Python Package Index.
 
+[1.0.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v1.0.0
+
 [0.1.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.1.0
 
 [0.0.4]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.4
@@ -107,6 +123,6 @@
 
 [0.0.1]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.1
 
-[common-changelog]: https:/common-changelog.org
+[common-changelog]: https://common-changelog.org
 
 [keep a changelog]: https://keepachangelog.com/en/1.1.0

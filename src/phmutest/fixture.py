@@ -1,4 +1,4 @@
-"""v0.1.0 Keyword arguments passed to --fixture function and return type Fixture.
+"""v1.0.0 Keyword arguments passed to --fixture function and return type Fixture.
 
 These are passed to the fixture function as keyword arguments:
 

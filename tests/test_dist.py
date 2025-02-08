@@ -30,9 +30,16 @@ class TestSameVersions:
         """Check the version near the top of README.md."""
         self.verify_found_in_file("README.md", "# phmutest {}\n")
 
-    def test_changelog(self):
-        """Check the version is anywhere in CHANGELOG.md."""
-        self.verify_found_in_file("CHANGELOG.md", "[{}] - ")
+    def test_changelog_tag(self):
+        """Check the version tag name is anywhere in CHANGELOG.md."""
+        self.verify_found_in_file("CHANGELOG.md", "## [{}] - ")
+
+    def test_changelog_tag_link(self):
+        """Check the version tag link is anywhere in CHANGELOG.md."""
+        self.verify_found_in_file(
+            "CHANGELOG.md",
+            "[{0}]: https://github.com/tmarktaylor/phmutest/releases/tag/v{0}\n",
+        )
 
     def test_tool_api(self):
         """Check the version is anywhere in docs/api.md."""
@@ -71,7 +78,7 @@ def test_consistent_copyright():
     assert f"Copyright (c) {year}" in Path("mkdocs.yml").read_text(encoding="utf-8")
 
 
-def test_trail_spaces_and_only_ascii():
+def test_trail_spaces_and_only_ascii():  # pragma: no cover
     """Fail if files in repository have non-ASCII or trailing spaces.
 
     Note- The IDE and/or git may be configurable to prevent trailing spaces
@@ -102,9 +109,7 @@ def string_to_dependencies(text: str) -> set:
     lines = text.splitlines()
     lines = [line for line in lines if not line.startswith("#")]
     collapsed_lines = [line.replace(" ", "") for line in lines if line]
-    items = set(collapsed_lines)
-    if "" in items:
-        items.remove("")  # empty string from blank lines
+    items = set(collapsed_lines) - {""}  # remove an unlikely empty str
     return items
 
 

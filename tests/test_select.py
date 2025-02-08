@@ -168,5 +168,5 @@ def test_get_contents():
     known_args = parser.parse_known_args(args)
     blockstore = phmutest.select.BlockStore(known_args[0])
     with pytest.raises(ValueError) as exc_info:
-        _ = blockstore.get_contents("README.md", 12)
+        _ = blockstore.get_contents_and_role("README.md", 12)
     assert "No block has start line= 12" in str(exc_info.value)

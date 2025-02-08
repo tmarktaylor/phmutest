@@ -1,4 +1,4 @@
-"""Process skip directives. Encapsulate access to Python standard library sys."""
+"""Process skip directives."""
 
 import argparse
 from dataclasses import dataclass
