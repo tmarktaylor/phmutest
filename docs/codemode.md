@@ -4,7 +4,7 @@
 
 Code and expected output blocks are tested internally with Python
 standard library [unittest][1]. The generated testfile can also
-be run with [pytest]
+be run with [pytest][2]
 
 A temporary unittest Python source file is generated and run.
 Added logic records the pass/failed/error/skip status and
@@ -133,3 +133,4 @@ to the standard error stream shared with unittest's verbose printing.
 Show printing by FCBs to standard output when testing is complete.
 
 [1]: https://docs.python.org/3/library/unittest.html
+[2]: https://docs.pytest.org

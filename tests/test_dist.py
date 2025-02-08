@@ -30,9 +30,16 @@ class TestSameVersions:
         """Check the version near the top of README.md."""
         self.verify_found_in_file("README.md", "# phmutest {}\n")
 
-    def test_changelog(self):
-        """Check the version is anywhere in CHANGELOG.md."""
-        self.verify_found_in_file("CHANGELOG.md", "[{}] - ")
+    def test_changelog_tag(self):
+        """Check the version tag name is anywhere in CHANGELOG.md."""
+        self.verify_found_in_file("CHANGELOG.md", "## [{}] - ")
+
+    def test_changelog_tag_link(self):
+        """Check the version tag link is anywhere in CHANGELOG.md."""
+        self.verify_found_in_file(
+            "CHANGELOG.md",
+            "[{0}]: https://github.com/tmarktaylor/phmutest/releases/tag/v{0}\n",
+        )
 
     def test_tool_api(self):
         """Check the version is anywhere in docs/api.md."""

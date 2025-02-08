@@ -107,6 +107,6 @@
 
 [0.0.1]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.0.1
 
-[common-changelog]: https:/common-changelog.org
+[common-changelog]: https://common-changelog.org
 
 [keep a changelog]: https://keepachangelog.com/en/1.1.0
