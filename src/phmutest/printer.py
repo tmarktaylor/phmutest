@@ -126,7 +126,7 @@ class Printer:
                 # In all other situations we expect is_print_capture_on_error to be
                 # True.
                 # So when it is False this means we are checking expected output.
-                # We don't log a reason because the asssertEqual may be testing a
+                # We don't log a reason because the assertEqual may be testing a
                 # multiline string which would mess up the output. The lower case "o"
                 # in the location column indicates expected output was checked.
                 if not self.is_print_capture_on_error:
