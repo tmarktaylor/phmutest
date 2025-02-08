@@ -1,7 +1,20 @@
 # Changelog
 
 <!-- Generate initial Markdown for commits contributing to the latest release.-->
-<!--git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-01-25"-->
+<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" a2ab243..HEAD -->
+<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-02-08" -->
+
+## [1.0.0] - 2025-02-08
+
+### Changed
+
+- For broken FCB show whole statement if multiline.
+  ([`238c41a`](https://github.com/tmarktaylor/phmutest/commit/238c41a))
+
+### Removed
+
+- Remove syntax highlight exception names in log.
+  ([`d77e05a`](https://github.com/tmarktaylor/phmutest/commit/d77e05a))
 
 ## [0.1.0] - 2025-01-27
 
@@ -97,6 +110,8 @@
 ## [0.0.1] - 2023-08-14
 
 - Initial upload to Python Package Index.
+
+[1.0.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v1.0.0
 
 [0.1.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v0.1.0
 

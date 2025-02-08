@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ref: v0.1.0
+  ref: v1.0.0
 
 jobs:
   builddist:
