@@ -133,10 +133,9 @@ def show_broken_fcbs(
                     if line_number == broken_statement_end:
                         break
 
-                # Highlight the exception name in the reason.
+                # Print the exception reason.
                 if text := entry[REASON]:
-                    htext = highlighter.highlight_exception(text)
-                    print(f"        {htext}")
+                    print(f"        {text}")
 
         # Additionally print diffs from miss-compare of an expected output block.
         # REASON will be the assertion message from unittest.assertEqual

@@ -1,6 +1,5 @@
 """Syntax highlight Python code with pygments."""
 
-import re
 from typing import Optional
 
 
@@ -44,11 +43,4 @@ class Highlighter:
         """Return syntax highlighted text."""
         if self.is_enabled:
             text = self.pygments_highlight(text, self.lexer, self.formatter).rstrip()
-        return text
-
-    def highlight_exception(self, text: str) -> str:
-        """Return text that highlights the exception name."""
-        if self.is_enabled:
-            repl = self.start_color + r"\1" + self.reset
-            text = re.sub(self._pattern, repl, text, count=1)
         return text

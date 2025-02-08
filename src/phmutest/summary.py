@@ -271,12 +271,6 @@ def show_log(
         # Colorize the result values in the second column,
         colorize_results(justified_columns[RESULT], use_color)
 
-        # Syntax highlight exception names in the third column
-        if len(justified_columns) >= 3:
-            column = justified_columns[REASON]
-            for i, text in enumerate(column):
-                column[i] = highighter.highlight_exception(text)
-
         # Assemble the table from the title row and the rows.
         justified_rows = transpose(justified_columns)
         table = [justified_titles]
