@@ -1,8 +1,6 @@
 # Changelog
 
-<!-- Generate initial Markdown for commits contributing to the latest release.-->
-<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" a2ab243..HEAD -->
-<!-- git log --pretty=format:"- %s%n  ([`%h`](https://github.com/tmarktaylor/phmutest/commit/%h))%n" --since="2025-02-08" -->
+<!-- Refs since the last tagged release: 07b6d0b..HEAD -->
 
 ## [1.0.0] - 2025-02-08
 
@@ -34,7 +32,8 @@
   ([`57b831b`](https://github.com/tmarktaylor/phmutest/commit/57b831b))
 - No longer de-indenting setup/teardown blocks.
   ([`3641b32`](https://github.com/tmarktaylor/phmutest/commit/3641b32))
-- Move docs/recent_changes.md to CHANGELOG.md and format based on advice in [common-changelog] and [keep a changelog].
+- Move docs/recent_changes.md to CHANGELOG.md and format based on advice
+  in [common-changelog] and [keep a changelog].
   ([`43b2bd7`](https://github.com/tmarktaylor/phmutest/commit/43b2bd7),
   [`6b75fb6`](https://github.com/tmarktaylor/phmutest/commit/6b75fb6))
 - Explicitly complete the with suite in code.py.
@@ -42,7 +41,8 @@
 
 ### Added
 
-- New features: Show broken FCBs, traceback, --color, --stdout, syntax highlighting --style.
+- New features: Show broken FCBs, traceback, --color, --stdout,
+  syntax highlighting --style.
   ([`8f1ff10`](https://github.com/tmarktaylor/phmutest/commit/8f1ff10),
   [`7ddbbca`](https://github.com/tmarktaylor/phmutest/commit/7ddbbca),
   [`c410da7`](https://github.com/tmarktaylor/phmutest/commit/c410da7),
