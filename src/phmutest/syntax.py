@@ -17,12 +17,10 @@ class Highlighter:
         except ModuleNotFoundError:
             self.pygments_highlight = None
             self.lexer = None
-
         if self.pygments_highlight is None or style is None:
             self.formatter = None
             self.is_enabled = False  # Not able to do highlighting.
         else:
-            # Determine pre and post ANSI terminal sequence strings to set color.
             self.formatter = TerminalTrueColorFormatter(style=style)
             self.is_enabled = True  # Able to do highlighting.
 
