@@ -75,7 +75,7 @@ def skip_block(block: FencedBlock, built_from: str) -> Optional[Tuple[int, List[
                 reason = directive.literal[4:-3]  # lose the directive <!-- and -->.
                 details = (block.line, [doc_location, "skip", reason])
             else:
-                assert directive.type == Marker.SKIPIF_PYVERSION, "sanity check"
+                assert directive.type == Marker.SKIPIF_PYVERSION, "unittest check"
                 minor_version = int(directive.value)
                 if sys.version_info < (3, minor_version):
                     reason = f"requires >=py3.{minor_version}"

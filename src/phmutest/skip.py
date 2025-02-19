@@ -90,7 +90,7 @@ def skipper(
                 reason = directive.literal[4:-3]  # lose the directive <!-- and -->.
                 skip_info = always_skip(reason, doc_location, args.progress)
             else:
-                assert directive.type == Marker.SKIPIF_PYVERSION, "sanity check"
+                assert directive.type == Marker.SKIPIF_PYVERSION, "unittest check"
                 minor_version = int(directive.value)
                 skip_info = skipif(minor_version, doc_location, args.progress)
     return skip_info

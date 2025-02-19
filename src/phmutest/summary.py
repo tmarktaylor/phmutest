@@ -231,7 +231,7 @@ def show_args(args: argparse.Namespace) -> None:
                 for value in v:
                     print(f"args.{k}: {format_arg(value)}")
         elif v:
-            assert k in single, "sanity check"
+            assert k in single, "unittest check"
             print(f"args.{k}: {format_arg(v)}")
     print()
 
