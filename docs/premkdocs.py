@@ -78,10 +78,27 @@ class Updater:
         return "\n".join(lines)
 
 
+def create_mkdocs_config_file():
+    """Create a new config file for mkdocs with different theme settings."""
+    filename = "mkdocs_color_mode_toggle.yml"
+    text = Path("mkdocs.yml").read_text(encoding="utf-8")
+    text = text.replace(
+        "theme: readthedocs",
+        "theme:\n  name: mkdocs\n  color_mode: auto\n  user_color_mode_toggle: true",
+        1,
+    )
+    print("Creating", filename)
+    Path(filename).write_text(text, encoding="utf-8")
+
+
 def start_mkdocs_serve():
     """Launch subprocess running mkdocs server."""
+    print("Need to restart mkdocs serve if changes to mkdocs.yml.")
     print("starting mkdocs serve...")
-    _ = subprocess.run(["mkdocs", "serve"])
+    # Note that the config-file is generated from mkdocs.yml at runtime.
+    _ = subprocess.run(
+        ["mkdocs", "serve", "--config-file", "mkdocs_color_mode_toggle.yml"]
+    )
 
 
 def mainloop(updater: Updater):
@@ -91,6 +108,7 @@ def mainloop(updater: Updater):
     print(f"number of files= {len(updater.watching)}")
     updater.update()
     updater.show_obsolete(remove="--clean" in sys.argv)
+    create_mkdocs_config_file()
     if "--start-server" in sys.argv:
         p = Process(target=start_mkdocs_serve)
         p.start()
