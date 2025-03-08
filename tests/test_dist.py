@@ -66,6 +66,10 @@ class TestSameVersions:
         """Check the ref: value in the GitHub publish.yml action."""
         self.verify_found_in_file(".github/workflows/publish.yml", "\n  ref: v{}\n")
 
+    def test_pages_yml(self):
+        """Check the ref: value in the GitHub pages.yml action."""
+        self.verify_found_in_file(".github/workflows/pages.yml", "\n  ref: v{}\n")
+
     def test_wheel_yml(self):
         """Check the ref: value in the GitHub wheel.yml action."""
         self.verify_found_in_file(".github/workflows/wheel.yml", "\n  version: {}\n")
