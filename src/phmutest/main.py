@@ -190,7 +190,7 @@ def generate_and_run(
     args = settings.args
 
     # Find, process, and select/deselect Python fenced code blocks.
-    block_store = phmutest.select.BlockStore(settings.args)
+    block_store = phmutest.select.BlockStore(args)
     markdown_map = None
     if args.report:
         print("Command line plus --config file args:")

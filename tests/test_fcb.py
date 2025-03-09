@@ -19,7 +19,7 @@ def test_map_missing_key(capsys, startswith_checker):
     known_args = parser.parse_known_args(args)
     settings = phmutest.config.get_settings(known_args)
     args = settings.args
-    block_store = phmutest.select.BlockStore(settings.args)
+    block_store = phmutest.select.BlockStore(args)
     _, markdown_map = phmutest.cases.testfile(args, block_store)
 
     # The log[4] exception line number is not present in the map.
