@@ -2,7 +2,7 @@
 
 When tests fail we show what caused the error to help you quickly find the root cause.
 This example shows how to use the Python library answerlib
-| [answerlib.py](../answerlib_py.md). It answers a question put to the ask method.
+| [answerlib.py](../answerlib_py.md).  The ask method returns an answer.
 The example imports classes from answerlib. | [phmutest output](#console-stdout)
 
 ```python
@@ -204,8 +204,6 @@ docs/repl/REPLexample.md:82
   "This is RaiserBot.ask() on stderr: Uh oh!" which was printed
   on stderr.
 - The location is the file and line number of the opening fence of the FCB.
-- For errors, the :NN in the 3rd column is the Markdown file line number
-  where the exception propagated out of the FCB.
 - To see Markdown line numbers, on GitHub view this file and choose
   the Code button. (Code is between Preview and Blame).
 - An FCB can have more than one line that raises an exception. Note the

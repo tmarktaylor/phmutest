@@ -12,47 +12,26 @@ across multiple Markdown [fenced code blocks][3] (FCBs or blocks).
 
 ## A broken Example
 
-When tests fail we show what caused the error to help you quickly find the root cause.
-This example shows how to use the example library answerlib
-| [answerlib.py](docs/answerlib_py.md).
-It answers a question put to the ask method. | [phmutest output](#phmutest-console-output)
+When FCBs break we show what caused the error to help you quickly find the root cause.
+Let's start with FCBs that show how to use the library answerlib.
+| [answerlib.py](docs/answerlib_py.md).  The ask method returns the answer
+to the question. | [phmutest output](#phmutest-console-output)
 
 ```python
 from docs.answerlib import RightAnswer, WrongAnswer, RaiserBot
 ```
 
 Create a RightAnswer instance and ask a question.
-The assert statement checks the answer.
-phmutest assigns a pass/failed/error/skip status to each Python FCB.
-This FCB is given 'pass' status.
+phmutest
+assigns a pass/failed/error/skip status to each Python FCB.
+This FCB and the FCB above are given 'pass' status.
 Note how the example continues across multiple FCBs.
 It continues for the entire Markdown file.
 
-### pass result
-
 ```python
 pass_bot = RightAnswer()
-answer = pass_bot.ask(question="What floats?")
-assert answer == "apples"
+pass_bot.ask(question="What floats?")
 ```
-
-### failed result
-
-Create a WrongAnswer instance and ask a question.
-The WrongAnswer instance ask() method returns an
-incorrect answer.
-The assert statement checks the answer,
-finds that
-it is wrong and raises an AssertionError.
-This FCB is given 'failed' status.
-
-```python
-fail_bot = WrongAnswer()
-answer = fail_bot.ask(question="What floats?")
-assert answer == "apples"
-```
-
-### error result
 
 Now we are going to cause the answerlib to raise an
 exception by calling the method inquire() which does not exist.
@@ -61,18 +40,11 @@ up and out of the first line of the FCB below.
 This FCB is given 'error' status.
 
 ```python
-answer = pass_bot.inquire(query="What floats?")
-assert answer == "apples"
+pass_bot.inquire(query="What floats?")
 ```
 
 The test runner keeps going even after an exception. To stop
 on first failure use the "-f" option.
-
-```python
-answer = pass_bot.ask(question="What floats?")
-assert answer == "apples"
-```
-
 Cause another exception within answerlib to see the FCB line
 where the exception propagates out of the FCB in the log.
 This FCB is also given 'error' status. See the results in the
@@ -82,8 +54,6 @@ log below.
 raiser_bot = RaiserBot()
 _ = raiser_bot.ask(question="What floats?")
 ```
-
-### Checking expected output
 
 Add an FCB that immediately follows a Python code block that has no info string
 or the info string `expected-output`. Captured stdout is compared to the block.
@@ -95,6 +65,14 @@ print("Incorrect expected output.")
 
 ```expected-output
 Hello World!
+```
+
+To test a value add an assert statement to the FCB. This FCB fails.
+
+```python
+fail_bot = WrongAnswer()
+answer = fail_bot.ask(question="What floats?")
+assert answer == "apples", f"expected= {answer}"
 ```
 
 ### phmutest command line
@@ -126,34 +104,33 @@ args.log: 'True'
 location|label  result  reason
 --------------  ------  ---------------------------------------------------------------
 README.md:20..  pass
-README.md:33..  pass
-README.md:49..  failed  AssertionError
-README.md:63..  error   AttributeError: 'RightAnswer' object has no attribute 'inquire'
-README.md:71..  pass
-README.md:81..  error   ValueError: What was the question?
-README.md:92 o  failed
+README.md:31..  pass
+README.md:42..  error   AttributeError: 'RightAnswer' object has no attribute 'inquire'
+README.md:53..  error   ValueError: What was the question?
+README.md:62 o  failed
+README.md:72..  failed  AssertionError: expected= very small rocks
 --------------  ------  ---------------------------------------------------------------
 
-README.md:49
-    50  fail_bot = WrongAnswer()
-    51  answer = fail_bot.ask(question="What floats?")
->   52  assert answer == "apples"
-        AssertionError
-
-README.md:63
->   64  answer = pass_bot.inquire(query="What floats?")
+README.md:42
+>   43  pass_bot.inquire(query="What floats?")
         AttributeError: 'RightAnswer' object has no attribute 'inquire'
 
-README.md:81
-    82  raiser_bot = RaiserBot()
->   83  _ = raiser_bot.ask(question="What floats?")
+README.md:53
+    54  raiser_bot = RaiserBot()
+>   55  _ = raiser_bot.ask(question="What floats?")
         ValueError: What was the question?
 
-README.md:92
-    93  print("Incorrect expected output.")
+README.md:62
+    63  print("Incorrect expected output.")
 AssertionError: 'Hello World!\n' != 'Incorrect expected output.\n'
 - Hello World!
 + Incorrect expected output.
+
+README.md:72
+    73  fail_bot = WrongAnswer()
+    74  answer = fail_bot.ask(question="What floats?")
+>   75  assert answer == "apples", f"expected= {answer}"
+        AssertionError: expected= very small rocks
 ```
 
 On GitHub, to see Markdown line numbers, view this file and choose
@@ -178,26 +155,26 @@ The testfile line numbers will mostly be different than the Markdown
 line numbers. Look for the Markdown line numbers in the log. (Python 3.11)
 
 ```txt
-=== README.md:81 stdout ===
+=== README.md:53 stdout ===
 This is RaiserBot.ask() on stdout answering 'What floats?'.
 === end ===
-=== README.md:81 stderr ===
+=== README.md:53 stderr ===
 This is RaiserBot.ask() on stderr: Uh oh!
 === end ===
 ======================================================================
-ERROR: tests (_phm1.Test001.tests) [README.md:63]
+ERROR: tests (_phm1.Test001.tests) [README.md:42]
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 42, in tests
-    answer = pass_bot.inquire(query="What floats?")
-             ^^^^^^^^^^^^^^^^
+  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 34, in tests
+    pass_bot.inquire(query="What floats?")
+    ^^^^^^^^^^^^^^^^
 AttributeError: 'RightAnswer' object has no attribute 'inquire'
 
 ======================================================================
-ERROR: tests (_phm1.Test001.tests) [README.md:81]
+ERROR: tests (_phm1.Test001.tests) [README.md:53]
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 55, in tests
+  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 40, in tests
     _ = raiser_bot.ask(question="What floats?")
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\XXX\Documents\u0\docs\answerlib.py", line 32, in ask
@@ -205,51 +182,53 @@ Traceback (most recent call last):
 ValueError: What was the question?
 
 ======================================================================
-FAIL: tests (_phm1.Test001.tests) [README.md:49]
+FAIL: tests (_phm1.Test001.tests) [README.md:62]
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 37, in tests
-    assert answer == "apples"
-           ^^^^^^^^^^^^^^^^^^
-AssertionError
-
-======================================================================
-FAIL: tests (_phm1.Test001.tests) [README.md:92]
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 66, in tests
+  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 51, in tests
     _phm_testcase.assertEqual(_phm_expected_str, _phm_printer.stdout())
 AssertionError: 'Hello World!\n' != 'Incorrect expected output.\n'
 - Hello World!
 + Incorrect expected output.
 
 
+======================================================================
+FAIL: tests (_phm1.Test001.tests) [README.md:72]
 ----------------------------------------------------------------------
-Ran 1 test in 0.003s
+Traceback (most recent call last):
+  File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 58, in tests
+    assert answer == "apples", f"expected= {answer}"
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: expected= very small rocks
+
+----------------------------------------------------------------------
+Ran 1 test in 0.027s
 
 FAILED (failures=2, errors=2)
 ```
 
-### Features
+## Features
 
 - Checks either Python code examples **or** ">>>" REPL examples
   | [doctest][5].
-- Reports pass/failed/error/skip status and line number for each block.
+- Reports pass/failed/error/skip status and Markdown file line number for each block.
 - Shows block source indicating the line where the exception propagated.
 - Support for setup and cleanup. Acquire and release resources, change context,
   Pass objects as global variables to the examples. Cleans up even when fail-fast.
   [Suite initialization and cleanup](#suite-initialization-and-cleanup)
+- Call from Python, call from pytest.
 - Write a pytest testfile into an existing pytest test suite.
 - Runs files in user specified order.
 - TOML configuration available.
 - An example can continue **across** files.
 - Show stdout printed by examples. --stdout
-- Colors pass/failed/error/skip status. --color.
+- Colors pass/failed/error/skip status. --color
+- Syntax highlights broken FCBs in the log. --style
 - Check expected output of code examples. Markdown edits are required.
 - Designated and stable **patch points** for Python standard library
   **unittest.mock.patch()** patches. | [Here](#patch-points)
 
-### Advanced features
+## Advanced features
 
 These features require adding tool specific HTML comment **directives**
 to the Markdown. Because directives are HTML comments they are not visible in
@@ -276,12 +255,15 @@ by pressing the `Code` button in the banner at the top of the file.
 [![codecov](https://codecov.io/gh/tmarktaylor/phmutest/coverage.svg?branch=main)](https://codecov.io/gh/tmarktaylor/phmutest?branch=main)
 
 [Docs RTD](https://phmutest.readthedocs.io/en/latest/) |
-[Docs GitHub](https://github.com/tmarktaylor/phmutest/blob/main/README.md) |
+[Docs auto-theme](https://tmarktaylor.github.io/phmutest) |
 [Repos](https://github.com/tmarktaylor/phmutest) |
 [pytest][13] |
 [Codecov](https://codecov.io/gh/tmarktaylor/phmutest?branch=main) |
 [License](https://github.com/tmarktaylor/phmutest/blob/main/LICENSE)
 
+[Features](#features) |
+[Advanced features](#advanced-features) |
+[main branch status](#main-branch-status) |
 [Installation](#installation) |
 [Usage](#usage) |
 [FILE](#file) |
@@ -295,6 +277,7 @@ by pressing the `Code` button in the banner at the top of the file.
 [TOML configuration](#toml-configuration) |
 [Run as a Python module](#run-as-a-python-module) |
 [Call from Python](#call-from-python) |
+[Call from pytest](#call-from-pytest) |
 [Patch points](#patch-points) |
 [Hints](#hints) |
 [Related projects](#related-projects) |
@@ -465,15 +448,6 @@ The test case test_doctest_optionflags_patch() shows an
 example with a fixture that applies a patch to
 doctest optionflags in --replmode.
 
-### Calling phmutest from pytest
-
-In some of the tests the --fixture function is in the same pytest file as the
-phmutest library call.  This is not recommended because the Python file is
-imported again by fixture_function_importer() to a new module object.
-The Python file's module level code will
-be run a second time. If there are side-effects they will be repeated, likely
-with un-desirable and hard to troubleshoot behavior.
-
 ### Dotted path details
 
 The fixture function must be at the top level of a .py file.
@@ -570,6 +544,15 @@ command line less the phmutest, like this:
   `["tests/md/project.md", "--replmode"]` and returns `phmutest.summary.PhmResult`.
 
 [Example](docs/callfrompython.md) | [Limitation](docs/callfrompython.md#limitation)
+
+## Call from pytest
+
+In some of the tests the --fixture function is in the same pytest file as the
+phmutest library call.  This is not recommended because the Python file is
+imported again by fixture_function_importer() to a new module object.
+The Python file's module level code will
+be run a second time. If there are side-effects they will be repeated, likely
+with un-desirable and hard to troubleshoot behavior.
 
 ## Patch points
 

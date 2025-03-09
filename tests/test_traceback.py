@@ -8,7 +8,7 @@ import phmutest.config
 import phmutest.main
 import phmutest.summary
 import phmutest.tool
-from phmutest.printer import EXCEPTION_LINE, REASON, RESULT, TRACE, Log
+from phmutest.printer import DOC_LOCATION, EXCEPTION_LINE, REASON, RESULT, TRACE, Log
 
 traceback_extra = False
 try:
@@ -21,10 +21,18 @@ except ModuleNotFoundError:  # pragma: no cover
 
 def check_exception_line_numbers(log: Log):
     # Check that the exception line numbers in the log for the
-    # failed and error entries are present in the traceback log entries.
+    # FCBs that propagated an exception or are present in the traceback log entries.
+    # FCBs that fail the expected output check will not have a TRACE log entry.
     # This should fail if a different line number is reported in the
-    # traceback than what was reported in the "failed" or "error" log entry.
-    elines = [e[EXCEPTION_LINE] for e in log if e[RESULT] in ["failed", "error"]]
+    # traceback than what was reported in the log entry.
+    elines = []
+    for e in log:
+        # See printer.cancel_print_capture_on_error().
+        if e[DOC_LOCATION].endswith(" o"):  # expected output check?
+            continue  # yes-
+        elif e[RESULT] in ["failed", "error"]:
+            elines.append(e[EXCEPTION_LINE])
+
     traces = [e[REASON] for e in log if e[RESULT] == TRACE]
     assert elines
     assert traces
@@ -52,15 +60,21 @@ def test_readme_traceback(capsys, ordered_checker):
     print(output)  # This is helpful to troubleshoot test case fails.
     assert "FAIL: tests" not in output, "not looking at unittest stdout"
     strings = [
-        ", line 37, in tests",
-        "--> 37",
-        " answer = 'very small rocks'",
-        ", line 42, in tests",
-        " answer = 'very small rocks'",
-        ", line 55, in tests",
+        ">   43",
+        ", line 34, in tests",
+        "--> 34",
+        "pass_bot.inquire",
+        ">   55",
+        ", line 40, in tests",
         ", line 32, in ask",
         "--> 32",
-        " question = 'What floats?'",
+        "question = 'What floats?'",
+        "ValueError: What was the question?",
+        "+ Incorrect expected output.",
+        ">   75",
+        ", line 58, in tests",
+        "--> 58",
+        "answer = 'very small rocks'",
     ]
     ordered_checker(output, strings)
     check_exception_line_numbers(results.log)
@@ -69,7 +83,7 @@ def test_readme_traceback(capsys, ordered_checker):
 @pytest.mark.skipif(not traceback_extra, reason="Requires install extra [traceback].")
 @pytest.mark.skipif(sys.version_info > (3, 12), reason="Skip py 3.12+")
 def test_traceback_md(capsys, ordered_checker):
-    """Test the stackprinter traceback printed when running on README.md."""
+    """Test the stackprinter traceback printed when running on tracer.md."""
     results = phmutest.main.command("tests/md/tracer.md --log")
     output = capsys.readouterr().out.strip()
     # Notes:

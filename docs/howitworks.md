@@ -22,7 +22,11 @@ it matches a Python info_string and the first line of the block starts with the
 session prompt: `'>>> '`.
 
 An output block is a fenced code block that immediately follows a
-Python code (not REPL) block that has an empty info string.
+Python code (not REPL) block that has:
+
+- an empty info string
+- the info string "expected-output"
+
 To prevent a text block following a code block from being detected
 as expected output, add the info string `txt`.
 
