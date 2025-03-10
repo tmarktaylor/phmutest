@@ -1,6 +1,6 @@
 # Contributing
 
-- [Code of Conduct](https://github.com/tmarktaylor/phmutest/blob/master/code_of_conduct.md)
+- [Code of Conduct](https://github.com/tmarktaylor/phmutest/blob/main/code_of_conduct.md)
 - Create an issue or submit a pull request forked from the develop branch.
 - For pull requests please refer to steps 1-6 at the top of [Contributing to Simple Icons](https://github.com/simple-icons/simple-icons/blob/develop/CONTRIBUTING.md)
 
