@@ -581,7 +581,7 @@ breakage in future versions. Look for examples in tests/test_patching.py.
 - A malformed HTML comment ending is bad. Make sure
   it ends with both dashes like `-->`.
 - A misspelled directive will be missing from the --report output.
-- If the generated test file has a compile error phmutest might raise an
+- If the generated testfile has a compile error phmutest might raise an
   ImportError when importing it.
 - Blocks skipped with --skip and the phmutest-skip directive
   are not rendered. This is useful to avoid above import error.

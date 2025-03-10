@@ -11,7 +11,7 @@ Added logic records the pass/failed/error/skip status and
 Markdown file line number of each block.
 The blocks are copied from the Markdown and pasted into the
 generated testfile. This is called rendering in the documentation.
-The generated test file is imported and then run by calling unittest.main().
+The generated testfile is imported and then run by calling unittest.main().
 
 - Example: [project.md](../tests/md/project.md) |
   [Generated testfile](generated_project_py.md)

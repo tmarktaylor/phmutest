@@ -1,4 +1,4 @@
-"""Imported by the generated test file to manage test module globals."""
+"""Imported by the generated testfile to manage test module globals."""
 
 import inspect
 import sys
@@ -124,7 +124,7 @@ class Globals:
         _ = additions.pop("_phm_fixture", None)
         _ = additions.pop("_phm_stack", None)
 
-        # Module level imports by the generated test file should not be
+        # Module level imports by the generated testfile should not be
         # modified. If they are present in additions they will
         # cause check_attribute_name() to raise an exception.
         # Users might have one or more of them in their code block.

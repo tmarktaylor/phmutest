@@ -22,7 +22,7 @@ from docs.quicklinks import make_quick_links
 from phmutest.printer import EXCEPTION_LINE, RESULT
 
 # Note- unittest appears to be printing to stderr when it is running
-#       the generated test file when called from Python.
+#       the generated testfile when called from Python.
 #       For example typing this command line in a bash shell
 #           phmutest docs/group/select.md --select slow --log
 #       produces:
