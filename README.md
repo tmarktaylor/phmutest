@@ -72,7 +72,7 @@ To test a value add an assert statement to the FCB. This FCB fails.
 ```python
 fail_bot = WrongAnswer()
 answer = fail_bot.ask(question="What floats?")
-assert answer == "apples", f"expected= {answer}"
+assert answer == "apples", f"got= {repr(answer)}"
 ```
 
 ### phmutest command line
@@ -108,7 +108,7 @@ README.md:31..  pass
 README.md:42..  error   AttributeError: 'RightAnswer' object has no attribute 'inquire'
 README.md:53..  error   ValueError: What was the question?
 README.md:62 o  failed
-README.md:72..  failed  AssertionError: expected= very small rocks
+README.md:72..  failed  AssertionError: got= 'very small rocks'
 --------------  ------  ---------------------------------------------------------------
 
 README.md:42
@@ -129,8 +129,8 @@ AssertionError: 'Hello World!\n' != 'Incorrect expected output.\n'
 README.md:72
     73  fail_bot = WrongAnswer()
     74  answer = fail_bot.ask(question="What floats?")
->   75  assert answer == "apples", f"expected= {answer}"
-        AssertionError: expected= very small rocks
+>   75  assert answer == "apples", f"got= {repr(answer)}"
+        AssertionError: got= 'very small rocks'
 ```
 
 On GitHub, to see Markdown line numbers, view this file and choose
@@ -197,9 +197,9 @@ FAIL: tests (_phm1.Test001.tests) [README.md:72]
 ----------------------------------------------------------------------
 Traceback (most recent call last):
   File "C:\Users\XXX\AppData\Local\Temp\YYY\_phm1.py", line 58, in tests
-    assert answer == "apples", f"expected= {answer}"
+    assert answer == "apples", f"got= {repr(answer)}"
            ^^^^^^^^^^^^^^^^^^
-AssertionError: expected= very small rocks
+AssertionError: got= 'very small rocks'
 
 ----------------------------------------------------------------------
 Ran 1 test in 0.027s
