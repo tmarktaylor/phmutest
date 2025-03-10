@@ -73,17 +73,6 @@ log below.
 >>> _ = raiser_bot.ask(question="What floats?")
 ```
 
-## Checking expected output
-
-Add an FCB that immediately follows a Python code block that has no info string
-or the info string `expected-output`. Captured stdout is compared to the block.
-In the log a "o" after the filename indicates expected output was checked.
-
-```python
->>> print("Incorrect expected output.")
-Hello World!
-```
-
 ## phmutest command line
 
 ```shell
@@ -151,9 +140,9 @@ Got:
 summary:
 metric
 --------------------  -
-blocks run            7
+blocks run            6
 blocks passed         3
-blocks failed         2
+blocks failed         1
 blocks skipped        0
 suite errors          2
 Markdown files        1
@@ -175,7 +164,6 @@ docs/repl/REPLexample.md:39  failed
 docs/repl/REPLexample.md:53  error   AttributeError: 'RightAnswer' object has no attribute 'inquire'
 docs/repl/REPLexample.md:61  pass
 docs/repl/REPLexample.md:71  error   ValueError: What was the question?
-docs/repl/REPLexample.md:82  failed
 ---------------------------  ------  ---------------------------------------------------------------
 
 docs/repl/REPLexample.md:39
@@ -192,10 +180,6 @@ docs/repl/REPLexample.md:71
     72  >>> raiser_bot = RaiserBot()
 >   73  >>> _ = raiser_bot.ask(question="What floats?")
         ValueError: What was the question?
-
-docs/repl/REPLexample.md:82
->   83  >>> print("Incorrect expected output.")
-    84  Hello World!
 ```
 
 ## Notes

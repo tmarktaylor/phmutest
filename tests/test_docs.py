@@ -190,9 +190,9 @@ def test_replexample_metrics():
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=7,
+        number_blocks_run=6,
         passed=3,
-        failed=2,
+        failed=1,
         skipped=0,
         suite_errors=2,  # counts all lines that raise exceptions
         number_of_files=1,

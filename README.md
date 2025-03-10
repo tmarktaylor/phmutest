@@ -217,7 +217,7 @@ FAILED (failures=2, errors=2)
   Pass objects as global variables to the examples. Cleans up even when fail-fast.
   [Suite initialization and cleanup](#suite-initialization-and-cleanup)
 - Call from Python, call from pytest.
-- Write a pytest testfile into an existing pytest test suite.
+- Write a pytest testfile into an existing pytest or unittest test suite.
 - Runs files in user specified order.
 - TOML configuration available.
 - An example can continue **across** files.
@@ -298,7 +298,7 @@ python -m pip install phmutest
 ```
 
 - No required dependencies since Python 3.11. Depends on tomli before Python 3.11.
-- Pure Python. No binaries.
+- Pure Python.
 - It is advisable to install in a virtual environment.
 
 ### install extras
@@ -581,7 +581,7 @@ breakage in future versions. Look for examples in tests/test_patching.py.
 - A malformed HTML comment ending is bad. Make sure
   it ends with both dashes like `-->`.
 - A misspelled directive will be missing from the --report output.
-- If the generated test file has a compile error phmutest will raise an
+- If the generated test file has a compile error phmutest might raise an
   ImportError when importing it.
 - Blocks skipped with --skip and the phmutest-skip directive
   are not rendered. This is useful to avoid above import error.
