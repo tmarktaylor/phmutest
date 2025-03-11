@@ -7,7 +7,7 @@ python -m pytest tests -k test_share_across_rebind --capture=tee-sys
 to see the printing. Example output is shown below.
 
 The name 'we' is added as a module global (sharing-mod adding= we, no_conflict)
-by the generated test file setUpModule().
+by the generated testfile setUpModule().
 
 tests/test_rebind.py::test_share_across_rebind sharing-mod initialized
 sharing-mod adding= we, no_conflict

@@ -22,7 +22,11 @@ it matches a Python info_string and the first line of the block starts with the
 session prompt: `'>>> '`.
 
 An output block is a fenced code block that immediately follows a
-Python code (not REPL) block that has an empty info string.
+Python code (not REPL) block that has:
+
+- an empty info string
+- the info string "expected-output"
+
 To prevent a text block following a code block from being detected
 as expected output, add the info string `txt`.
 
@@ -43,7 +47,7 @@ The --report option shows these fenced block details:
 | Role.CODE     | Python code block     | code blocks or Python code blocks
 | Role.OUTPUT   | expected output block | output blocks
 | Role.SESSION  | Python REPL block     | session or REPL blocks
-| Role.NOROLE   | all other blocks
+| Role.NOROLE   | all other blocks | --
 
 The report also shows a list called Deselected blocks: at the end that lists each
 block that was excluded by the --select or --deselect option.
@@ -61,5 +65,3 @@ Test session blocks with --replmode. Test code and output blocks otherwise.
 
 [1]: https://github.github.com/gfm/#fenced-code-blocks
 [2]: https://github.github.com/gfm/#info-string
-[3]: https://docs.python.org/3/library/unittest.html
-[4]: https://spec.commonmark.org

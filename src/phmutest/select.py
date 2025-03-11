@@ -151,7 +151,7 @@ class BlockStore:
     def get_contents_and_role(self, built_from: str, line: int) -> Tuple[str, Role]:
         """Return contents of block in file whose open fence is at line."""
         fileblocks = self.get_blocks(Path(built_from))
-        assert fileblocks.built_from == built_from, "sanity check"
+        assert fileblocks.built_from == built_from, "unittest check"
         for b in fileblocks.selected:
             if b.line == line:
                 return b.contents, b.role

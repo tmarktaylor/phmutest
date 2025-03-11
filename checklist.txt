@@ -50,6 +50,9 @@ Check the release on PYPI
 ( ) Manually dispatch "Install from PYPI" (wheel.yml) to show pip
     install succeeds.
 
+( ) Deploy docs to GitHub pages
+  On GitHub manually dispatch action "Deploy Pages" (pages.yml).
+
   -------------------------------------------------------------------------
   Legacy manual steps
   - On GitHub manually dispatch build.yml on the release ref

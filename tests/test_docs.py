@@ -22,7 +22,7 @@ from docs.quicklinks import make_quick_links
 from phmutest.printer import EXCEPTION_LINE, RESULT
 
 # Note- unittest appears to be printing to stderr when it is running
-#       the generated test file when called from Python.
+#       the generated testfile when called from Python.
 #       For example typing this command line in a bash shell
 #           phmutest docs/group/select.md --select slow --log
 #       produces:
@@ -104,18 +104,14 @@ NUM_README_FAILED = 2
 """Number of Python code FCBs in README.md broken example that log as 'failed'."""
 
 
-NUM_README_ASSERTION_FAILED = 1
-"""FCBs counted by NUM_README_FAILED that failed due to assert in the FCB."""
-
-
 def test_readme_code_metrics():
     """Test the metrics when running on README.md."""
     command = readme_chooser.select(info_string="shell")[0]  # 1st of selected FCBs
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=7,
-        passed=3,
+        number_blocks_run=6,
+        passed=2,
         failed=NUM_README_FAILED,
         skipped=0,
         suite_errors=NUM_README_ERROR,
@@ -194,9 +190,9 @@ def test_replexample_metrics():
     args = arg_list(command)
     phmresult = phmutest.main.main(args)
     want = phmutest.summary.Metrics(
-        number_blocks_run=7,
+        number_blocks_run=6,
         passed=3,
-        failed=2,
+        failed=1,
         skipped=0,
         suite_errors=2,  # counts all lines that raise exceptions
         number_of_files=1,

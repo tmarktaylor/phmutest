@@ -10,6 +10,9 @@ t[0-9].txt
 tmp[0-9].md
 tmp[0-9].txt
 
+# Reserved for alternate docs build
+mkdocs_color_mode_toggle.yml
+
 # Reserved for local CI tests
 dev/test_temptestfile.py
 

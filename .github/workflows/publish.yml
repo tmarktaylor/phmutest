@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ref: v1.0.0
+  ref: v1.0.1
 
 jobs:
   builddist:
@@ -52,7 +52,7 @@ jobs:
         print-hash: true
 
   publish-pypi:
-    needs: builddist
+    needs: [builddist, publish-test-pypi]
     runs-on: ubuntu-latest
     permissions:
       # IMPORTANT this permission is mandatory for trusted publishing

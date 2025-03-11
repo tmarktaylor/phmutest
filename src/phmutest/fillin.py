@@ -33,7 +33,7 @@ def remove_trailng_spaces(text: str) -> str:
 
 def justify(template: str, key: str, text: str) -> str:
     """Determine indent from template and template key, return indented text."""
-    assert text, "sanity check"
+    assert text, "unittest check"
     indent = get_indent(template, key)
     indented_text = textwrap.indent(text, indent)
     # Remove the indent, if present, from the first line since the key is indented.

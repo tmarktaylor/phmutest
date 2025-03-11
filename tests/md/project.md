@@ -50,7 +50,7 @@ World!
 Here is an interactive Python session showing an
 expected exception and use of the doctest directive
 `IGNORE_EXCEPTION_DETAIL`.
-To see the doctest directive navigate to [project.md unrendered][1].
+To see the doctest directive navigate to  main branch [project.md unrendered][1].
 
 ```py
 >>> int("def")    #doctest:+IGNORE_EXCEPTION_DETAIL
@@ -70,3 +70,5 @@ ValueError:
 >>> coffee + coding == enjoyment
 True
 ```
+
+[1]: https://github.com/tmarktaylor/phmutest/blob/main/tests/md/project.md?plain=1

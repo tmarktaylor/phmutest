@@ -1,0 +1,54 @@
+name: Deploy Pages
+# Build docs and deploy to GitHub pages for the repository
+on:
+  workflow_dispatch:
+
+env:
+  ref: v1.0.1
+
+jobs:
+  buildsite:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ env.ref }}
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+
+    - name: Build mkdocs site
+      id: build
+      run: |
+        python -m pip install --upgrade pip
+        pip install mkdocs
+        python docs/premkdocs.py
+        mkdocs build --config-file mkdocs_color_mode_toggle.yml
+
+    - name: Upload site
+      id: upload
+      uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+      with:
+        path: site/
+
+  deploysite:
+    # refer to https://github.com/actions/deploy-pages
+    needs: buildsite
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

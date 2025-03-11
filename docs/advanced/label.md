@@ -11,7 +11,7 @@ phmutest tests/md/directive1.md --log --replmode
 ```
 
 In the output, note the label "doctest_print_coffee" shows after
-tests/md/directive1.md:69 below.
+tests/md/directive1.md:78 below.
 
 ```txt
 log:

@@ -99,5 +99,5 @@ are run by **unittest.tearDownModule()**.
 
 Examples: [setup/teardown](setup/setup.md) | [setup across files](setup/across1.md)
 
-[1]: https://github.com/tmarktaylor/phmutest/blob/master/tests/md/directive1.md?plain=1
+[1]: https://github.com/tmarktaylor/phmutest/blob/main/tests/md/directive1.md?plain=1
 [2]: https://tmarktaylor.github.io/phmdoctest

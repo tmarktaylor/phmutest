@@ -37,7 +37,7 @@ class DocNode:
         elif match["comment"] is not None:
             self.ntype = NodeType.HTML_COMMENT
         else:
-            assert match["fcb"] is not None, "sanity check"
+            assert match["fcb"] is not None, "unittest check"
             self.ntype = NodeType.FENCED_CODE_BLOCK
 
         if self.ntype == NodeType.HTML_COMMENT:

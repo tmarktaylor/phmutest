@@ -46,8 +46,8 @@ def make_quick_links(filename: str) -> str:
             link = "(#" + link + ")"
             links.append(label + link)
 
-    # remove the links for sections before before [Installation]
-    ix = links.index("[Installation](#installation)")
+    # remove the links for earlier sections
+    ix = links.index("[Features](#features)")
     links = links[ix:]
     return " |\n".join(links)
 

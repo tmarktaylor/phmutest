@@ -6,9 +6,6 @@ from typing import Optional
 class Highlighter:
     """Encapsulate pygments setup to syntax highlight Python code."""
 
-    # Detect Python exception name in the log.
-    _pattern = r"(([A-Z]\w*?Error:)|(AssertionError))"
-
     def __init__(self, style: Optional[str] = None):
         try:
             from pygments import highlight  # type: ignore
@@ -20,19 +17,11 @@ class Highlighter:
         except ModuleNotFoundError:
             self.pygments_highlight = None
             self.lexer = None
-
         if self.pygments_highlight is None or style is None:
             self.formatter = None
-            self.start_color = ""
-            self.reset = ""
             self.is_enabled = False  # Not able to do highlighting.
         else:
-            # Determine pre and post ANSI terminal sequence strings to set color.
             self.formatter = TerminalTrueColorFormatter(style=style)
-            sequences = self.pygments_highlight(
-                "ValueError", self.lexer, self.formatter
-            ).rstrip()
-            self.start_color, self.reset = sequences.split("ValueError")
             self.is_enabled = True  # Able to do highlighting.
 
     def disable(self) -> None:

@@ -103,7 +103,7 @@ def show_broken_fcbs(
     # For Python code blocks (not REPL) that failed the expected output check,
     # the whole block is printed.
     # If these are --replmode FCBs there is no markdown_map and no "error",
-    # FRAME, or DIFFS RESULTs.
+    # FRAME, or DIFFS.
     for entry in log:
         if entry[RESULT] in ["failed", "error", FRAME]:
             print()
