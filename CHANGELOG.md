@@ -1,6 +1,15 @@
 # Changelog
 
 <!-- Refs since the last tagged release: 07b6d0b..HEAD -->
+## [1.0.1] - 2025-03-11
+
+This release has changes to docs, tests, and comments.
+
+### Removed
+
+- Remove unneeded code left over after earlier commit.
+([`33de2dc`](https://github.com/tmarktaylor/phmutest/commit/33de2dc))
+See ([`d77e05a`](https://github.com/tmarktaylor/phmutest/commit/d77e05a))
 
 ## [1.0.0] - 2025-02-08
 
@@ -110,6 +119,8 @@
 ## [0.0.1] - 2023-08-14
 
 - Initial upload to Python Package Index.
+
+[1.0.1]: https://github.com/tmarktaylor/phmutest/releases/tag/v1.0.1
 
 [1.0.0]: https://github.com/tmarktaylor/phmutest/releases/tag/v1.0.0
 

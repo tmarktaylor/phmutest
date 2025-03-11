@@ -1,4 +1,4 @@
-# phmutest 1.0.0
+# phmutest 1.0.1
 
 ## Detect and troubleshoot broken Python examples in Markdown
 
